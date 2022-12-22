@@ -15,7 +15,7 @@ private:
     }
 
 public:
-    Window()
+    Window(int height, int width)
     {
         glfwSetErrorCallback(errorCallback);
 
@@ -30,7 +30,7 @@ public:
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-        window = glfwCreateWindow(1000, 1000, "Mintys fresh adventure", NULL, NULL);
+        window = glfwCreateWindow(height, width, "Mintys fresh adventure", NULL, NULL);
         if (!window) {
             printf("Failed to create window\n");
             return;
