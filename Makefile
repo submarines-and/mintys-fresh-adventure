@@ -22,8 +22,10 @@ clean:
 
 install:
 	git submodule deinit -f . && git submodule update --init
+	git update-index --assume-unchanged lib/glfw
 
-
+	cd lib/glad && $(CC) -o src/glad.o -Iinclude -c src/glad.c
+	cd lib/glfw && cmake . && make
 
 build: $(OBJ)
 	mkdir -p ./$(BIN)
