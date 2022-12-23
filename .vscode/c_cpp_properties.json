@@ -12,7 +12,8 @@
             "compilerArgs": [
                 "--std=c++17",
                 "-Ilib/glfw/include",
-                "-Ilib/glad/include"
+                "-Ilib/glad/include",
+                "-Ilib/cglm/include",
             ]
         }
     ],
