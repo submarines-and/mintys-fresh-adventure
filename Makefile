@@ -22,11 +22,11 @@ BIN = bin
 .PHONY: start build clean install
 
 start: build
-	$(BIN)/game
+	$(BIN)/MintyFresh
 
 build: $(OBJ)
 	mkdir -p ./$(BIN)
-	$(CXX) -o $(BIN)/game $^ $(LDFLAGS)
+	$(CXX) -o $(BIN)/MintyFresh $^ $(LDFLAGS)
 
 %.o: %.cpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
