@@ -2,8 +2,9 @@ UNAME_S = $(shell uname -s)
 
 CXX = clang++
 CXXFLAGS = -Wall -Wextra --std=c++17 -g
-CXXFLAGS += -Ilib/glad/include -Ilib/glfw/include
-LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a
+CXXFLAGS += -Ilib/glad/include -Ilib/glfw/include -Ilib/cglm/include
+
+LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a lib/cglm/libcglm.a
 
 # GLFW required frameworks on OSX
 ifeq ($(UNAME_S), Darwin)
@@ -35,7 +36,10 @@ clean:
 
 install:
 	git submodule deinit -f . && git submodule update --init
+
+	git update-index --assume-unchanged lib/cglm
 	git update-index --assume-unchanged lib/glfw
 
+	cd lib/cglm && cmake . -DCGLM_STATIC=ON && make
 	cd lib/glad && $(CXX) -o src/glad.o -Iinclude -c src/glad.c
 	cd lib/glfw && cmake . && make
