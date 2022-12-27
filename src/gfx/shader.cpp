@@ -3,14 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-ShaderLoader::~ShaderLoader()
-{
-    for (auto id : shaders) {
-        glDeleteProgram(id);
-    }
-}
-
-Shader ShaderLoader::load(const char* vertexPath, const char* fragmentPath)
+Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
@@ -47,36 +40,36 @@ Shader ShaderLoader::load(const char* vertexPath, const char* fragmentPath)
     const char* fragmentShaderSource = fragmentCode.c_str();
 
     // vs
-    auto vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vertexShaderSource, NULL);
-    glCompileShader(vs);
+    auto vertextId = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertextId, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertextId);
 
     int success;
-    glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(vertextId, GL_COMPILE_STATUS, &success);
     if (!success) {
         char infoLog[512];
-        glGetShaderInfoLog(vs, 512, NULL, infoLog);
+        glGetShaderInfoLog(vertextId, 512, NULL, infoLog);
         printf("Error: %s\n", infoLog);
     }
 
     // fs
-    auto fs = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fs, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fs);
+    auto fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentId, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentId);
 
-    glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(fragmentId, GL_COMPILE_STATUS, &success);
     if (!success) {
         char infoLog[512];
-        glGetShaderInfoLog(fs, 512, NULL, infoLog);
+        glGetShaderInfoLog(vertextId, 512, NULL, infoLog);
         printf("Error: %s\n", infoLog);
     }
 
     // shader program
-    auto shaderId = glCreateProgram();
-    glAttachShader(shaderId, vs);
-    glAttachShader(shaderId, fs);
+    shaderId = glCreateProgram();
+    glAttachShader(shaderId, vertextId);
+    glAttachShader(shaderId, fragmentId);
     glLinkProgram(shaderId);
-    shaders.emplace_back(shaderId);
+    glValidateProgram(shaderId);
 
     glGetProgramiv(shaderId, GL_LINK_STATUS, &success);
     if (!success) {
@@ -85,10 +78,22 @@ Shader ShaderLoader::load(const char* vertexPath, const char* fragmentPath)
         printf("Error: %s\n", infoLog);
     }
 
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+    glDeleteShader(vertextId);
+    glDeleteShader(fragmentId);
+}
 
-    return Shader{
-        .id = shaderId,
-    };
+Shader::~Shader()
+{
+    printf("Deleting shader %i\n", shaderId);
+    glDeleteProgram(shaderId);
+}
+
+void Shader::start()
+{
+    glUseProgram(shaderId);
+}
+
+void Shader::stop()
+{
+    glUseProgram(0);
 }

@@ -2,15 +2,14 @@
 #include <vector>
 #include "opengl.h"
 
-struct Shader {
-    GLuint id;
-};
-
-class ShaderLoader {
+class Shader {
 private:
-    std::vector<GLuint> shaders;
+    GLuint shaderId;
 
 public:
-    ~ShaderLoader();
-    Shader load(const char* vertexPath, const char* fragmentPath);
+    Shader(const char* vertexPath, const char* fragmentPath);
+    ~Shader();
+
+    void start();
+    void stop();
 };

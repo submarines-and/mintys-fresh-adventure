@@ -1,22 +1,20 @@
 #pragma once
 #include <vector>
 #include "opengl.h"
+#include "shader.h"
 
-struct Model {
-    GLuint id;
-    GLuint shaderId;
-
-    GLsizei vertexCount;
-};
-
-class ModelLoader {
+class Model {
 private:
     std::vector<GLuint> vaos;
     std::vector<GLuint> vbos;
+    Shader shader;
 
 public:
-    ~ModelLoader();
+    GLuint id;
+    GLsizei vertexCount;
 
-    Model load(std::vector<float> vertices, std::vector<int> indices);
-    void render(Model model);
+    Model(std::vector<float> vertices, std::vector<int> indices, const char* vertexPath, const char* fragmentPath);
+    ~Model();
+
+    void render();
 };

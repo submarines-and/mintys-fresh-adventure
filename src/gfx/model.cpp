@@ -1,26 +1,13 @@
 #include "model.h"
 
-ModelLoader::~ModelLoader()
+Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* vertexPath, const char* fragmentPath) : shader(Shader(vertexPath, fragmentPath))
 {
-    for (auto id : vaos) {
-        glDeleteVertexArrays(1, &id);
-    }
-
-    for (auto id : vbos) {
-        glDeleteBuffers(1, &id);
-    }
-}
-
-Model ModelLoader::load(std::vector<float> vertices, std::vector<int> indices)
-{
-    Model model{
-        .vertexCount = static_cast<GLsizei>(indices.size()),
-    };
+    vertexCount = static_cast<GLsizei>(indices.size());
 
     // vertex array
-    glGenVertexArrays(1, &model.id);
-    glBindVertexArray(model.id);
-    vaos.emplace_back(model.id);
+    glGenVertexArrays(1, &id);
+    glBindVertexArray(id);
+    vaos.emplace_back(id);
 
     // vertex buffer
     GLuint vertexBufferId;
@@ -44,14 +31,26 @@ Model ModelLoader::load(std::vector<float> vertices, std::vector<int> indices)
     // unbind all
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
-    return model;
 }
 
-void ModelLoader::render(Model model)
+Model::~Model()
 {
-    glUseProgram(model.shaderId);
-    glBindVertexArray(model.id);
-    glDrawElements(GL_TRIANGLES, model.vertexCount, GL_UNSIGNED_INT, 0);
+    for (auto id : vaos) {
+        glDeleteVertexArrays(1, &id);
+    }
+
+    for (auto id : vbos) {
+        glDeleteBuffers(1, &id);
+    }
+}
+
+void Model::render()
+{
+    shader.start();
+
+    glBindVertexArray(id);
+    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+    
+    shader.stop();
 }
