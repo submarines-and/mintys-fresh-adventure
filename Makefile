@@ -2,9 +2,9 @@ UNAME_S = $(shell uname -s)
 
 CXX = clang++
 CXXFLAGS = -Wall -Wextra --std=c++17 -g
-CXXFLAGS += -Ilib/glad/include -Ilib/glfw/include -Ilib/cglm/include
+CXXFLAGS += -Ilib/glad/include -Ilib/glfw/include -Ilib/cglm/include -Ilib/stb 
 
-LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a lib/cglm/libcglm.a
+LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a lib/cglm/libcglm.a 
 
 # GLFW required frameworks on OSX
 ifeq ($(UNAME_S), Darwin)

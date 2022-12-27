@@ -65,16 +65,16 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     }
 
     // shader program
-    shaderId = glCreateProgram();
-    glAttachShader(shaderId, vertextId);
-    glAttachShader(shaderId, fragmentId);
-    glLinkProgram(shaderId);
-    glValidateProgram(shaderId);
+    id = glCreateProgram();
+    glAttachShader(id, vertextId);
+    glAttachShader(id, fragmentId);
+    glLinkProgram(id);
+    glValidateProgram(id);
 
-    glGetProgramiv(shaderId, GL_LINK_STATUS, &success);
+    glGetProgramiv(id, GL_LINK_STATUS, &success);
     if (!success) {
         char infoLog[512];
-        glGetProgramInfoLog(shaderId, 512, NULL, infoLog);
+        glGetProgramInfoLog(id, 512, NULL, infoLog);
         printf("Error: %s\n", infoLog);
     }
 
@@ -84,14 +84,14 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 Shader::~Shader()
 {
-    printf("Deleting shader %i\n", shaderId);
+    printf("Deleting shader %i\n", id);
     stop();
-    glDeleteProgram(shaderId);
+    glDeleteProgram(id);
 }
 
 void Shader::start()
 {
-    glUseProgram(shaderId);
+    glUseProgram(id);
 }
 
 void Shader::stop()

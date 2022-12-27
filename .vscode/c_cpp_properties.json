@@ -14,6 +14,7 @@
                 "-Ilib/glfw/include",
                 "-Ilib/glad/include",
                 "-Ilib/cglm/include",
+                "-Ilib/stb"
             ]
         }
     ],

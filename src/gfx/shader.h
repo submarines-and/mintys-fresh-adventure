@@ -4,7 +4,7 @@
 
 class Shader {
 private:
-    GLuint shaderId;
+    GLuint id;
 
 public:
     Shader(const char* vertexPath, const char* fragmentPath);
