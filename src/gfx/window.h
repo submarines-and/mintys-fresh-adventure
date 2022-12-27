@@ -5,7 +5,6 @@ class Window {
     typedef void (*WindowFunction)();
 
 private:
-    void processInput(GLFWwindow* window);
     GLFWwindow* window;
     WindowFunction init, destroy, update, render;
 

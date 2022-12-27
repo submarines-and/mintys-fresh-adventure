@@ -7,11 +7,16 @@ static void errorCallback(int code, const char* description)
     printf("GLFW error %d: %s\n", code, description);
 }
 
-void Window::processInput(GLFWwindow* window)
+void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+}
+
+void onResize(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
 
 Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction update, WindowFunction render) : init(init), destroy(destroy), update(update), render(render)
@@ -27,7 +32,10 @@ Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction updat
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
     window = glfwCreateWindow(1280, 720, "Mintys fresh adventure", NULL, NULL);
     if (!window) {
@@ -36,6 +44,7 @@ Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction updat
     }
 
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, onResize);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         printf("Failed to load GLAD\n");
@@ -66,11 +75,10 @@ void Window::loop()
 
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
-        
+
         update();
         render();
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
