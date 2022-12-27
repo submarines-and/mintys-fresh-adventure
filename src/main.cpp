@@ -5,25 +5,26 @@
 ModelLoader loader;
 ShaderLoader shader;
 
-Model m;
+Model model;
 
 void init()
 {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     std::vector<float> vertices = {
-        // first triangle
         0.5f, 0.5f, 0.0f,   // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, 0.5f, 0.0f,  // top left
-                            // second triangle
         0.5f, -0.5f, 0.0f,  // bottom right
         -0.5f, -0.5f, 0.0f, // bottom left
         -0.5f, 0.5f, 0.0f   // top left
     };
 
-    m = loader.load(vertices);
-    m.shaderId = shader.load();
+    std::vector<int> indices = {
+        0, 1, 3, // first Triangle
+        1, 2, 3  // second Triangle
+    };
+
+    model = loader.load(vertices, indices);
+    model.shaderId = shader.load();
 }
 
 void destroy()
@@ -39,7 +40,7 @@ void render()
     glClearColor(255, 255, 255, 255);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    loader.render(m);
+    loader.render(model);
 }
 
 int main()

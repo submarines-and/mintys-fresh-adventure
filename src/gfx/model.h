@@ -17,6 +17,6 @@ private:
 public:
     ~ModelLoader();
 
-    Model load(std::vector<float> vertices);
+    Model load(std::vector<float> vertices, std::vector<int> indices);
     void render(Model model);
 };
