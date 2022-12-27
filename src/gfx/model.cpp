@@ -35,6 +35,8 @@ Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* 
 
 Model::~Model()
 {
+    printf("Deleting data for model %i\n", id);
+
     for (auto id : vaos) {
         glDeleteVertexArrays(1, &id);
     }
@@ -51,6 +53,6 @@ void Model::render()
     glBindVertexArray(id);
     glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-    
+
     shader.stop();
 }

@@ -1,9 +1,10 @@
 #version 330 core
-out vec4 FragColor;
-  
-in vec4 vertexColor; // the input variable from the vertex shader (same name and same type)  
 
-void main()
+in vec3 colour;
+
+layout(location = 0) out vec4 out_Color;
+
+void main(void)
 {
-    FragColor = vertexColor;
-} 
+    out_Color = vec4(colour, 1.0);
+}

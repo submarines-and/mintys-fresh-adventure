@@ -85,6 +85,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 Shader::~Shader()
 {
     printf("Deleting shader %i\n", shaderId);
+    stop();
     glDeleteProgram(shaderId);
 }
 
