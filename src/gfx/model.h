@@ -5,6 +5,8 @@
 struct Model {
     GLuint id;
     GLuint shaderId;
+
+    GLsizei vertexCount;
 };
 
 class ModelLoader {

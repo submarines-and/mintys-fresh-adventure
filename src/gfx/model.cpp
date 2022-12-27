@@ -17,7 +17,9 @@ ModelLoader::~ModelLoader()
 
 Model ModelLoader::load(std::vector<float> vertices)
 {
-    Model model{};
+    Model model{
+        .vertexCount = static_cast<GLsizei>(vertices.size() / 3),
+    };
 
     // vs
     auto vs = glCreateShader(GL_VERTEX_SHADER);
@@ -72,7 +74,7 @@ Model ModelLoader::load(std::vector<float> vertices)
 
     // vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboId);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * 4, &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
     vbos.emplace_back(vboId);
 
     // store data in slot 0
@@ -90,6 +92,8 @@ Model ModelLoader::load(std::vector<float> vertices)
 void ModelLoader::render(Model model)
 {
     glUseProgram(model.shaderId);
+
     glBindVertexArray(model.id);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, model.vertexCount);
+    glBindVertexArray(0);
 }
