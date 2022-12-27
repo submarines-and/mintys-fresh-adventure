@@ -76,6 +76,9 @@
     "set": "cpp",
     "unordered_set": "cpp",
     "__availability": "cpp",
-    "queue": "cpp"
+    "queue": "cpp",
+    "filesystem": "cpp",
+    "functional": "cpp",
+    "*.inc": "cpp"
   }
 }

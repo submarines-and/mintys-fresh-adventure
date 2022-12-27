@@ -13,6 +13,12 @@
             "args": [
                 "make start"
             ]
+        },
+        {
+            "label": "clean",
+            "args": [
+                "make clean"
+            ]
         }
     ]
 }

@@ -24,7 +24,7 @@ void init()
     };
 
     model = loader.load(vertices, indices);
-    model.shaderId = shader.load();
+    model.shaderId = shader.load("shaders/test.vs", "shaders/test.fs").id;
 }
 
 void destroy()
