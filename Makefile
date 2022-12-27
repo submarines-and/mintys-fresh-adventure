@@ -15,7 +15,7 @@ ifeq ($(UNAME_S), Linux)
 	LDFLAGS += -ldl -lpthread
 endif
 
-SRC = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) 
+SRC = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp) 
 OBJ = $(SRC:.cpp=.o)
 BIN = bin
 

@@ -1,8 +1,8 @@
-#include "window.h"
+#include "gfx/window.h"
 
 int main()
 {
-    Window window(1000, 1000);
+    Window window(1280, 720);
     window.loop();
 
     return 0;
