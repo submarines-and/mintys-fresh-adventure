@@ -2,10 +2,10 @@
 #include "gfx/model.h"
 #include "gfx/shader.h"
 
-ModelLoader loader;
+ModelLoader model;
 ShaderLoader shader;
 
-Model model;
+Model m;
 
 void init()
 {
@@ -23,8 +23,8 @@ void init()
         1, 2, 3  // second Triangle
     };
 
-    model = loader.load(vertices, indices);
-    model.shaderId = shader.load("shaders/test.vs", "shaders/test.fs").id;
+    m = model.load(vertices, indices);
+    m.shaderId = shader.load("shaders/test.vs", "shaders/test.fs").id;
 }
 
 void destroy()
@@ -40,7 +40,7 @@ void render()
     glClearColor(255, 255, 255, 255);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    loader.render(model);
+    model.render(m);
 }
 
 int main()

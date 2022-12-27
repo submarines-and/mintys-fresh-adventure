@@ -19,7 +19,11 @@ void onResize(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction update, WindowFunction render) : init(init), destroy(destroy), update(update), render(render)
+Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction update, WindowFunction render)
+    : init(init),
+      destroy(destroy),
+      update(update),
+      render(render)
 {
     glfwSetErrorCallback(errorCallback);
 
@@ -56,7 +60,6 @@ Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction updat
 
 Window::~Window()
 {
-    destroy();
 
     if (window) {
         glfwDestroyWindow(window);
@@ -82,4 +85,6 @@ void Window::loop()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    destroy();
 }

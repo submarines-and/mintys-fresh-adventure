@@ -2,6 +2,8 @@
 #include "opengl.h"
 
 class Window {
+
+    // callback type for main loop
     typedef void (*WindowFunction)();
 
 private:
