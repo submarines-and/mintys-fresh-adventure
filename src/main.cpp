@@ -1,6 +1,10 @@
 #include "gfx/window.h"
 #include "gfx/model.h"
+#include "gfx/shader.h"
+
 ModelLoader loader;
+ShaderLoader shader;
+
 Model m;
 
 void init()
@@ -19,6 +23,7 @@ void init()
     };
 
     m = loader.load(vertices);
+    m.shaderId = shader.load();
 }
 
 void destroy()
