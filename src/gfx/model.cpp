@@ -1,6 +1,8 @@
 #include "model.h"
 
-Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* vertexPath, const char* fragmentPath) : shader(Shader(vertexPath, fragmentPath))
+Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* vertexPath, const char* fragmentPath, const char* texturePath)
+    : shader(Shader(vertexPath, fragmentPath)),
+      texture(Texture(texturePath))
 {
     vertexCount = static_cast<GLsizei>(indices.size());
 
@@ -23,10 +25,17 @@ Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
     vbos.emplace_back(indexBufferId);
 
-    // store vertex data in attribute slot 0
-    int attributeNumber = 0;
-    glVertexAttribPointer(attributeNumber, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(attributeNumber);
+    // vertex attribute data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // color attribute data
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // texture attribute data
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // unbind all
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -35,7 +44,7 @@ Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* 
 
 Model::~Model()
 {
-    printf("Deleting data for model %i\n", id);
+    printf("Deleting model %i\n", id);
 
     for (auto id : vaos) {
         glDeleteVertexArrays(1, &id);
@@ -49,10 +58,11 @@ Model::~Model()
 void Model::render()
 {
     shader.start();
-
+    glBindTexture(GL_TEXTURE_2D, texture.id);
     glBindVertexArray(id);
-    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
 
+    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(0);
     shader.stop();
 }

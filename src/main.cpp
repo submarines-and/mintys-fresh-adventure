@@ -8,10 +8,11 @@ void init()
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     std::vector<float> vertices = {
-        0.5f, 0.5f, 0.0f,   // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f, // bottom left
-        -0.5f, 0.5f, 0.0f   // top left
+        // positions          // colors           // texture coords
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // top left
     };
 
     std::vector<int> indices = {
@@ -19,7 +20,7 @@ void init()
         1, 2, 3  // second Triangle
     };
 
-    m = new Model(vertices, indices, "shaders/test.vs", "shaders/test.fs");
+    m = new Model(vertices, indices, "shaders/test.vs", "shaders/test.fs", "assets/box.jpg");
 }
 
 void destroy()

@@ -24,5 +24,6 @@ Texture::Texture(const char* filepath)
 
 Texture::~Texture()
 {
+    printf("Deleting texture %i\n", id);
     glDeleteTextures(1, &id);
 }
