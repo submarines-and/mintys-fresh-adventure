@@ -14,7 +14,7 @@ void Window::processInput(GLFWwindow* window)
     }
 }
 
-Window::Window(int height, int width)
+Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction update, WindowFunction render) : init(init), destroy(destroy), update(update), render(render)
 {
     glfwSetErrorCallback(errorCallback);
 
@@ -29,7 +29,7 @@ Window::Window(int height, int width)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(height, width, "Mintys fresh adventure", NULL, NULL);
+    window = glfwCreateWindow(1280, 720, "Mintys fresh adventure", NULL, NULL);
     if (!window) {
         printf("Failed to create window\n");
         return;
@@ -47,6 +47,8 @@ Window::Window(int height, int width)
 
 Window::~Window()
 {
+    destroy();
+
     if (window) {
         glfwDestroyWindow(window);
     }
@@ -60,8 +62,13 @@ void Window::loop()
         return;
     }
 
+    init();
+
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
+        
+        update();
+        render();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwSwapBuffers(window);
