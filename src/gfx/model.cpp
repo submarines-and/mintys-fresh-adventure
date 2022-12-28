@@ -1,4 +1,5 @@
 #include "model.h"
+#include <cglm/cglm.h>
 
 Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* vertexPath, const char* fragmentPath, const char* texturePath)
     : shader(Shader(vertexPath, fragmentPath)),
@@ -26,16 +27,12 @@ Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* 
     vbos.emplace_back(indexBufferId);
 
     // vertex attribute data
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // color attribute data
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
     // texture attribute data
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // unbind all
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -58,6 +55,15 @@ Model::~Model()
 void Model::render()
 {
     shader.start();
+
+    mat4 transform;
+    glm_mat4_identity(transform);
+
+    glm_translate(transform, vec3{0.5f, -0.5f, 0.0f});
+    glm_rotate(transform, (float)glfwGetTime(), vec3{0.0f, 0.0f, 1.0f});
+    unsigned int transformLoc = glGetUniformLocation(shader.id, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transform[0]);
+
     glBindTexture(GL_TEXTURE_2D, texture.id);
     glBindVertexArray(id);
 
