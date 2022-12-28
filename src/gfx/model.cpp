@@ -56,18 +56,27 @@ void Model::render()
 {
     shader.start();
 
-    mat4 transform;
-    glm_mat4_identity(transform);
+    mat4 model;
+    glm_mat4_identity(model);
+    glm_rotate(model, (float)glfwGetTime() * glm_rad(50.0f), vec3{0.5f, 1.0f, 0.0f});
 
-    glm_translate(transform, vec3{0.5f, -0.5f, 0.0f});
-    glm_rotate(transform, (float)glfwGetTime(), vec3{0.0f, 0.0f, 1.0f});
-    unsigned int transformLoc = glGetUniformLocation(shader.id, "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transform[0]);
+    mat4 view;
+    glm_mat4_identity(view);
+    glm_translate(view, vec3{0.0f, 0.0f, -3.0f});
+
+    mat4 projection;
+    glm_mat4_identity(projection);
+    glm_perspective(glm_rad(45.0f), 800.0f / 600.0f, 0.1f, 100.0f, projection);
+
+    glUniformMatrix4fv(glGetUniformLocation(shader.id, "model"), 1, GL_FALSE, model[0]);
+    glUniformMatrix4fv(glGetUniformLocation(shader.id, "view"), 1, GL_FALSE, view[0]);
+    glUniformMatrix4fv(glGetUniformLocation(shader.id, "projection"), 1, GL_FALSE, projection[0]);
 
     glBindTexture(GL_TEXTURE_2D, texture.id);
     glBindVertexArray(id);
 
-    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+    // glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 
     glBindVertexArray(0);
     shader.stop();
