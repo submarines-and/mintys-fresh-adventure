@@ -1,10 +1,18 @@
 #include "gfx/window.h"
 #include "gfx/model.h"
+#include "global.h"
 
 Model* m = nullptr;
 
+/** Init global state and make accessible for main function. */
+static Global global_instance;
+Global& global = global_instance;
+
 void init()
 {
+
+    global.camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
     std::vector<float> vertices = {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
         0.5f, -0.5f, -0.5f, 1.0f, 0.0f,

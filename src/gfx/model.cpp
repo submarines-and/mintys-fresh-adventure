@@ -1,5 +1,5 @@
 #include "model.h"
-#include <cglm/cglm.h>
+#include "global.h"
 
 Model::Model(std::vector<float> vertices, std::vector<int> indices, const char* vertexPath, const char* fragmentPath, const char* texturePath)
     : shader(Shader(vertexPath, fragmentPath)),
@@ -56,21 +56,15 @@ void Model::render()
 {
     shader.start();
 
-    mat4 model;
-    glm_mat4_identity(model);
-    glm_rotate(model, (float)glfwGetTime() * glm_rad(50.0f), vec3{0.5f, 1.0f, 0.0f});
+    glm::mat4 model = glm::mat4(1.0f); 
+    model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    shader.setMat4("model", model);
 
-    mat4 view;
-    glm_mat4_identity(view);
-    glm_translate(view, vec3{0.0f, 0.0f, -3.0f});
+    glm::mat4 view = global.camera.getViewMatrix();
+    shader.setMat4("view", view);
 
-    mat4 projection;
-    glm_mat4_identity(projection);
-    glm_perspective(glm_rad(45.0f), 800.0f / 600.0f, 0.1f, 100.0f, projection);
-
-    glUniformMatrix4fv(glGetUniformLocation(shader.id, "model"), 1, GL_FALSE, model[0]);
-    glUniformMatrix4fv(glGetUniformLocation(shader.id, "view"), 1, GL_FALSE, view[0]);
-    glUniformMatrix4fv(glGetUniformLocation(shader.id, "projection"), 1, GL_FALSE, projection[0]);
+    glm::mat4 projection = glm::perspective(glm::radians(global.camera.Zoom), (float)1280 / (float)720, 0.1f, 100.0f);
+    shader.setMat4("projection", projection);
 
     glBindTexture(GL_TEXTURE_2D, texture.id);
     glBindVertexArray(id);

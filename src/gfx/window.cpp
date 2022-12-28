@@ -1,22 +1,61 @@
 #include "window.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "global.h"
 
 static void errorCallback(int code, const char* description)
 {
     printf("GLFW error %d: %s\n", code, description);
 }
 
-void processInput(GLFWwindow* window)
+void onResize(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void Window::handleInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        global.camera.processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        global.camera.processKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        global.camera.processKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        global.camera.processKeyboard(RIGHT, deltaTime);
 }
 
-void onResize(GLFWwindow* window, int width, int height)
+void Window::handleMouseMovement(GLFWwindow* window)
 {
-    glViewport(0, 0, width, height);
+    GLdouble xposIn, yposIn;
+    glfwGetCursorPos(window, &xposIn, &yposIn);
+
+    float xPos = static_cast<float>(xposIn);
+    float yPos = static_cast<float>(yposIn);
+
+    if (firstMouse) {
+        lastX = xPos;
+        lastY = yPos;
+        firstMouse = false;
+    }
+
+    float xoffset = xPos - lastX;
+    float yoffset = lastY - yPos; // reversed since y-coordinates go from bottom to top
+
+    lastX = xPos;
+    lastY = yPos;
+
+    global.camera.processMouseMovement(xoffset, yoffset);
+}
+
+void Window::handleScroll(GLFWwindow* window)
+{
+    // https://github.com/glfw/glfw/issues/356
+    // global.camera.processMouseScroll(static_cast<float>(yoffset));
 }
 
 Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction update, WindowFunction render)
@@ -78,8 +117,16 @@ void Window::loop()
     glEnable(GL_DEPTH_TEST);
     init();
 
+    float lastFrame = 0.0f;
+
     while (!glfwWindowShouldClose(window)) {
-        processInput(window);
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        handleInput(window);
+        handleMouseMovement(window);
+        handleScroll(window);
         update();
 
         glClearColor(255, 255, 255, 255);
