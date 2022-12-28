@@ -1,11 +1,10 @@
 #pragma once
 #include "opengl.h"
 
+// callback type for main loop
+using WindowFunction = void (*)();
+
 class Window {
-
-    // callback type for main loop
-    typedef void (*WindowFunction)();
-
 private:
     GLFWwindow* window;
     WindowFunction init, destroy, update, render;

@@ -3,10 +3,9 @@
 #include "opengl.h"
 
 class Shader {
-private:
+public:
     GLuint id;
 
-public:
     Shader(const char* vertexPath, const char* fragmentPath);
     ~Shader();
 
