@@ -14,7 +14,8 @@
                 "-Ilib/glfw/include",
                 "-Ilib/glad/include",
                 "-Ilib/glm",
-                "-Ilib/stb"
+                "-Ilib/stb",
+                "-Ilib/assimp/include"
             ]
         }
     ],
