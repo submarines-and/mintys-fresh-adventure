@@ -1,8 +1,8 @@
 #pragma once
-#include <vector>
 #include "opengl.h"
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
 
 class Shader {
 public:

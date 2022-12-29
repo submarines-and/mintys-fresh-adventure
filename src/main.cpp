@@ -1,5 +1,5 @@
-#include "gfx/window.h"
 #include "gfx/model.h"
+#include "gfx/window.h"
 #include "global.h"
 
 Model* m = nullptr;

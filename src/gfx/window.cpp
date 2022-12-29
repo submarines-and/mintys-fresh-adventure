@@ -1,7 +1,7 @@
 #include "window.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include "global.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static void errorCallback(int code, const char* description)
 {

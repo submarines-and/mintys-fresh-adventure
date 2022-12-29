@@ -1,6 +1,6 @@
 #pragma once
-#include "opengl.h"
 #include "camera.h"
+#include "opengl.h"
 
 // callback type for main loop
 using WindowFunction = void (*)();

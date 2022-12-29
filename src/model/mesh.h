@@ -1,10 +1,10 @@
 #pragma once
 #include <vector>
 
+#include "gfx/opengl.h"
+#include "gfx/shader.h"
 #include "texture.h"
 #include "vertex.h"
-#include "gfx/shader.h"
-#include "gfx/opengl.h"
 
 class Mesh {
 public:

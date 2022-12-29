@@ -1,7 +1,7 @@
 #include "shader.h"
-#include <string>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
