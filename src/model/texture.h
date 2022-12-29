@@ -1,7 +1,9 @@
 #pragma once
 #include "gfx/opengl.h"
+#include <string>
 
 struct Texture {
     GLuint id;
-    const char* type;
+    std::string type;
+    std::string path;
 };
