@@ -56,9 +56,9 @@ void Model::render()
 {
     shader.start();
 
-    glm::mat4 model = glm::mat4(1.0f); 
-    model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-    shader.setMat4("model", model);
+    glm::mat4 transform = glm::mat4(1.0f); 
+    transform = glm::rotate(transform, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    shader.setMat4("transform", transform);
 
     glm::mat4 view = global.camera.getViewMatrix();
     shader.setMat4("view", view);
