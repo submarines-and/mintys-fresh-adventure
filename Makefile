@@ -35,9 +35,11 @@ clean:
 	rm -rf $(BIN) $(OBJ)
 
 install:
+# Reload and ignore output changes
 	git submodule deinit -f . && git submodule update --init
-
 	git update-index --assume-unchanged lib/glfw
 
+# Glad and glfw 
 	cd lib/glad && $(CXX) -o src/glad.o -Iinclude -c src/glad.c
 	cd lib/glfw && cmake . && make
+
