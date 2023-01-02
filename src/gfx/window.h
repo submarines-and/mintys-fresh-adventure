@@ -8,19 +8,19 @@ using WindowFunction = void (*)();
 class Window {
 private:
     GLFWwindow* window;
-    WindowFunction init, destroy, update, render;
+    WindowFunction init, update, render, destroy;
 
     void handleInput(GLFWwindow* window);
     void handleMouseMovement(GLFWwindow* window);
     void handleScroll(GLFWwindow* window);
 
     float deltaTime = 0.0f;
-    float lastX = 1280 / 2.0f;
-    float lastY = 720 / 2.0f;
+    float lastX = 0.0f;
+    float lastY = 0.0f;
     bool firstMouse = true;
 
 public:
-    Window(WindowFunction init, WindowFunction destroy, WindowFunction update, WindowFunction render);
+    Window(int width, int height, WindowFunction init, WindowFunction update, WindowFunction render, WindowFunction destroy);
     ~Window();
 
     void loop();

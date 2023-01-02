@@ -20,16 +20,16 @@ void Window::handleInput(GLFWwindow* window)
     }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        global.camera.processKeyboard(FORWARD, deltaTime);
+        global.camera->processKeyboard(UP, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        global.camera.processKeyboard(BACKWARD, deltaTime);
+        global.camera->processKeyboard(DOWN, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        global.camera.processKeyboard(LEFT, deltaTime);
+        global.camera->processKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        global.camera.processKeyboard(RIGHT, deltaTime);
+        global.camera->processKeyboard(RIGHT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        global.camera.processKeyboard(UP, deltaTime);
+        global.camera->processKeyboard(UP, deltaTime);
 }
 
 void Window::handleMouseMovement(GLFWwindow* window)
@@ -52,7 +52,7 @@ void Window::handleMouseMovement(GLFWwindow* window)
     lastX = xPos;
     lastY = yPos;
 
-    global.camera.processMouseMovement(xoffset, yoffset);
+    global.camera->processMouseMovement(xoffset, yoffset);
 }
 
 void Window::handleScroll(GLFWwindow* window)
@@ -61,11 +61,13 @@ void Window::handleScroll(GLFWwindow* window)
     // global.camera.processMouseScroll(static_cast<float>(yoffset));
 }
 
-Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction update, WindowFunction render)
+Window::Window(int width, int height, WindowFunction init, WindowFunction update, WindowFunction render, WindowFunction destroy)
     : init(init),
-      destroy(destroy),
       update(update),
-      render(render)
+      render(render),
+      destroy(destroy),
+      lastX(width / 2.0f),
+      lastY(height / 2.0f)
 {
     glfwSetErrorCallback(errorCallback);
 
@@ -83,7 +85,7 @@ Window::Window(WindowFunction init, WindowFunction destroy, WindowFunction updat
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(1280, 720, "Mintys fresh adventure", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Mintys fresh adventure", NULL, NULL);
     if (!window) {
         printf("Failed to create window\n");
         return;
@@ -118,10 +120,11 @@ void Window::loop()
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_DEPTH_TEST);
-    init();
 
     float lastFrame = 0.0f;
 
+    init();
+    
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;

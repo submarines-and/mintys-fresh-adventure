@@ -79,6 +79,7 @@
     "queue": "cpp",
     "filesystem": "cpp",
     "functional": "cpp",
-    "*.inc": "cpp"
+    "*.inc": "cpp",
+    "memory_resource": "cpp"
   }
 }

@@ -1,24 +1,16 @@
 #include "gfx/window.h"
 #include "global.h"
-#include "model/model.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 /** Init global state and make accessible for main function. */
 static Global global_instance;
 Global& global = global_instance;
 
-Model* m = nullptr;
-Shader* shader = nullptr;
 void init()
 {
-    global.camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-
-    m = new Model("assets/tree.obj");
-    shader = new Shader("shaders/test.vs", "shaders/test.fs");
-}
-
-void destroy()
-{
-    delete m;
+    global.renderer->loadShader("static", "shaders/static.vs", "shaders/static.fs");
+    global.renderer->loadSprite("assets/krabbanklo.png");
 }
 
 void update()
@@ -27,28 +19,30 @@ void update()
 
 void render()
 {
+
+    auto shader = global.renderer->getShader("static");
     shader->start();
+    shader->setMat4("view", global.camera->getViewMatrix());
+    shader->setMat4("projection", global.camera->getProjectionMatrix());
+    shader->setInt("image", 0);
 
-    // view/projection transformations
-    glm::mat4 projection = glm::perspective(glm::radians(global.camera.Zoom), (float)1280 / (float)720, 0.1f, 100.0f);
-    glm::mat4 view = global.camera.getViewMatrix();
-    shader->setMat4("projection", projection);
-    shader->setMat4("view", view);
+    global.renderer->renderSprite("assets/pyddelov.png", "static", glm::vec2(global.renderer->width, global.renderer->height), glm::vec2(200.0f, 200.0f), 0.0f);
+}
 
-    // render the loaded model
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-    transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
-    shader->setMat4("transform", transform);
-
-    m->draw(*shader);
-
-    shader->stop();
+void destroy()
+{
+    delete global.renderer;
 }
 
 int main()
 {
-    Window window(init, destroy, update, render);
+    auto width = 1280;
+    auto height = 720;
+
+    Window window(width, height, init, update, render, destroy);
+    global.renderer = new Renderer(width, height);
+    global.camera = new Camera(glm::vec3(width / 2, height / 2, 0));
+
     window.loop();
 
     return 0;
