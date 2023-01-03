@@ -9,7 +9,7 @@ Global& global = global_instance;
 
 void init()
 {
-    global.renderer->loadShader("static", "shaders/static.vs", "shaders/static.fs");
+    global.renderer->loadShader("static", "shaders/static.vert", "shaders/static.frag");
 }
 
 void update()
@@ -25,7 +25,9 @@ void render()
     shader->setMat4("projection", global.camera->getProjectionMatrix());
     shader->setInt("image", 0);
 
-    global.renderer->renderSprite("assets/pyddelov.png", "static", glm::vec2(global.renderer->width, global.renderer->height), glm::vec2(200.0f, 200.0f), 0.0f);
+    shader->setVec2("tilePosition", glm::vec2(2, 0));
+
+    global.renderer->renderSprite("assets/pyddelov.png", "static", glm::vec2(global.renderer->width, global.renderer->height), glm::vec2(128, 128), 0.0f);
 }
 
 void destroy()
