@@ -30,6 +30,7 @@ void render()
 void destroy()
 {
     delete global.renderer;
+    delete global.camera;
 }
 
 int main()
@@ -39,7 +40,7 @@ int main()
 
     Window window(global.width, global.height, init, update, render, destroy);
     global.renderer = new Renderer();
-    global.camera = new Camera(glm::vec3(0, 0, 0));
+    global.camera = new Camera(glm::vec3(global.width / 2, global.height / 2, 0));
 
     window.loop();
 
