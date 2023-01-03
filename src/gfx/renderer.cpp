@@ -71,7 +71,7 @@ void Renderer::renderSprite(const char* spritePath, const char* shaderKey, glm::
     glm::mat4 transform = glm::mat4(1.0f);
     transform = glm::translate(transform, glm::vec3(position, 0.0f));
     transform = glm::translate(transform, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
-    transform = glm::rotate(transform, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+    transform = glm::rotate(transform, glm::radians(rotate + 180), glm::vec3(0.0f, 0.0f, 1.0f));
     transform = glm::translate(transform, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
     transform = glm::scale(transform, glm::vec3(size, 1.0f));
