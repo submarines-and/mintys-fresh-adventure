@@ -26,12 +26,12 @@ void render()
     shader->setInt("image", 0);
 
     auto center = glm::vec2(global.camera->position.x + global.width / 2, global.camera->position.y + global.height / 2);
-    global.renderer->renderSprite("assets/pyddelov.png", "static", center, glm::vec2(32, 32), 0.0f);
+    global.renderer->renderSprite("assets/pyddelov.png", "static", center, glm::vec2(32, 32), global.camera->rotation);
     shader->setVec2("tilePosition", glm::vec2(0, 0));
 
     for (auto t : global.world.tiles) {
         shader->setVec2("tilePosition", glm::vec2(t.z, 0));
-        global.renderer->renderSprite("assets/terrain.png", "static", glm::vec2(t.x * 32, t.y * 32), glm::vec2(32, 32), 0.0f);
+        global.renderer->renderSprite("assets/terrain.png", "static", glm::vec2(t.x * 32, t.y * 32), glm::vec2(32, 32), 0);
     }
 
     shader->stop();

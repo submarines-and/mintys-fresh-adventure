@@ -38,4 +38,7 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 
 void Camera::processMouseMovement(float xOffset, float yOffset, bool left, bool right)
 {
+    if (right) {
+        rotation += xOffset;
+    }
 }

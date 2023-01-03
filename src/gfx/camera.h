@@ -11,6 +11,7 @@ enum CameraDirection {
 class Camera {
 public:
     glm::vec3 position;
+    float rotation = 0.0f;
 
     Camera(glm::vec3 position);
     glm::mat4 getViewMatrix();
