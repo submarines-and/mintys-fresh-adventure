@@ -21,10 +21,7 @@ void render()
 {
     auto center = glm::vec2(global.camera->position.x + global.width / 2, global.camera->position.y + global.height / 2);
     global.renderer->renderSprite("assets/pyddelov.png", Shader::TILE, glm::vec2(4, 1), glm::vec2(0, 0), center, glm::vec2(32, 32), global.camera->rotation);
-
-    for (auto t : global.world.tiles) {
-        global.renderer->renderSprite("assets/terrain.png", Shader::TILE, glm::vec2(20, 20), glm::vec2(((int)t.z % 20), (int)t.z / 20), glm::vec2(t.x * 32, t.y * 32), glm::vec2(32, 32), 0);
-    }
+    global.renderer->renderTiles(TileAtlas(), global.world.tiles);
 }
 
 void destroy()

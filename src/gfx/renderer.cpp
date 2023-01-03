@@ -95,3 +95,37 @@ void Renderer::renderSprite(const char* spritePath, Shader::ShaderType shaderKey
 
     shader->stop();
 }
+
+void Renderer::renderTiles(TileAtlas atlas, std::vector<Tile> tiles)
+{
+    auto shader = getShader(atlas.shaderKey);
+    shader->start();
+
+    shader->setMat4("projection", global.camera->getProjectionMatrix());
+    shader->setMat4("view", global.camera->getViewMatrix());
+    shader->setInt("image", 0);
+    shader->setVec2("atlasSize", atlas.size);
+
+    glActiveTexture(GL_TEXTURE0);
+    auto sprite = loadSprite(atlas.spritePath);
+    sprite->bind();
+    glBindVertexArray(quadVAO);
+
+    for (auto tile : tiles) {
+        shader->setVec2("offset", tile.getOffset(atlas));
+
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, glm::vec3(tile.position, 0.0f));
+        transform = glm::translate(transform, glm::vec3(0.5f * tile.size.x, 0.5f * tile.size.y, 0.0f));
+        transform = glm::rotate(transform, glm::radians(tile.rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::translate(transform, glm::vec3(-0.5f * tile.size.x, -0.5f * tile.size.y, 0.0f));
+        transform = glm::scale(transform, glm::vec3(tile.size, 1.0f));
+
+        shader->setMat4("transform", transform);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+    glBindVertexArray(0);
+
+    shader->stop();
+}

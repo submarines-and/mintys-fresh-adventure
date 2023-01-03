@@ -1,6 +1,7 @@
 #pragma once
 #include "shader.h"
 #include "sprite.h"
+#include "tile.h"
 #include <map>
 
 class Renderer {
@@ -18,4 +19,6 @@ public:
     Shader* getShader(Shader::ShaderType shaderKey);
 
     void renderSprite(const char* spritePath, Shader::ShaderType shaderKey, glm::vec2 atlasSize, glm::vec2 atlasOffset, glm::vec2 worldPosition, glm::vec2 worldSize, float rotation);
+
+    void renderTiles(TileAtlas atlas, std::vector<Tile> tiles);
 };

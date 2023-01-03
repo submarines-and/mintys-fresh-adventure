@@ -12,6 +12,8 @@ World::World()
 
 void World::generate(int tileCount)
 {
+    printf("Generating world...\n");
+
     tiles = std::vector<Tile>(tileCount ^ 2);
 
     for (int x = 0; x < tileCount; x++) {
@@ -35,4 +37,6 @@ void World::generate(int tileCount)
             });
         }
     }
+
+    printf("Done (Size: %i)!\n", tileCount);
 }

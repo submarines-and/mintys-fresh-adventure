@@ -19,7 +19,6 @@ public:
     };
 
 public:
-    TileAtlas atlas;
     TileType type = GRASS;
 
     glm::vec2 position = glm::vec2(0, 0);
@@ -27,5 +26,5 @@ public:
     float rotation = 0.0f;
 
 public:
-    glm::vec2 getOffset();
+    glm::vec2 getOffset(TileAtlas atlas);
 };
