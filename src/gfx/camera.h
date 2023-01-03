@@ -9,10 +9,9 @@ enum CameraDirection {
 };
 
 class Camera {
-private:
+public:
     glm::vec3 position;
 
-public:
     Camera(glm::vec3 position);
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();

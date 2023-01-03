@@ -19,19 +19,19 @@ glm::mat4 Camera::getProjectionMatrix()
 
 void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 {
-    float velocity = 200.0f * deltaTime;
+    float velocity = 1000.0f * deltaTime;
 
     if (direction == UP)
-        position.y -= velocity;
-
-    if (direction == DOWN)
         position.y += velocity;
 
+    if (direction == DOWN)
+        position.y -= velocity;
+
     if (direction == LEFT)
-        position.x += velocity;
+        position.x -= velocity;
 
     if (direction == RIGHT)
-        position.x -= velocity;
+        position.x += velocity;
 
     glm::normalize(position);
 }

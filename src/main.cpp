@@ -18,16 +18,25 @@ void update()
 
 void render()
 {
-
     auto shader = global.renderer->getShader("static");
     shader->start();
-    shader->setMat4("view", global.camera->getViewMatrix());
     shader->setMat4("projection", global.camera->getProjectionMatrix());
+    shader->setMat4("view", global.camera->getViewMatrix());
     shader->setInt("image", 0);
+    shader->setVec2("tilePosition", glm::vec2(0, 0));
 
-    shader->setVec2("tilePosition", glm::vec2(2, 0));
+    auto center = glm::vec2(global.camera->position.x + global.renderer->width / 2, global.camera->position.y + global.renderer->height / 2);
+    global.renderer->renderSprite("assets/pyddelov.png", "static", center, glm::vec2(32, 32), 0.0f);
 
-    global.renderer->renderSprite("assets/pyddelov.png", "static", glm::vec2(global.renderer->width, global.renderer->height), glm::vec2(128, 128), 0.0f);
+
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 30; j++) {
+            global.renderer->renderSprite("assets/terrain.png", "static", glm::vec2(i * 64, j * 64), glm::vec2(64, 64), 0.0f);
+        }
+    }
+
+
+    shader->stop();
 }
 
 void destroy()
@@ -37,12 +46,12 @@ void destroy()
 
 int main()
 {
-    auto width = 1280;
-    auto height = 720;
+    auto width = 32 * 40;
+    auto height = 32 * 20;
 
     Window window(width, height, init, update, render, destroy);
     global.renderer = new Renderer(width, height);
-    global.camera = new Camera(glm::vec3(width / 2, height / 2, 0));
+    global.camera = new Camera(glm::vec3(-1, -1, 0));
 
     window.loop();
 
