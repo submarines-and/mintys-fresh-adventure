@@ -12,7 +12,7 @@ World::World()
 
 void World::generate(int tileCount)
 {
-    tiles = std::vector<glm::vec3>(tileCount ^ 2);
+    tiles = std::vector<Tile>(tileCount ^ 2);
 
     for (int x = 0; x < tileCount; x++) {
         for (int y = 0; y < tileCount; y++) {
@@ -20,17 +20,19 @@ void World::generate(int tileCount)
             // generate noise
             auto noise = noiseGenerator.GetNoise((float)x, (float)y);
 
-            int tileId = WATER;
+            auto tileType = Tile::WATER;
             if (noise > -0.5) {
-                tileId = GRASS;
+                tileType = Tile::GRASS;
             }
             if (noise > 0.8) {
-                tileId = STUMP;
+                tileType = Tile::STUMP;
             }
 
             // map to tiles
-            auto tile = glm::vec3(x, y, tileId - 1);
-            tiles.push_back(tile);
+            tiles.push_back(Tile{
+                .type = tileType,
+                .position = glm::vec2(x * 32, y * 32),
+            });
         }
     }
 }

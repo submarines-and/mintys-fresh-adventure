@@ -37,8 +37,8 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 
     // clamp
     auto lastTile = global.world.tiles.back();
-    auto maxX = lastTile.x * 32 - global.width;
-    auto maxY = lastTile.x * 32 - global.height;
+    auto maxX = lastTile.position.x * 32 - global.width;
+    auto maxY = lastTile.position.y * 32 - global.height;
 
     position.x = position.x < 0 ? 0 : (position.x > maxX ? maxX : position.x);
     position.y = position.y < 0 ? 0 : (position.y > maxY ? maxY : position.y);
