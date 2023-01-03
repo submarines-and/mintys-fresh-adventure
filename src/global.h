@@ -5,9 +5,15 @@
 
 /** All globally available objects */
 struct Global {
+
+    /** Window with and height */
+    int width, height;
+
+    /** Currently active level */
+    World world;
+
     Camera* camera;
     Renderer* renderer;
-    World world;
 };
 
 /** Will be created by main.cpp */

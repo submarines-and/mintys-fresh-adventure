@@ -10,7 +10,11 @@ static void errorCallback(int code, const char* description)
 
 void onResize(GLFWwindow* window, int width, int height)
 {
+#pragma unused(window)
+
     glViewport(0, 0, width, height);
+    global.width = width;
+    global.height = height;
 }
 
 void Window::handleInput(GLFWwindow* window)
@@ -55,8 +59,9 @@ void Window::handleMouseMovement(GLFWwindow* window)
     global.camera->processMouseMovement(xoffset, yoffset);
 }
 
-void Window::handleScroll(GLFWwindow* window)
-{
+void Window::handleScroll(GLFWwindow* window){
+#pragma unused(window)
+
     // https://github.com/glfw/glfw/issues/356
     // global.camera.processMouseScroll(static_cast<float>(yoffset));
 }
@@ -124,7 +129,7 @@ void Window::loop()
     float lastFrame = 0.0f;
 
     init();
-    
+
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;

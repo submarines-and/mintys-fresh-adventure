@@ -14,7 +14,7 @@ glm::mat4 Camera::getViewMatrix()
 
 glm::mat4 Camera::getProjectionMatrix()
 {
-    return glm::ortho(0.0f, (float)global.renderer->width, 0.0f, (float)global.renderer->height, 0.0f, 100.0f);
+    return glm::ortho(0.0f, (float)global.width, 0.0f, (float)global.height, 0.0f, 100.0f);
 }
 
 void Camera::processKeyboard(CameraDirection direction, float deltaTime)

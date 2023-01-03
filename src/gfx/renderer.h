@@ -10,10 +10,8 @@ private:
     std::map<const char*, Shader*> shaders;
 
 public:
-    Renderer(int width, int height);
+    Renderer();
     ~Renderer();
-
-    int width, height;
 
     Sprite* loadSprite(const char* path);
     Shader* loadShader(const char* shaderKey, const char* vertexPath, const char* fragmentPath);
