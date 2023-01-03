@@ -10,6 +10,7 @@ private:
     enum TileType {
         GRASS = 1,
         STUMP = 140,
+        WATER = 162,
     };
 
 public:

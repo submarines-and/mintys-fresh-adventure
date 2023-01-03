@@ -6,6 +6,11 @@
 
 class Shader {
 public:
+    enum ShaderType {
+        TILE,
+    };
+
+public:
     GLuint id;
 
     Shader(const char* vertexPath, const char* fragmentPath);

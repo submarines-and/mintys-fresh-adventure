@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "global.h"
 #include "opengl.h"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -40,7 +41,7 @@ Renderer::~Renderer()
     }
 }
 
-Shader* Renderer::loadShader(const char* shaderKey, const char* vertexPath, const char* fragmentPath)
+Shader* Renderer::loadShader(Shader::ShaderType shaderKey, const char* vertexPath, const char* fragmentPath)
 {
     if (!shaders.count(shaderKey)) {
         shaders.emplace(shaderKey, new Shader(vertexPath, fragmentPath));
@@ -49,7 +50,7 @@ Shader* Renderer::loadShader(const char* shaderKey, const char* vertexPath, cons
     return shaders[shaderKey];
 }
 
-Shader* Renderer::getShader(const char* shaderKey)
+Shader* Renderer::getShader(Shader::ShaderType shaderKey)
 {
     return shaders[shaderKey];
 }
@@ -63,18 +64,24 @@ Sprite* Renderer::loadSprite(const char* path)
     return sprites[path];
 }
 
-void Renderer::renderSprite(const char* spritePath, const char* shaderKey, glm::vec2 position, glm::vec2 size, float rotate)
+void Renderer::renderSprite(const char* spritePath, Shader::ShaderType shaderKey, glm::vec2 atlasSize, glm::vec2 atlasOffset, glm::vec2 worldPosition, glm::vec2 worldSize, float rotation)
 {
     auto shader = getShader(shaderKey);
     shader->start();
 
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(position, 0.0f));
-    transform = glm::translate(transform, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
-    transform = glm::rotate(transform, glm::radians(rotate + 180), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform = glm::translate(transform, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
+    shader->setMat4("projection", global.camera->getProjectionMatrix());
+    shader->setMat4("view", global.camera->getViewMatrix());
+    shader->setInt("image", 0);
+    shader->setVec2("atlasSize", atlasSize);
+    shader->setVec2("offset", atlasOffset);
 
-    transform = glm::scale(transform, glm::vec3(size, 1.0f));
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::translate(transform, glm::vec3(worldPosition, 0.0f));
+    transform = glm::translate(transform, glm::vec3(0.5f * worldSize.x, 0.5f * worldSize.y, 0.0f));
+    transform = glm::rotate(transform, glm::radians(rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
+    transform = glm::translate(transform, glm::vec3(-0.5f * worldSize.x, -0.5f * worldSize.y, 0.0f));
+
+    transform = glm::scale(transform, glm::vec3(worldSize, 1.0f));
 
     shader->setMat4("transform", transform);
 
@@ -85,4 +92,6 @@ void Renderer::renderSprite(const char* spritePath, const char* shaderKey, glm::
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
+
+    shader->stop();
 }

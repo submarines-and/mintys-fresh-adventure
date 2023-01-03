@@ -20,8 +20,11 @@ void World::generate(int tileCount)
             // generate noise
             auto noise = noiseGenerator.GetNoise((float)x, (float)y);
 
-            int tileId = GRASS;
-            if (noise > 0.5) {
+            int tileId = WATER;
+            if (noise > -0.5) {
+                tileId = GRASS;
+            }
+            if (noise > 0.8) {
                 tileId = STUMP;
             }
 
