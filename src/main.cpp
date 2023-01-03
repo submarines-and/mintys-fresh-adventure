@@ -10,7 +10,6 @@ Global& global = global_instance;
 void init()
 {
     global.renderer->loadShader("static", "shaders/static.vs", "shaders/static.fs");
-    global.renderer->loadSprite("assets/krabbanklo.png");
 }
 
 void update()

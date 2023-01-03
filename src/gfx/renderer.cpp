@@ -2,7 +2,7 @@
 #include "opengl.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Renderer::Renderer(int width, int height) : width(height), height(width)
+Renderer::Renderer(int width, int height) : width(width), height(height)
 {
     // configure VAO/VBO
     unsigned int VBO;
