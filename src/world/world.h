@@ -8,21 +8,8 @@ private:
     FastNoiseLite noiseGenerator;
 
     enum TileType {
-        GRASS,
-        WATER,
-        SAND,
-        SNOW,
-    };
-
-    enum Obstacles {
-        TREE,
-        ROCK,
-    };
-
-    enum Teasures {
-        SEASHELL,
-        FLOWER,
-        BREAD,
+        GRASS = 1,
+        STUMP = 140,
     };
 
 public:

@@ -20,19 +20,13 @@ void World::generate(int tileCount)
             // generate noise
             auto noise = noiseGenerator.GetNoise((float)x, (float)y);
 
-            auto tileId = WATER;
-            if (noise < -0.9) {
-                tileId = SNOW;
-            }
-            else if (noise < -0.5) {
-                tileId = GRASS;
-            }
-            else if (noise < 0.) {
-                tileId = SAND;
+            int tileId = GRASS;
+            if (noise > 0.5) {
+                tileId = STUMP;
             }
 
             // map to tiles
-            auto tile = glm::vec3(x, y, tileId);
+            auto tile = glm::vec3(x, y, tileId - 1);
             tiles.push_back(tile);
         }
     }
