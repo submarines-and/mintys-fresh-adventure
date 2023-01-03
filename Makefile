@@ -3,7 +3,7 @@ UNAME_S = $(shell uname -s)
 CXX = clang++
 
 CXXFLAGS = -Wall -Wextra --std=c++17 -g
-CXXFLAGS += -I./src -Ilib/glad/include -Ilib/glfw/include -Ilib/glm -Ilib/stb -Ilib/assimp/include
+CXXFLAGS += -I./src -Ilib/glad/include -Ilib/glfw/include -Ilib/glm -Ilib/stb -Ilib/assimp/include -Ilib/noise/Cpp
 
 LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a lib/assimp/lib/libassimp.a -lz
 
