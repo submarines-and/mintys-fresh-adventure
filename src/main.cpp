@@ -26,6 +26,7 @@ void render()
     shader->setInt("image", 0);
 
     auto center = glm::vec2(global.camera->position.x + global.width / 2, global.camera->position.y + global.height / 2);
+
     global.renderer->renderSprite("assets/pyddelov.png", "static", center, glm::vec2(32, 32), global.camera->rotation);
     shader->setVec2("tilePosition", glm::vec2(0, 0));
 
@@ -49,7 +50,7 @@ int main()
 
     Window window(global.width, global.height, init, update, render, destroy);
     global.renderer = new Renderer();
-    global.camera = new Camera(glm::vec3(-1, -1, 0));
+    global.camera = new Camera(glm::vec3(0, 0, 0));
 
     window.loop();
 

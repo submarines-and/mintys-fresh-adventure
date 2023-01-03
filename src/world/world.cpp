@@ -14,8 +14,8 @@ void World::generate(int tileCount)
 {
     tiles = std::vector<glm::vec3>(tileCount ^ 2);
 
-    for (int y = 0; y < tileCount; y++) {
-        for (int x = 0; x < tileCount; x++) {
+    for (int x = 0; x < tileCount; x++) {
+        for (int y = 0; y < tileCount; y++) {
 
             // generate noise
             auto noise = noiseGenerator.GetNoise((float)x, (float)y);
