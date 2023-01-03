@@ -56,7 +56,10 @@ void Window::handleMouseMovement(GLFWwindow* window)
     lastX = xPos;
     lastY = yPos;
 
-    global.camera->processMouseMovement(xoffset, yoffset);
+    auto left = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+    auto right = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
+
+    global.camera->processMouseMovement(xoffset, yoffset, left, right);
 }
 
 void Window::handleScroll(GLFWwindow* window){

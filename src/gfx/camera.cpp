@@ -36,6 +36,6 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
     glm::normalize(position);
 }
 
-void Camera::processMouseMovement(float xOffset, float yOffset)
+void Camera::processMouseMovement(float xOffset, float yOffset, bool left, bool right)
 {
 }

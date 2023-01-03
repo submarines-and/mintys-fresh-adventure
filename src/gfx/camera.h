@@ -17,5 +17,5 @@ public:
     glm::mat4 getProjectionMatrix();
 
     void processKeyboard(CameraDirection direction, float deltaTime);
-    void processMouseMovement(float xOffset, float yOffset);
+    void processMouseMovement(float xOffset, float yOffset, bool left, bool right);
 };
