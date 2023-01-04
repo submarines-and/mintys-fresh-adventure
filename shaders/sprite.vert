@@ -1,16 +1,15 @@
 #version 330 core
 layout (location = 0) in vec4 vertex;
-layout (location = 1) in vec2 offset;
-layout (location = 2) in mat4 transform;
 
 out vec2 texCoords;
 
 uniform mat4 projection;
 uniform mat4 view;
+uniform mat4 transform;
 
 // sprite atlas
+uniform vec2 offset;
 uniform vec2 atlasSize;
-
 
 void main()
 {

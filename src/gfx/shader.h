@@ -8,6 +8,7 @@ class Shader {
 public:
     enum ShaderType {
         TILE,
+        SPRITE
     };
 
 public:

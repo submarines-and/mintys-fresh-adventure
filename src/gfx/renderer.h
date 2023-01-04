@@ -20,5 +20,6 @@ public:
 
     void renderSprite(const char* spritePath, Shader::ShaderType shaderKey, glm::vec2 atlasSize, glm::vec2 atlasOffset, glm::vec2 worldPosition, glm::vec2 worldSize, float rotation);
 
-    void renderTiles(TileAtlas atlas, std::vector<Tile> tiles);
+    void prepareTiles(std::vector<glm::mat4> transformations, std::vector<glm::vec2> textureOffsets);
+    void renderTiles(TileAtlas atlas, int tileCount);
 };

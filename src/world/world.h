@@ -1,16 +1,14 @@
 #pragma once
-#include "gfx/tile.h"
 #include <FastNoiseLite.h>
-#include <glm/glm.hpp>
-#include <vector>
 
 class World {
 private:
     FastNoiseLite noiseGenerator;
 
 public:
-    World();
-    void generate(int tileCount);
+    int tileCount = 0;
 
-    std::vector<Tile> tiles;
+public:
+    World();
+    void generate(int requestedTileCount);
 };

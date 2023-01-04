@@ -35,6 +35,7 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 
     glm::normalize(position);
 
+    /*
     // clamp
     auto lastTile = global.world.tiles.back();
     auto maxX = lastTile.position.x * 32 - global.width;
@@ -42,6 +43,7 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 
     position.x = position.x < 0 ? 0 : (position.x > maxX ? maxX : position.x);
     position.y = position.y < 0 ? 0 : (position.y > maxY ? maxY : position.y);
+    */
 }
 
 void Camera::processMouseMovement(float xOffset, float yOffset, bool left, bool right)

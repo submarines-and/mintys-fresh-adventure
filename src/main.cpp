@@ -9,8 +9,9 @@ Global& global = global_instance;
 
 void init()
 {
-    global.world.generate(100);
+    global.world.generate(500);
     global.renderer->loadShader(Shader::TILE, "shaders/tile.vert", "shaders/tile.frag");
+    global.renderer->loadShader(Shader::SPRITE, "shaders/sprite.vert", "shaders/sprite.frag");
 }
 
 void update()
@@ -20,8 +21,8 @@ void update()
 void render()
 {
     auto center = glm::vec2(global.camera->position.x + global.width / 2, global.camera->position.y + global.height / 2);
-    global.renderer->renderSprite("assets/pyddelov.png", Shader::TILE, glm::vec2(4, 1), glm::vec2(0, 0), center, glm::vec2(32, 32), global.camera->rotation);
-    global.renderer->renderTiles(TileAtlas(), global.world.tiles);
+    global.renderer->renderSprite("assets/pyddelov.png", Shader::SPRITE, glm::vec2(4, 1), glm::vec2(0, 0), center, glm::vec2(32, 32), global.camera->rotation);
+    global.renderer->renderTiles(TileAtlas(), global.world.tileCount);
 }
 
 void destroy()
@@ -37,7 +38,7 @@ int main()
 
     Window window(global.width, global.height, init, update, render, destroy);
     global.renderer = new Renderer();
-    global.camera = new Camera(glm::vec3(global.width / 2, global.height / 2, 0));
+    global.camera = new Camera(glm::vec3(0, 0, 0));
 
     window.loop();
 
