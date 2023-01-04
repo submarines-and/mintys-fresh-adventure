@@ -3,7 +3,7 @@
 #include "opengl.h"
 
 // callback type for main loop
-using WindowFunction = void (*)();
+using WindowFunction = void (*)(int ticks);
 
 class Window {
 private:
@@ -15,6 +15,8 @@ private:
     void handleScroll(GLFWwindow* window);
 
     float deltaTime = 0.0f;
+    int ticks = 0;
+
     float lastX = 0.0f;
     float lastY = 0.0f;
     bool firstMouse = true;

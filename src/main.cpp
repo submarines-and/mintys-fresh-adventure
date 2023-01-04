@@ -7,30 +7,33 @@
 static Global global_instance;
 Global& global = global_instance;
 
-void init()
+void init(int ticks)
 {
     global.world.generate(100, TileAtlas{
-                                  .spritePath = "assets/forest.jpg",
-                                  .atlasSize = glm::vec2(1, 1),
-                                  .tileSize = glm::vec2(1000, 1000),
-                              });
+                                   .spritePath = "assets/forest.jpg",
+                                   .atlasSize = glm::vec2(1, 1),
+                                   .tileSize = glm::vec2(1000, 1000),
+                               });
 
     global.renderer->loadShader(Shader::TILE, "shaders/tile.vert", "shaders/tile.frag");
     global.renderer->loadShader(Shader::SPRITE, "shaders/sprite.vert", "shaders/sprite.frag");
 }
 
-void update()
+void update(int ticks)
 {
 }
 
-void render()
+void render(int ticks)
 {
     auto center = glm::vec2(global.camera->position.x + global.width / 2, global.camera->position.y + global.height / 2);
-    global.renderer->renderSprite("assets/pyddelov.png", Shader::SPRITE, glm::vec2(4, 1), glm::vec2(0, 0), center, glm::vec2(32, 32), global.camera->rotation);
+
+    auto animationframe = (int)(ticks / 20) % 8;
+    global.renderer->renderSprite("assets/hood.png", Shader::SPRITE, glm::vec2(8, 9), glm::vec2(animationframe, 3), center, glm::vec2(128, 128), global.camera->rotation);
+
     global.renderer->renderTiles();
 }
 
-void destroy()
+void destroy(int ticks)
 {
     delete global.renderer;
     delete global.camera;
