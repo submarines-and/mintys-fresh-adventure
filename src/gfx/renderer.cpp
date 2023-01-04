@@ -96,21 +96,6 @@ void Renderer::renderSprite(const char* spritePath, Shader::ShaderType shaderKey
     shader->stop();
 }
 
-glm::mat4 debugMat4()
-{
-    glm::vec2 worldPosition(0, 0);
-    glm::vec2 worldSize(32, 32);
-    float rotation = 0.0f;
-
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(worldPosition, 0.0f));
-    transform = glm::translate(transform, glm::vec3(0.5f * worldSize.x, 0.5f * worldSize.y, 0.0f));
-    transform = glm::rotate(transform, glm::radians(rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform = glm::translate(transform, glm::vec3(-0.5f * worldSize.x, -0.5f * worldSize.y, 0.0f));
-    transform = glm::scale(transform, glm::vec3(worldSize, 1.0f));
-
-    return transform;
-}
 
 void Renderer::prepareTiles(std::vector<glm::mat4> transformations, std::vector<glm::vec2> textureOffsets)
 {
@@ -154,7 +139,6 @@ void Renderer::renderTiles(TileAtlas atlas, int tileCount)
     shader->setMat4("view", global.camera->getViewMatrix());
     shader->setInt("image", 0);
     shader->setVec2("atlasSize", atlas.size);
-    // shader->setMat4("transform", debugMat4());
 
     glActiveTexture(GL_TEXTURE0);
     auto sprite = loadSprite(atlas.spritePath);

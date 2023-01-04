@@ -7,6 +7,7 @@ private:
 
 public:
     int tileCount = 0;
+    int width, height = 0;
 
 public:
     World();

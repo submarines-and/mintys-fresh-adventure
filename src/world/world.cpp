@@ -16,7 +16,8 @@ World::World()
 void World::generate(int requestedTileCount)
 {
     printf("Generating world...\n");
-    std::vector<Tile> generatedTiles;
+    std::vector<glm::mat4> transformations;
+    std::vector<glm::vec2> offsets;
 
     for (int x = 0; x < requestedTileCount; x++) {
         for (int y = 0; y < requestedTileCount; y++) {
@@ -33,32 +34,33 @@ void World::generate(int requestedTileCount)
             }
 
             // map to tiles
-            generatedTiles.emplace_back(Tile{
+            Tile tile{
                 .type = tileType,
-                .position = glm::vec2(x * 32, y * 32),
-            });
+                .position = glm::vec2(x * 64, y * 64),
+                .size = glm::vec2(64, 64),
+            };
+
+            // set world variables
+            width = tile.position.x;
+            height = tile.position.y;
+
+            glm::mat4 transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, glm::vec3(tile.position, 0.0f));
+            transform = glm::translate(transform, glm::vec3(0.5f * tile.size.x, 0.5f * tile.size.y, 0.0f));
+            transform = glm::rotate(transform, glm::radians(tile.rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
+            transform = glm::translate(transform, glm::vec3(-0.5f * tile.size.x, -0.5f * tile.size.y, 0.0f));
+            transform = glm::scale(transform, glm::vec3(tile.size, 1.0f));
+
+            transformations.emplace_back(transform);
+            offsets.emplace_back(tile.getOffset(TileAtlas()));
         }
     }
 
-    // save generated size, use this for futher calculations
-    tileCount = generatedTiles.size();
+    // set world variables
+    tileCount = transformations.size();
 
-    std::vector<glm::mat4> transformations;
-    std::vector<glm::vec2> offsets;
-
-    for (auto tile : generatedTiles) {
-        glm::mat4 transform = glm::mat4(1.0f);
-        transform = glm::translate(transform, glm::vec3(tile.position, 0.0f));
-        transform = glm::translate(transform, glm::vec3(0.5f * tile.size.x, 0.5f * tile.size.y, 0.0f));
-        transform = glm::rotate(transform, glm::radians(tile.rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
-        transform = glm::translate(transform, glm::vec3(-0.5f * tile.size.x, -0.5f * tile.size.y, 0.0f));
-        transform = glm::scale(transform, glm::vec3(tile.size, 1.0f));
-
-        transformations.emplace_back(transform);
-        offsets.emplace_back(tile.getOffset(TileAtlas()));
-    }
+    // send to renderer
+    global.renderer->prepareTiles(transformations, offsets);
 
     printf("Done (Size: %i)!\n", tileCount);
-
-    global.renderer->prepareTiles(transformations, offsets);
 }
