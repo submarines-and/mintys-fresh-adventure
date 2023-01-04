@@ -20,18 +20,18 @@ void World::generate(int requestedTileCount, TileAtlas atlas)
 
     std::vector<glm::mat4> transformations;
     std::vector<glm::vec2> offsets;
+    std::vector<glm::vec4> colors;
 
     for (int x = 0; x < requestedTileCount; x++) {
         for (int y = 0; y < requestedTileCount; y++) {
 
             // generate noise
-            auto noise = noiseGenerator.GetNoise((float)x, (float)y);
+            // normalize to range 0 - 1
+            float noise = noiseGenerator.GetNoise((float)x, (float)y);
+            noise = (noise + 1) / 2;
 
+            // pick biome
             auto tileType = Tile::GRASS;
-            if (noise > -0.5) {
-            }
-            if (noise > 0.8) {
-            }
 
             // map to tiles
             Tile tile{
@@ -53,6 +53,8 @@ void World::generate(int requestedTileCount, TileAtlas atlas)
 
             transformations.emplace_back(transform);
             offsets.emplace_back(tile.getOffset(atlas));
+
+            colors.emplace_back(glm::vec4(noise * 0.5, noise, noise * 0.1, 0.9f));
         }
     }
 
@@ -60,7 +62,7 @@ void World::generate(int requestedTileCount, TileAtlas atlas)
     tileCount = transformations.size();
 
     // send to renderer
-    global.renderer->prepareTiles(transformations, offsets);
+    global.renderer->prepareTiles(transformations, offsets, colors);
 
     printf("Done (Size: %i)!\n", tileCount);
 }

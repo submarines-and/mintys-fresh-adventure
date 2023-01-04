@@ -41,10 +41,10 @@ int main()
     Window window(global.width, global.height, init, update, render, destroy);
     global.renderer = new Renderer();
 
-    global.world.generate(100, TileAtlas{
+    global.world.generate(500, TileAtlas{
                                    .spritePath = "assets/forest.jpg",
                                    .atlasSize = glm::vec2(1, 1),
-                                   .tileSize = glm::vec2(1000, 1000),
+                                   .tileSize = glm::vec2(64, 64),
                                });
 
     global.camera = new Camera(glm::vec3(global.world.width / 2, global.world.height / 2, 0));

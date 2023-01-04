@@ -1,6 +1,7 @@
 #version 330 core
 
 in  vec2 texCoords;
+in  vec4 noiseColor;
 out vec4 color;
 
 uniform sampler2D image;
@@ -13,5 +14,5 @@ void main()
     if(texColor.a < 0.1)
         discard;
 
-    color = texColor;
+    color = texColor * noiseColor;
 }

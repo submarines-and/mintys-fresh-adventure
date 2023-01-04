@@ -96,26 +96,24 @@ void Renderer::renderSprite(const char* spritePath, Shader::ShaderType shaderKey
     shader->stop();
 }
 
-
-void Renderer::prepareTiles(std::vector<glm::mat4> transformations, std::vector<glm::vec2> textureOffsets)
+void Renderer::prepareTiles(std::vector<glm::mat4> transformations, std::vector<glm::vec2> textureOffsets, std::vector<glm::vec4> colors)
 {
-    // create buffers
-    unsigned int textureOffsetVbo;
-    unsigned int transformationVbo;
-    glGenBuffers(1, &textureOffsetVbo);
-    glGenBuffers(1, &transformationVbo);
 
     // bind array
     glBindVertexArray(quadVAO);
 
     // offsets
+    unsigned int textureOffsetVbo;
+    glGenBuffers(1, &textureOffsetVbo);
     glBindBuffer(GL_ARRAY_BUFFER, textureOffsetVbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * textureOffsets.size(), &textureOffsets[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
     glVertexAttribDivisor(1, 1);
 
-    // transformations (4 slots)
+    // transformations (4 slots) 2-6
+    unsigned int transformationVbo;
+    glGenBuffers(1, &transformationVbo);
     glBindBuffer(GL_ARRAY_BUFFER, transformationVbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transformations.size(), &transformations[0], GL_STATIC_DRAW);
 
@@ -124,6 +122,15 @@ void Renderer::prepareTiles(std::vector<glm::mat4> transformations, std::vector<
         glVertexAttribPointer(2 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
         glVertexAttribDivisor(2 + i, 1);
     }
+
+    // colors
+    unsigned int colorVbo;
+    glGenBuffers(1, &colorVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * colors.size(), &colors[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+    glVertexAttribDivisor(6, 1);
 
     // unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
