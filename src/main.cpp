@@ -22,7 +22,7 @@ void render(int ticks)
     auto center = glm::vec2(global.camera->position.x + global.width / 2, global.camera->position.y + global.height / 2);
 
     auto animationframe = (int)(ticks / 20) % 8;
-    global.renderer->renderSprite("assets/hood.png", Shader::SPRITE, glm::vec2(8, 9), glm::vec2(animationframe, 3), center, glm::vec2(128, 128), global.camera->rotation);
+    global.renderer->renderSprite("assets/hood.png", Shader::SPRITE, glm::vec2(8, 9), glm::vec2(animationframe, 3), center, glm::vec2(128, 128), 0);
 
     global.renderer->renderTiles();
 }
