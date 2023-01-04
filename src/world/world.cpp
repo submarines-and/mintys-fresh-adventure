@@ -1,17 +1,8 @@
 #include "world.h"
+#include "biome.h"
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
-
-World::World()
-{
-    srand((unsigned int)time(NULL));
-
-    int seed = rand() % RAND_MAX + 1;
-
-    noiseGenerator.SetSeed(seed);
-    noiseGenerator.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
-}
 
 void World::generate(int requestedTileCount, TileAtlas atlas)
 {
@@ -25,17 +16,12 @@ void World::generate(int requestedTileCount, TileAtlas atlas)
     for (int x = 0; x < requestedTileCount; x++) {
         for (int y = 0; y < requestedTileCount; y++) {
 
-            // generate noise
-            // normalize to range 0 - 1
-            float noise = noiseGenerator.GetNoise((float)x, (float)y);
-            noise = (noise + 1) / 2;
-
-            // pick biome
-            auto tileType = Tile::GRASS;
+            float rainfall = rainfallNoise.next(x, y);
+            float temperature = temperatureNoise.next(x, y);
 
             // map to tiles
             Tile tile{
-                .type = tileType,
+                .type = Tile::GRASS,
                 .position = glm::vec2(x * atlas.tileSize.x, y * atlas.tileSize.y),
                 .size = atlas.tileSize,
             };
@@ -54,7 +40,9 @@ void World::generate(int requestedTileCount, TileAtlas atlas)
             transformations.emplace_back(transform);
             offsets.emplace_back(tile.getOffset(atlas));
 
-            colors.emplace_back(glm::vec4(noise * 0.5, noise, noise * 0.1, 0.9f));
+            Biome biome(rainfall, temperature);
+
+            colors.emplace_back(biome.getColor());
         }
     }
 

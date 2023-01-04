@@ -37,11 +37,12 @@ int main()
 {
     global.width = 1920;
     global.height = 1080;
+    srand((unsigned int)time(NULL));
 
     Window window(global.width, global.height, init, update, render, destroy);
     global.renderer = new Renderer();
 
-    global.world.generate(500, TileAtlas{
+    global.world.generate(200, TileAtlas{
                                    .spritePath = "assets/forest.jpg",
                                    .atlasSize = glm::vec2(1, 1),
                                    .tileSize = glm::vec2(64, 64),
