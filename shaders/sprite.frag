@@ -7,5 +7,12 @@ uniform sampler2D image;
 
 void main()
 {
-    color = texture(image, texCoords);
+    vec4 texColor = texture(image, texCoords);
+
+    // transparent
+    if(texColor.a < 0.1)
+        discard;
+
+    color = texColor;
+
 }
