@@ -10,7 +10,7 @@ Global& global = global_instance;
 void init()
 {
     global.world.generate(100, TileAtlas{
-                                  .spritePath = "assets/forest.png",
+                                  .spritePath = "assets/forest.jpg",
                                   .atlasSize = glm::vec2(1, 1),
                                   .tileSize = glm::vec2(1000, 1000),
                               });
