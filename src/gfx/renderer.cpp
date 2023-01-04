@@ -130,22 +130,22 @@ void Renderer::prepareTiles(std::vector<glm::mat4> transformations, std::vector<
     glBindVertexArray(0);
 }
 
-void Renderer::renderTiles(TileAtlas atlas, int tileCount)
+void Renderer::renderTiles()
 {
-    auto shader = getShader(atlas.shaderKey);
+    auto shader = getShader(global.world.atlas.shaderKey);
     shader->start();
 
     shader->setMat4("projection", global.camera->getProjectionMatrix());
     shader->setMat4("view", global.camera->getViewMatrix());
     shader->setInt("image", 0);
-    shader->setVec2("atlasSize", atlas.size);
+    shader->setVec2("atlasSize", global.world.atlas.atlasSize);
 
     glActiveTexture(GL_TEXTURE0);
-    auto sprite = loadSprite(atlas.spritePath);
+    auto sprite = loadSprite(global.world.atlas.spritePath);
     sprite->bind();
 
     glBindVertexArray(quadVAO);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, tileCount);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, global.world.tileCount);
 
     glBindVertexArray(0);
     shader->stop();

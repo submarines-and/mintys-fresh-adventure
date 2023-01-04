@@ -13,9 +13,11 @@ World::World()
     noiseGenerator.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
 }
 
-void World::generate(int requestedTileCount)
+void World::generate(int requestedTileCount, TileAtlas atlas)
 {
     printf("Generating world...\n");
+    this->atlas = atlas;
+
     std::vector<glm::mat4> transformations;
     std::vector<glm::vec2> offsets;
 
@@ -25,19 +27,17 @@ void World::generate(int requestedTileCount)
             // generate noise
             auto noise = noiseGenerator.GetNoise((float)x, (float)y);
 
-            auto tileType = Tile::WATER;
+            auto tileType = Tile::GRASS;
             if (noise > -0.5) {
-                tileType = Tile::GRASS;
             }
             if (noise > 0.8) {
-                tileType = Tile::STUMP;
             }
 
             // map to tiles
             Tile tile{
                 .type = tileType,
-                .position = glm::vec2(x * 64, y * 64),
-                .size = glm::vec2(64, 64),
+                .position = glm::vec2(x * atlas.tileSize.x, y * atlas.tileSize.y),
+                .size = atlas.tileSize,
             };
 
             // set world variables
@@ -52,7 +52,7 @@ void World::generate(int requestedTileCount)
             transform = glm::scale(transform, glm::vec3(tile.size, 1.0f));
 
             transformations.emplace_back(transform);
-            offsets.emplace_back(tile.getOffset(TileAtlas()));
+            offsets.emplace_back(tile.getOffset(atlas));
         }
     }
 

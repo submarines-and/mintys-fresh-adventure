@@ -9,7 +9,12 @@ Global& global = global_instance;
 
 void init()
 {
-    global.world.generate(500);
+    global.world.generate(100, TileAtlas{
+                                  .spritePath = "assets/forest.png",
+                                  .atlasSize = glm::vec2(1, 1),
+                                  .tileSize = glm::vec2(1000, 1000),
+                              });
+
     global.renderer->loadShader(Shader::TILE, "shaders/tile.vert", "shaders/tile.frag");
     global.renderer->loadShader(Shader::SPRITE, "shaders/sprite.vert", "shaders/sprite.frag");
 }
@@ -22,7 +27,7 @@ void render()
 {
     auto center = glm::vec2(global.camera->position.x + global.width / 2, global.camera->position.y + global.height / 2);
     global.renderer->renderSprite("assets/pyddelov.png", Shader::SPRITE, glm::vec2(4, 1), glm::vec2(0, 0), center, glm::vec2(32, 32), global.camera->rotation);
-    global.renderer->renderTiles(TileAtlas(), global.world.tileCount);
+    global.renderer->renderTiles();
 }
 
 void destroy()
