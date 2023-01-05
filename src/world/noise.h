@@ -25,11 +25,12 @@ private:
 
     double getNoise(float x, float y, std::vector<int>& p)
     {
-        int z = 0.5;
+        float z = 0.5f;
 
         int X = (int)floor(x) & 255, // FIND UNIT CUBE THAT
             Y = (int)floor(y) & 255, // CONTAINS POINT.
             Z = (int)floor(z) & 255;
+            
         x -= floor(x); // FIND RELATIVE X,Y,Z
         y -= floor(y); // OF POINT IN CUBE.
         z -= floor(z);
