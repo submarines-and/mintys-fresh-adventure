@@ -1,16 +1,16 @@
 #include "world.h"
-#include "global.h"
 #include "gfx/shader.h"
+#include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 World::World()
 {
     global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
-    chunks = std::vector<GLuint>(xMapChunks * yMapChunks);
+    chunks = std::vector<GLuint>(numberOfChunks * numberOfChunks);
 
-    for (int y = 0; y < yMapChunks; y++) {
-        for (int x = 0; x < xMapChunks; x++) {
-            generateWorldChunk(chunks[x + y * xMapChunks], x, y);
+    for (int y = 0; y < numberOfChunks; y++) {
+        for (int x = 0; x < numberOfChunks; x++) {
+            generateWorldChunk(chunks[x + y * numberOfChunks], x, y);
         }
     }
 }
@@ -32,12 +32,14 @@ void World::render()
     objectShader->setVec3("u_viewPos", global.camera->position);
 
     // Measures number of map chunks away from origin map chunk the camera is
-    gridPosX = (int)(global.camera->position.x - originX) / chunkWidth + xMapChunks / 2;
-    gridPosY = (int)(global.camera->position.z - originY) / chunkHeight + yMapChunks / 2;
+    float originX = (chunkWidth * numberOfChunks) / 2 - chunkWidth / 2;
+    float originY = (chunkHeight * numberOfChunks) / 2 - chunkHeight / 2;
+    int gridPosX = (int)(global.camera->position.x - originX) / chunkWidth + numberOfChunks / 2;
+    int gridPosY = (int)(global.camera->position.z - originY) / chunkHeight + numberOfChunks / 2;
 
     // Render map chunks
-    for (int y = 0; y < yMapChunks; y++) {
-        for (int x = 0; x < xMapChunks; x++) {
+    for (int y = 0; y < numberOfChunks; y++) {
+        for (int x = 0; x < numberOfChunks; x++) {
 
             // Only render chunk if it's within render distance
             if (std::abs(gridPosX - x) <= renderDistance && (y - gridPosY) <= renderDistance) {
@@ -46,8 +48,8 @@ void World::render()
                 objectShader->setMat4("u_model", model);
 
                 // Terrain chunk
-                glBindVertexArray(chunks[x + y * xMapChunks]);
-                glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
+                glBindVertexArray(chunks[x + y * numberOfChunks]);
+                glDrawElements(GL_TRIANGLES, chunkWidth * chunkHeight * 6, GL_UNSIGNED_INT, 0);
             }
         }
     }

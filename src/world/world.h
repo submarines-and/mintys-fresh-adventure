@@ -6,18 +6,15 @@
 
 class World {
 private:
-    float meshHeight = 32.0f;
+    int numberOfChunks = 10;
+    int chunkWidth = 100;
+    int chunkHeight = 100;
+
+    float meshHeight = 5.0f;
     float waterHeight = 0.1f;
     int renderDistance = 3;
-    int xMapChunks = 10;
-    int yMapChunks = 10;
-    int chunkWidth = 127;
-    int chunkHeight = 127;
-    int gridPosX = 0;
-    int gridPosY = 0;
-    float originX = (chunkWidth * xMapChunks) / 2 - chunkWidth / 2;
-    float originY = (chunkHeight * yMapChunks) / 2 - chunkHeight / 2;
-    int nIndices = chunkWidth * chunkHeight * 6;
+
+
 
     std::vector<GLuint> chunks;
     Noise noise;
