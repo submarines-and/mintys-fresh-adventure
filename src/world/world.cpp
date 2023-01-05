@@ -105,6 +105,9 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
     // Configure vertex colors attribute
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(2);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 std::vector<int> World::generateIndices()
