@@ -16,8 +16,8 @@
 #include "gfx/shader.h"
 #include "gfx/window.h"
 #include "global.h"
-#include "perlin.h"
 #include "tiny_obj_loader.h"
+#include "world/noise.h"
 
 // Structs
 struct plant {
@@ -45,7 +45,6 @@ struct plant {
  *
  */
 std::vector<int> generate_indices();
-std::vector<float> generate_noise_map(int xOffset, int yOffset);
 std::vector<float> generate_vertices(const std::vector<float>& noise_map);
 std::vector<float> generate_normals(const std::vector<int>& indices, const std::vector<float>& vertices);
 std::vector<float> generate_biome(const std::vector<float>& vertices, std::vector<plant>& plants, int xOffset, int yOffset);
@@ -74,13 +73,7 @@ int gridPosX = 0;
 int gridPosY = 0;
 float originX = (chunkWidth * xMapChunks) / 2 - chunkWidth / 2;
 float originY = (chunkHeight * yMapChunks) / 2 - chunkHeight / 2;
-
-// Noise params
-int octaves = 5;
 float meshHeight = 32; // Vertical scaling
-float noiseScale = 64; // Horizontal scaling
-float persistence = 0.5;
-float lacunarity = 2;
 
 // Model params
 float MODEL_SCALE = 3;
@@ -207,9 +200,11 @@ void generate_map_chunk(GLuint& VAO, int xOffset, int yOffset, std::vector<plant
     std::vector<float> normals;
     std::vector<float> colors;
 
+    Noise noise;
+
     // Generate map
     indices = generate_indices();
-    noise_map = generate_noise_map(xOffset, yOffset);
+    noise_map = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
     vertices = generate_vertices(noise_map);
     normals = generate_normals(indices, vertices);
     colors = generate_biome(vertices, plants, xOffset, yOffset);
@@ -254,53 +249,6 @@ void generate_map_chunk(GLuint& VAO, int xOffset, int yOffset, std::vector<plant
 glm::vec3 get_color(int r, int g, int b)
 {
     return glm::vec3(r / 255.0, g / 255.0, b / 255.0);
-}
-
-std::vector<float> generate_noise_map(int offsetX, int offsetY)
-{
-    std::vector<float> noiseValues;
-    std::vector<float> normalizedNoiseValues;
-    std::vector<int> p = get_permutation_vector();
-
-    float amp = 1;
-    float freq = 1;
-    float maxPossibleHeight = 0;
-
-    for (int i = 0; i < octaves; i++) {
-        maxPossibleHeight += amp;
-        amp *= persistence;
-    }
-
-    for (int y = 0; y < chunkHeight; y++) {
-        for (int x = 0; x < chunkWidth; x++) {
-            amp = 1;
-            freq = 1;
-            float noiseHeight = 0;
-            for (int i = 0; i < octaves; i++) {
-                float xSample = (x + offsetX * (chunkWidth - 1)) / noiseScale * freq;
-                float ySample = (y + offsetY * (chunkHeight - 1)) / noiseScale * freq;
-
-                float perlinValue = perlin_noise(xSample, ySample, p);
-                noiseHeight += perlinValue * amp;
-
-                // Lacunarity  --> Increase in frequency of octaves
-                // Persistence --> Decrease in amplitude of octaves
-                amp *= persistence;
-                freq *= lacunarity;
-            }
-
-            noiseValues.push_back(noiseHeight);
-        }
-    }
-
-    for (int y = 0; y < chunkHeight; y++) {
-        for (int x = 0; x < chunkWidth; x++) {
-            // Inverse lerp and scale values to range from 0 to 1
-            normalizedNoiseValues.push_back((noiseValues[x + y * chunkWidth] + 1) / maxPossibleHeight);
-        }
-    }
-
-    return normalizedNoiseValues;
 }
 
 struct terrainColor {

@@ -10,6 +10,3 @@
 [submodule "lib/assimp"]
 	path = lib/assimp
 	url = https://github.com/assimp/assimp
-[submodule "lib/noise"]
-	path = lib/noise
-	url = https://github.com/Auburn/FastNoiseLite

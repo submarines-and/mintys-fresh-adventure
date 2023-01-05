@@ -1,7 +1,6 @@
 #pragma once
 #include "gfx/camera.h"
 #include "gfx/renderer.h"
-#include "world/world.h"
 
 /** All globally available objects */
 struct Global {

@@ -16,7 +16,6 @@
                 "-Ilib/glm",
                 "-Ilib/stb",
                 "-Ilib/assimp/include",
-                "-Ilib/noise/Cpp",
             ]
         }
     ],
