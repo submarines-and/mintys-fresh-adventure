@@ -48,6 +48,11 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
     if (direction == RIGHT)
         position += right * velocity;
 
+    // clamp
+    if (position.y < 10.0f) {
+        position.y = 10.0f;
+    }
+
     glm::normalize(position);
 }
 
