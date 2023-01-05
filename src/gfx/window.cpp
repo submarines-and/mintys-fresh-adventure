@@ -36,9 +36,6 @@ void Window::handleInput(GLFWwindow* window)
         global.camera->processKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         global.camera->processKeyboard(RIGHT, deltaTime);
-
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        global.camera->processKeyboard(UP, deltaTime);
 }
 
 void Window::handleMouseMovement(GLFWwindow* window)

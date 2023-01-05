@@ -13,6 +13,9 @@ private:
     float yaw = -90.0f;
     float pitch = 0.0f;
 
+    float MOVEMENT_SPEED = 32.0f;
+    float LOOK_SENTITIVITY = 0.1f;
+
     // camera Attributes
     glm::vec3 front;
     glm::vec3 right;
