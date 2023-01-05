@@ -18,33 +18,32 @@ void World::generate(int requestedTileCount, TileAtlas atlas)
 
             float rainfall = rainfallNoise.next(x, y);
             float temperature = temperatureNoise.next(x, y);
-
-            // map to tiles
-            Tile tile{
-                .type = Tile::GRASS,
-                .position = glm::vec2(x * atlas.tileSize.x, y * atlas.tileSize.y),
-                .size = atlas.tileSize,
-            };
+        
+            auto position = glm::vec2(x * atlas.tileSize.x, y * atlas.tileSize.y);
 
             // set world variables
-            width = tile.position.x;
-            height = tile.position.y;
+            width = position.x;
+            height = position.y;
 
             glm::mat4 transform = glm::mat4(1.0f);
-            transform = glm::translate(transform, glm::vec3(tile.position, 0.0f));
-            transform = glm::translate(transform, glm::vec3(0.5f * tile.size.x, 0.5f * tile.size.y, 0.0f));
-            transform = glm::rotate(transform, glm::radians(tile.rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
-            transform = glm::translate(transform, glm::vec3(-0.5f * tile.size.x, -0.5f * tile.size.y, 0.0f));
-            transform = glm::scale(transform, glm::vec3(tile.size, 1.0f));
+            transform = glm::translate(transform, glm::vec3(position, 0.0f));
+            transform = glm::translate(transform, glm::vec3(0.5f * atlas.tileSize.x, 0.5f * atlas.tileSize.y, 0.0f));
+            transform = glm::rotate(transform, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+            transform = glm::translate(transform, glm::vec3(-0.5f * atlas.tileSize.x, -0.5f * atlas.tileSize.y, 0.0f));
+            transform = glm::scale(transform, glm::vec3(atlas.tileSize, 1.0f));
 
             transformations.emplace_back(transform);
-            offsets.emplace_back(tile.getOffset(atlas));
+
+            int tileType = 0;
+            offsets.emplace_back(glm::vec2(((int)tileType % (int)atlas.atlasSize.x), (int)tileType / (int)atlas.atlasSize.y));
 
             Biome biome(rainfall, temperature);
 
             colors.emplace_back(biome.getColor());
         }
     }
+
+    printf("Sending to GPU...\n");
 
     // set world variables
     tileCount = transformations.size();
