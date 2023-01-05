@@ -9,7 +9,8 @@ uniform bool isFlat;
 void main() {
     if (isFlat) {
         FragColor = vec4(flatColor, 1.0);
-    } else {
+    } 
+    else {
         FragColor = vec4(Color, 1.0);
     }
 }

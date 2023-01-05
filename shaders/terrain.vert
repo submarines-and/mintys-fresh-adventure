@@ -44,8 +44,7 @@ vec3 calculateLighting(vec3 Normal, vec3 FragPos) {
 
 void main() {
     vec3 FragPos = vec3(u_model * vec4(aPos + aOffset, 1.0));
-    vec3 Normal = aNormal;
-//    vec3 Normal = transpose(inverse(mat3(u_model))) * aNormal;
+    vec3 Normal = transpose(inverse(mat3(u_model))) * aNormal;
 
     vec3 lighting = calculateLighting(Normal, FragPos);
     Color = aColor * lighting;
