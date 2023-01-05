@@ -4,9 +4,14 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+struct WorldChunk {
+    GLuint id;
+    bool generated = false;
+};
+
 class World {
 private:
-    int numberOfChunks = 10;
+    int numberOfChunks = 1000;
     int chunkWidth = 100;
     int chunkHeight = 100;
 
@@ -14,9 +19,7 @@ private:
     float waterHeight = 0.1f;
     int renderDistance = 3;
 
-
-
-    std::vector<GLuint> chunks;
+    std::vector<WorldChunk> chunks;
     Noise noise;
 
     struct TerrainColor {

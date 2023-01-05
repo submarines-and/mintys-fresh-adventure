@@ -6,11 +6,11 @@
 World::World()
 {
     global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
-    chunks = std::vector<GLuint>(numberOfChunks * numberOfChunks);
+    chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
 
     for (int y = 0; y < numberOfChunks; y++) {
         for (int x = 0; x < numberOfChunks; x++) {
-            generateWorldChunk(chunks[x + y * numberOfChunks], x, y);
+            chunks[x + y * numberOfChunks] = WorldChunk();
         }
     }
 }
@@ -43,12 +43,19 @@ void World::render()
 
             // Only render chunk if it's within render distance
             if (std::abs(gridPosX - x) <= renderDistance && (y - gridPosY) <= renderDistance) {
+
+                auto& chunk = chunks[x + y * numberOfChunks];
+                if (!chunk.generated) {
+                    generateWorldChunk(chunk.id, x, y);
+                    chunk.generated = true;
+                }
+
                 glm::mat4 model = glm::mat4(1.0f);
                 model = glm::translate(model, glm::vec3(-chunkWidth / 2.0 + (chunkWidth - 1) * x, 0.0, -chunkHeight / 2.0 + (chunkHeight - 1) * y));
                 objectShader->setMat4("u_model", model);
 
                 // Terrain chunk
-                glBindVertexArray(chunks[x + y * numberOfChunks]);
+                glBindVertexArray(chunk.id);
                 glDrawElements(GL_TRIANGLES, chunkWidth * chunkHeight * 6, GL_UNSIGNED_INT, 0);
             }
         }
