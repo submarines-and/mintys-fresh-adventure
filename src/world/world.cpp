@@ -59,11 +59,11 @@ void World::render()
 
 void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
 {
-    std::vector<int> indices = generateIndices();
-    std::vector<float> noise_map = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
-    std::vector<float> vertices = generateVertices(noise_map);
-    std::vector<float> normals = generateNormals(indices, vertices);
-    std::vector<float> colors = generateBiome(vertices);
+    auto indices = generateIndices();
+    auto noise_map = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
+    auto vertices = generateVertices(noise_map);
+    auto normals = generateNormals(indices, vertices);
+    auto colors = generateBiome(vertices);
 
     GLuint VBO[3], EBO;
 
@@ -95,10 +95,10 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
 
     // Bind vertices to VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
-    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), &colors[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
 
     // Configure vertex colors attribute
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
     glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -183,9 +183,9 @@ std::vector<float> World::generateNormals(const std::vector<int>& indices, const
     return normals;
 }
 
-std::vector<float> World::generateBiome(const std::vector<float>& vertices)
+std::vector<glm::vec3> World::generateBiome(const std::vector<float>& vertices)
 {
-    std::vector<float> colors;
+    std::vector<glm::vec3> colors;
 
     for (auto i = 1.0f; i < vertices.size(); i += 3) {
         glm::vec3 color;
@@ -218,9 +218,7 @@ std::vector<float> World::generateBiome(const std::vector<float>& vertices)
         // normalize
         color = glm::vec3(color.r / 255.0, color.g / 255.0, color.b / 255.0);
 
-        colors.push_back(color.r);
-        colors.push_back(color.g);
-        colors.push_back(color.b);
+        colors.push_back(color);
     }
 
     return colors;

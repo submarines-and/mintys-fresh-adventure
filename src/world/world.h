@@ -28,7 +28,7 @@ private:
     std::vector<int> generateIndices();
     std::vector<float> generateVertices(const std::vector<float>& noiseMap);
     std::vector<float> generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices);
-    std::vector<float> generateBiome(const std::vector<float>& vertices);
+    std::vector<glm::vec3> generateBiome(const std::vector<float>& vertices);
 
 public:
     World(int numberOfChunks, int chunkSize);
