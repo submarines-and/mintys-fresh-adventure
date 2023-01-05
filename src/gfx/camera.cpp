@@ -56,6 +56,7 @@ void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonH
     xOffset *= LOOK_SENTITIVITY;
     yOffset *= LOOK_SENTITIVITY;
 
+    // always add to y
     pitch += yOffset;
 
     // side scroll on mouse held

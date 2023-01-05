@@ -12,13 +12,13 @@ struct WorldChunk {
 
 class World {
 private:
-    int numberOfChunks = 1000;
+    int numberOfChunks = 100;
     int chunkWidth = 100;
     int chunkHeight = 100;
 
     float meshHeight = 5.0f;
     float waterHeight = 0.1f;
-    int renderDistance = 3;
+    int renderDistance = chunkHeight * 3;
 
     std::vector<WorldChunk> chunks;
     Noise noise;

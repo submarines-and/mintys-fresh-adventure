@@ -34,23 +34,16 @@ void World::render()
     objectShader->setMat4("u_view", view);
     objectShader->setVec3("u_viewPos", global.camera->position);
 
-    // Measures number of map chunks away from origin map chunk the camera is
-    float originX = (chunkWidth * numberOfChunks) / 2 - chunkWidth / 2;
-    float originY = (chunkHeight * numberOfChunks) / 2 - chunkHeight / 2;
-    int gridPosX = (int)(global.camera->position.x - originX) / chunkWidth + numberOfChunks / 2;
-    int gridPosY = (int)(global.camera->position.y - originY) / chunkHeight + numberOfChunks / 2;
-
     // Render map chunks
     for (auto& chunk : chunks) {
 
         // Only render chunk if it's within render distance
-        if (std::abs(gridPosX - chunk.x) <= renderDistance && (chunk.y - gridPosY) <= renderDistance) {
+        if (std::abs(chunk.x * chunkWidth - global.camera->position.x) <= renderDistance && std::abs(chunk.y * chunkHeight - global.camera->position.z) <= renderDistance) {
 
             if (!chunk.generated) {
                 generateWorldChunk(chunk.id, chunk.x, chunk.y);
                 chunk.generated = true;
             }
-
 
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(-chunkWidth / 2.0 + (chunkWidth - 1) * chunk.x, 0.0, -chunkHeight / 2.0 + (chunkHeight - 1) * chunk.y));
