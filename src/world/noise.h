@@ -1,4 +1,5 @@
 #pragma once
+#include "util/math.h"
 #include <FastNoiseLite.h>
 
 class Noise {
@@ -19,6 +20,6 @@ public:
         float noise = generator.GetNoise((float)x, (float)y);
 
         // clamp to 0-1
-        return (noise + 1) / 2;
+        return Math::normalize(noise, 1, -1, 1);
     }
 };
