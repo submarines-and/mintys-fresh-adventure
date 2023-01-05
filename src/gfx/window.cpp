@@ -8,6 +8,11 @@ static void errorCallback(int code, const char* description)
     printf("GLFW error %d: %s\n", code, description);
 }
 
+void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
+{
+    global.camera->processScroll(yOffset);
+}
+
 void onResize(GLFWwindow* window, int width, int height)
 {
 #pragma unused(window)
@@ -64,13 +69,6 @@ void Window::handleMouseMovement(GLFWwindow* window)
     global.camera->processMouseMovement(xoffset, yoffset, left, right);
 }
 
-void Window::handleScroll(GLFWwindow* window){
-#pragma unused(window)
-
-    // https://github.com/glfw/glfw/issues/356
-    // global.camera.processMouseScroll(static_cast<float>(yoffset));
-}
-
 Window::Window(int width, int height, WindowFunction init, WindowFunction update, WindowFunction render, WindowFunction destroy)
     : init(init),
       update(update),
@@ -103,6 +101,7 @@ Window::Window(int width, int height, WindowFunction init, WindowFunction update
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, onResize);
+    glfwSetScrollCallback(window, scrollCallback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         printf("Failed to load GLAD\n");
@@ -142,7 +141,6 @@ void Window::loop()
 
         handleInput(window);
         handleMouseMovement(window);
-        handleScroll(window);
         update();
 
         glClearColor(255, 255, 255, 255);

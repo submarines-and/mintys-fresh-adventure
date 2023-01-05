@@ -12,7 +12,6 @@ private:
 
     void handleInput(GLFWwindow* window);
     void handleMouseMovement(GLFWwindow* window);
-    void handleScroll(GLFWwindow* window);
 
     float deltaTime = 0.0f;
     int ticks = 0;

@@ -10,7 +10,7 @@ enum CameraDirection {
 
 class Camera {
 private:
-    float yaw = -90.0f;
+    float yaw = 90.0f;
     float pitch = 0.0f;
 
     float MOVEMENT_SPEED = 32.0f;
@@ -25,15 +25,16 @@ private:
     void updateCameraVectors();
 
 public:
-    glm::vec3 position;
-    float zoom = 45.0f;
+    glm::vec3 position = glm::vec3(80.0f, 80.0f, 0);
+    float zoom = 20.0f;
 
 public:
-    Camera(glm::vec3 position);
+    Camera();
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();
 
     void processKeyboard(CameraDirection direction, float deltaTime);
     void processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld);
+    void processScroll(float yOffset);
 };

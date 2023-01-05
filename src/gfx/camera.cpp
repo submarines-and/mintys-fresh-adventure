@@ -2,7 +2,7 @@
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera(glm::vec3 position) : position(position)
+Camera::Camera()
 {
     updateCameraVectors();
 }
@@ -15,43 +15,6 @@ glm::mat4 Camera::getViewMatrix()
 glm::mat4 Camera::getProjectionMatrix()
 {
     return glm::ortho(0.0f, (float)global.width, 0.0f, (float)global.height, -100.0f, 100.0f);
-}
-
-void Camera::processKeyboard(CameraDirection direction, float deltaTime)
-{
-    float velocity = MOVEMENT_SPEED * deltaTime;
-
-    if (direction == UP)
-        position += front * velocity;
-    if (direction == DOWN)
-        position -= front * velocity;
-    if (direction == LEFT)
-        position -= right * velocity;
-    if (direction == RIGHT)
-        position += right * velocity;
-
-    glm::normalize(position);
-}
-
-void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
-{
-
-    xOffset *= LOOK_SENTITIVITY;
-    yOffset *= LOOK_SENTITIVITY;
-
-    pitch += yOffset;
-
-    if (rightButtonHeld) {
-        yaw += xOffset;
-    }
-
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    updateCameraVectors();
 }
 
 void Camera::updateCameraVectors()
@@ -67,4 +30,58 @@ void Camera::updateCameraVectors()
     // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
     up = glm::normalize(glm::cross(right, front));
+}
+
+void Camera::processKeyboard(CameraDirection direction, float deltaTime)
+{
+    float velocity = MOVEMENT_SPEED * deltaTime;
+
+    if (direction == UP)
+        position += front * velocity;
+
+    if (direction == DOWN)
+        position -= front * velocity;
+
+    if (direction == LEFT)
+        position -= right * velocity;
+
+    if (direction == RIGHT)
+        position += right * velocity;
+
+    glm::normalize(position);
+}
+
+void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
+{
+    xOffset *= LOOK_SENTITIVITY;
+    yOffset *= LOOK_SENTITIVITY;
+
+    pitch += yOffset;
+
+    // side scroll on mouse held
+    if (rightButtonHeld) {
+        yaw += xOffset;
+    }
+
+    // make sure that when pitch is out of bounds, screen doesn't get flipped
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    updateCameraVectors();
+}
+
+void Camera::processScroll(float yOffset)
+{
+    yOffset *= LOOK_SENTITIVITY;
+
+    if (zoom >= 1.0f && zoom <= 45.0f)
+        zoom -= yOffset;
+
+    if (zoom <= 1.0f)
+        zoom = 1.0f;
+
+    if (zoom >= 45.0f)
+        zoom = 45.0f;
 }
