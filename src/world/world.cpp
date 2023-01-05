@@ -1,6 +1,57 @@
 #include "world.h"
+#include "global.h"
+#include "gfx/shader.h"
+#include <glm/gtc/matrix_transform.hpp>
 
-World::World(int chunkHeight, int chunkWidth) : chunkHeight(chunkHeight), chunkWidth(chunkWidth) {}
+World::World()
+{
+    global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
+    chunks = std::vector<GLuint>(xMapChunks * yMapChunks);
+
+    for (int y = 0; y < yMapChunks; y++) {
+        for (int x = 0; x < xMapChunks; x++) {
+            generateWorldChunk(chunks[x + y * xMapChunks], x, y);
+        }
+    }
+}
+
+void World::render()
+{
+    glm::mat4 projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, (float)chunkWidth * (renderDistance - 1.2f));
+    glm::mat4 view = global.camera->getViewMatrix();
+
+    Shader* objectShader = global.renderer->getShader(Shader::TERRAIN);
+    objectShader->start();
+    objectShader->setBool("isFlat", true);
+    objectShader->setVec3("light.ambient", 0.2, 0.2, 0.2);
+    objectShader->setVec3("light.diffuse", 0.3, 0.3, 0.3);
+    objectShader->setVec3("light.specular", 1.0, 1.0, 1.0);
+    objectShader->setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+    objectShader->setMat4("u_projection", projection);
+    objectShader->setMat4("u_view", view);
+    objectShader->setVec3("u_viewPos", global.camera->position);
+
+    // Measures number of map chunks away from origin map chunk the camera is
+    gridPosX = (int)(global.camera->position.x - originX) / chunkWidth + xMapChunks / 2;
+    gridPosY = (int)(global.camera->position.z - originY) / chunkHeight + yMapChunks / 2;
+
+    // Render map chunks
+    for (int y = 0; y < yMapChunks; y++) {
+        for (int x = 0; x < xMapChunks; x++) {
+
+            // Only render chunk if it's within render distance
+            if (std::abs(gridPosX - x) <= renderDistance && (y - gridPosY) <= renderDistance) {
+                glm::mat4 model = glm::mat4(1.0f);
+                model = glm::translate(model, glm::vec3(-chunkWidth / 2.0 + (chunkWidth - 1) * x, 0.0, -chunkHeight / 2.0 + (chunkHeight - 1) * y));
+                objectShader->setMat4("u_model", model);
+
+                // Terrain chunk
+                glBindVertexArray(chunks[x + y * xMapChunks]);
+                glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
+            }
+        }
+    }
+}
 
 void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
 {

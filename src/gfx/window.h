@@ -3,7 +3,7 @@
 #include "opengl.h"
 
 // callback type for main loop
-using WindowFunction = void (*)(int ticks);
+using WindowFunction = void (*)();
 
 class Window {
 private:

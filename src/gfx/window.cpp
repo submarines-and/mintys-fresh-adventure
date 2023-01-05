@@ -135,7 +135,7 @@ void Window::loop()
     glEnable(GL_FRAMEBUFFER_SRGB);
 
     // main init
-    init(ticks);
+    init();
 
     float lastFrame = 0.0f;
     while (!glfwWindowShouldClose(window)) {
@@ -146,11 +146,11 @@ void Window::loop()
         handleInput(window);
         handleMouseMovement(window);
         handleScroll(window);
-        update(ticks);
+        update();
 
         glClearColor(255, 255, 255, 255);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        render(ticks);
+        render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -158,5 +158,5 @@ void Window::loop()
     }
 
     // main destroy
-    destroy(ticks);
+    destroy();
 }

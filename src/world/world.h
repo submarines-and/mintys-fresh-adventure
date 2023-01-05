@@ -6,11 +6,21 @@
 
 class World {
 private:
-    Noise noise;
     float meshHeight = 32.0f;
     float waterHeight = 0.1f;
+    int renderDistance = 3;
+    int xMapChunks = 10;
+    int yMapChunks = 10;
+    int chunkWidth = 127;
+    int chunkHeight = 127;
+    int gridPosX = 0;
+    int gridPosY = 0;
+    float originX = (chunkWidth * xMapChunks) / 2 - chunkWidth / 2;
+    float originY = (chunkHeight * yMapChunks) / 2 - chunkHeight / 2;
+    int nIndices = chunkWidth * chunkHeight * 6;
 
-    int chunkHeight, chunkWidth;
+    std::vector<GLuint> chunks;
+    Noise noise;
 
     struct TerrainColor {
         TerrainColor(float height, glm::vec3 color) : height(height), color(color) {}
@@ -19,6 +29,8 @@ private:
     };
 
 private:
+    void generateWorldChunk(GLuint& VAO, int xOffset, int yOffset);
+
     std::vector<int> generateIndices();
     std::vector<float> generateVertices(const std::vector<float>& noiseMap);
     std::vector<float> generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices);
@@ -26,6 +38,6 @@ private:
     glm::vec3 normalizeColor(int r, int g, int b);
 
 public:
-    World(int chunkHeight, int chunkWidth);
-    void generateWorldChunk(GLuint& VAO, int xOffset, int yOffset);
+    World();
+    void render();
 };
