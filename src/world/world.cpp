@@ -3,7 +3,7 @@
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-World::World()
+World::World(int numberOfChunks, int chunkSize) : chunkWidth(chunkSize), chunkHeight(chunkSize)
 {
     global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
@@ -40,6 +40,7 @@ void World::render()
         // Only render chunk if it's within render distance
         if (std::abs(chunk.x * chunkWidth - global.camera->position.x) <= renderDistance && std::abs(chunk.y * chunkHeight - global.camera->position.z) <= renderDistance) {
 
+            // generate if missing
             if (!chunk.generated) {
                 generateWorldChunk(chunk.id, chunk.x, chunk.y);
                 chunk.generated = true;

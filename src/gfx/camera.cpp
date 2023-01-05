@@ -53,16 +53,17 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 
 void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
 {
+    // only move when mouse held
+    if (!rightButtonHeld) {
+        return;
+    }
+
     xOffset *= LOOK_SENTITIVITY;
     yOffset *= LOOK_SENTITIVITY;
 
     // always add to y
     pitch += yOffset;
-
-    // side scroll on mouse held
-    if (rightButtonHeld) {
-        yaw += xOffset;
-    }
+    yaw += xOffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (pitch > 89.0f)

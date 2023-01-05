@@ -12,7 +12,6 @@ struct WorldChunk {
 
 class World {
 private:
-    int numberOfChunks = 100;
     int chunkWidth = 100;
     int chunkHeight = 100;
 
@@ -39,6 +38,6 @@ private:
     glm::vec3 normalizeColor(int r, int g, int b);
 
 public:
-    World();
+    World(int numberOfChunks, int chunkSize);
     void render();
 };
