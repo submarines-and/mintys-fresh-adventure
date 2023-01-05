@@ -23,6 +23,11 @@ void Window::handleInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
     }
 
+    // wireframe
+    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         global.camera->processKeyboard(UP, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -126,18 +131,13 @@ void Window::loop()
         return;
     }
 
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_FRAMEBUFFER_SRGB);
 
-    // transparency
-    // glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // https://learnopengl.com/Advanced-OpenGL/Blending
-
-    float lastFrame = 0.0f;
-
+    // main init
     init(ticks);
 
+    float lastFrame = 0.0f;
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
@@ -157,5 +157,6 @@ void Window::loop()
         ticks++;
     }
 
+    // main destroy
     destroy(ticks);
 }

@@ -7,8 +7,7 @@
 class Shader {
 public:
     enum ShaderType {
-        TILE,
-        SPRITE
+        TERRAIN
     };
 
 public:
@@ -19,6 +18,11 @@ public:
 
     void start();
     void stop();
+
+    void setBool(const std::string& name, bool value) const
+    {
+        glUniform1i(glGetUniformLocation(id, name.c_str()), (int)value);
+    }
 
     void setInt(const std::string& name, int value) const
     {

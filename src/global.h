@@ -9,9 +9,6 @@ struct Global {
     /** Window with and height */
     int width, height;
 
-    /** Currently active level */
-    World world;
-
     Camera* camera;
     Renderer* renderer;
 };

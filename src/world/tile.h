@@ -5,7 +5,7 @@
 class TileAtlas {
 public:
     const char* spritePath = "assets/terrain.png";
-    Shader::ShaderType shaderKey = Shader::TILE;
+    Shader::ShaderType shaderKey = Shader::TERRAIN;
     glm::vec2 atlasSize = glm::vec2(20, 20);
     glm::vec2 tileSize = glm::vec2(32, 32);
 };

@@ -19,41 +19,40 @@ glm::mat4 Camera::getProjectionMatrix()
 
 void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 {
-    float velocity = 1000.0f * deltaTime;
+    float velocity = 32.0f * deltaTime;
 
     if (direction == UP)
-        position.y += velocity;
-
+        position += front * velocity;
     if (direction == DOWN)
-        position.y -= velocity;
-
+        position -= front * velocity;
     if (direction == LEFT)
-        position.x -= velocity;
-
+        position -= right * velocity;
     if (direction == RIGHT)
-        position.x += velocity;
+        position += right * velocity;
 
     glm::normalize(position);
 
     // clamp
+    /*
     auto maxX = global.world.width - global.width;
     auto maxY = global.world.height - global.height;
 
     position.x = position.x < 0 ? 0 : (position.x > maxX ? maxX : position.x);
     position.y = position.y < 0 ? 0 : (position.y > maxY ? maxY : position.y);
+    */
 }
 
 void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
 {
     if (!rightButtonHeld) {
-        return;
+        //   return;
     }
 
-    const float SENSITIVITY = 0.1f;
+    const float SENSITIVITY = 0.05f;
     xOffset *= SENSITIVITY;
     yOffset *= SENSITIVITY;
 
-    // yaw += xOffset;
+    yaw += xOffset;
     pitch += yOffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped

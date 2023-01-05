@@ -139,6 +139,7 @@ void Renderer::prepareTiles(std::vector<glm::mat4> transformations, std::vector<
 
 void Renderer::renderTiles()
 {
+    /*
     auto shader = getShader(global.world.atlas.shaderKey);
     shader->start();
 
@@ -156,4 +157,5 @@ void Renderer::renderTiles()
 
     glBindVertexArray(0);
     shader->stop();
+    */
 }
