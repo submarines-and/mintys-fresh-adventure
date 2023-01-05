@@ -35,7 +35,7 @@ void World::render()
     float originX = (chunkWidth * numberOfChunks) / 2 - chunkWidth / 2;
     float originY = (chunkHeight * numberOfChunks) / 2 - chunkHeight / 2;
     int gridPosX = (int)(global.camera->position.x - originX) / chunkWidth + numberOfChunks / 2;
-    int gridPosY = (int)(global.camera->position.z - originY) / chunkHeight + numberOfChunks / 2;
+    int gridPosY = (int)(global.camera->position.y - originY) / chunkHeight + numberOfChunks / 2;
 
     // Render map chunks
     for (int y = 0; y < numberOfChunks; y++) {
