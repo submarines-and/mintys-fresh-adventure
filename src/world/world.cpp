@@ -139,8 +139,10 @@ std::vector<float> World::generateVertices(const std::vector<float>& noiseMap)
     for (int y = 0; y < chunkHeight + 1; y++)
         for (int x = 0; x < chunkWidth; x++) {
             v.push_back(x);
+
             // Apply cubic easing to the noise
             float easedNoise = std::pow(noiseMap[x + y * chunkWidth] * 1.1f, 3);
+
             // Scale noise to match meshHeight
             // Pervent vertex height from being below WATER_HEIGHT
             v.push_back(std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight));
@@ -184,39 +186,42 @@ std::vector<float> World::generateNormals(const std::vector<int>& indices, const
 std::vector<float> World::generateBiome(const std::vector<float>& vertices)
 {
     std::vector<float> colors;
-    std::vector<TerrainColor> biomeColors;
-    glm::vec3 color = normalizeColor(255, 255, 255);
 
-    // NOTE: Terrain color height is a value between 0 and 1
-    biomeColors.push_back(TerrainColor(waterHeight * 0.5f, normalizeColor(60, 95, 190))); // Deep water
-    biomeColors.push_back(TerrainColor(waterHeight, normalizeColor(60, 100, 190)));       // Shallow water
-    biomeColors.push_back(TerrainColor(0.15f, normalizeColor(210, 215, 130)));            // Sand
-    biomeColors.push_back(TerrainColor(0.30f, normalizeColor(95, 165, 30)));              // Grass 1
-    biomeColors.push_back(TerrainColor(0.40f, normalizeColor(65, 115, 20)));              // Grass 2
-    biomeColors.push_back(TerrainColor(0.50f, normalizeColor(90, 65, 60)));               // Rock 1
-    biomeColors.push_back(TerrainColor(0.80f, normalizeColor(75, 60, 55)));               // Rock 2
-    biomeColors.push_back(TerrainColor(1.00f, normalizeColor(255, 255, 255)));            // Snow
-
-    // Determine which color to assign each vertex by its y-coord
-    // Iterate through vertex y values
     for (auto i = 1.0f; i < vertices.size(); i += 3) {
-        for (auto j = 0.0f; j < biomeColors.size(); j++) {
+        glm::vec3 color;
 
-            // NOTE: The max height of a vertex is "meshHeight"
-            if (vertices[i] <= biomeColors[j].height * meshHeight) {
-                color = biomeColors[j].color;
-                break;
-            }
+        if (vertices[i] <= meshHeight * waterHeight * 0.5f) {
+            color = glm::vec3(60, 95, 190); // Deep water
         }
+        else if (vertices[i] <= meshHeight * waterHeight) {
+            color = glm::vec3(60, 100, 190); // Shallow water
+        }
+        else if (vertices[i] <= meshHeight * 0.15f) {
+            color = glm::vec3(210, 215, 130); // Sand
+        }
+        else if (vertices[i] <= meshHeight * 0.3f) {
+            color = glm::vec3(95, 165, 30); // Grass 1
+        }
+        else if (vertices[i] <= meshHeight * 0.4f) {
+            color = glm::vec3(65, 115, 20); // Grass 2
+        }
+        else if (vertices[i] <= meshHeight * 0.5f) {
+            color = glm::vec3(90, 65, 60); // Rock 1
+        }
+        else if (vertices[i] <= meshHeight * 0.8f) {
+            color = glm::vec3(75, 60, 55); // Rock 2
+        }
+        else {
+            color = glm::vec3(255, 255, 255); // Snow
+        }
+
+        // normalize
+        color = glm::vec3(color.r / 255.0, color.g / 255.0, color.b / 255.0);
 
         colors.push_back(color.r);
         colors.push_back(color.g);
         colors.push_back(color.b);
     }
-    return colors;
-}
 
-glm::vec3 World::normalizeColor(int r, int g, int b)
-{
-    return glm::vec3(r / 255.0, g / 255.0, b / 255.0);
+    return colors;
 }
