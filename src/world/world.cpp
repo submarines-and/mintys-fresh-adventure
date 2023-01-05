@@ -3,7 +3,7 @@
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-World::World(int numberOfChunks, int chunkSize) : chunkWidth(chunkSize), chunkHeight(chunkSize)
+World::World(int numberOfChunks)
 {
     global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);

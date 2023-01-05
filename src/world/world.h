@@ -31,6 +31,6 @@ private:
     std::vector<glm::vec3> generateBiome(const std::vector<float>& vertices);
 
 public:
-    World(int numberOfChunks, int chunkSize);
+    World(int numberOfChunks);
     void render();
 };

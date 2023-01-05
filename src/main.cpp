@@ -11,13 +11,7 @@ Global& global = global_instance;
 void init()
 {
     global.renderer = new Renderer();
-
-    int numberOfChunks = 1000;
-    int chunkSize = 100;
-    float center = (chunkSize * numberOfChunks) / 2 - chunkSize / 2;
-
-
-    global.world = new World(numberOfChunks, chunkSize);
+    global.world = new World(1000);
     global.camera = new Camera(glm::vec3(8000.0f, 30.0f, 8000.0f));
 }
 
