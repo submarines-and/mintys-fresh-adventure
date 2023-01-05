@@ -6,6 +6,7 @@
 
 struct WorldChunk {
     GLuint id;
+    int x, y;
     bool generated = false;
 };
 
