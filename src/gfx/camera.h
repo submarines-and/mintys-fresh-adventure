@@ -25,11 +25,11 @@ private:
     void updateCameraVectors();
 
 public:
-    glm::vec3 position = glm::vec3(80.0f, 80.0f, 0);
+    glm::vec3 position;
     float zoom = 20.0f;
 
 public:
-    Camera();
+    Camera(glm::vec3 position);
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();

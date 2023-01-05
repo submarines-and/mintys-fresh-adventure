@@ -2,6 +2,7 @@
 #include "gfx/renderer.h"
 #include "gfx/window.h"
 #include "global.h"
+#include <glm/glm.hpp>
 
 /** Init global state and make accessible for main function. */
 static Global global_instance;
@@ -10,8 +11,8 @@ Global& global = global_instance;
 void init()
 {
     global.renderer = new Renderer();
-    global.camera = new Camera();
     global.world = new World();
+    global.camera = new Camera(glm::vec3(global.world->worldCenterX / 2, 10.0f, 100.0f));
 }
 
 void update()

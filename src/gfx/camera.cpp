@@ -2,7 +2,7 @@
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera()
+Camera::Camera(glm::vec3 position) : position(position)
 {
     updateCameraVectors();
 }
