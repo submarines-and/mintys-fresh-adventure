@@ -2,7 +2,6 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec3 aColor;
-layout (location = 3) in vec3 aOffset;
 
 flat out vec3 flatColor;
 out vec3 Color;
@@ -43,12 +42,12 @@ vec3 calculateLighting(vec3 Normal, vec3 FragPos) {
 }
 
 void main() {
-    vec3 FragPos = vec3(u_model * vec4(aPos + aOffset, 1.0));
+    vec3 FragPos = vec3(u_model * vec4(aPos, 1.0));
     vec3 Normal = transpose(inverse(mat3(u_model))) * aNormal;
 
     vec3 lighting = calculateLighting(Normal, FragPos);
     Color = aColor * lighting;
     flatColor = Color;
     
-    gl_Position = u_projection * u_view * u_model * vec4(aPos + aOffset, 1.0);
+    gl_Position = u_projection * u_view * u_model * vec4(aPos, 1.0);
 }
