@@ -10,7 +10,7 @@ void init()
 {
     global.renderer = new Renderer();
     global.world = new World(1000);
-    global.camera = new Camera(glm::vec3(8000.0f, 30.0f, 8000.0f));
+    global.camera = new Camera(glm::vec3(0.0f, 30.0f, 0.0f));
 }
 
 void update()
