@@ -87,7 +87,7 @@ private:
                      {SLOPE, glm::vec3(140, 106, 59)},
                      {MOUNTAIN, glm::vec3(90, 65, 60)},
                      {ROCK, glm::vec3(75, 60, 55)},
-                     {SNOW, glm::vec3(255, 255, 255)},
+                     {SNOW, glm::vec3(250, 213, 165)},
                  }},
     };
 

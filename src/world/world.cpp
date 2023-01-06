@@ -66,7 +66,7 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
     auto normals = generateNormals(indices, vertices);
 
     // biomes
-    Biome biome(0, 0, meshHeight, waterHeight);
+    Biome biome(1.0f, 1.0f, meshHeight, waterHeight);
     auto colors = biome.getColorAtPoint(vertices);
 
     GLuint VBO[3], EBO;

@@ -7,7 +7,24 @@ Biome::Biome(float rainfall, float temperature, float meshHeight, float waterHei
 
 BiomeType Biome::getBiomeType(float rainfall, float temperature)
 {
-    return TUNDRA;
+    if (rainfall < 1.1f && temperature < 0.2f) {
+        return TUNDRA;
+    }
+    else if (rainfall < 0.4f && temperature < 0.4f) {
+        return PLAINS;
+    }
+    else if (rainfall < 1.1f && temperature < 0.4f) {
+        return SWAMP;
+    }
+    else if (rainfall < 0.6f && temperature < 0.8) {
+        return FOREST;
+    }
+    else if (rainfall < 1.1f && temperature < 0.8) {
+        return RAIN_FOREST;
+    }
+    else {
+        return DESERT;
+    }
 }
 
 glm::vec3 Biome::getColorAtPoint(float noise)
