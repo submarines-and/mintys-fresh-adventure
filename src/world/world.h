@@ -12,8 +12,8 @@ struct WorldChunk {
 
 class World {
 private:
-    int chunkWidth = 100;
-    int chunkHeight = 100;
+    int chunkWidth = 75;
+    int chunkHeight = 75;
 
     float meshHeight = 10.0f;
     float waterHeight = 0.1f;
