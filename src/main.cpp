@@ -1,5 +1,3 @@
-#include "gfx/camera.h"
-#include "gfx/renderer.h"
 #include "gfx/window.h"
 #include "global.h"
 #include <glm/glm.hpp>
