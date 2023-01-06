@@ -1,4 +1,5 @@
 #include "world.h"
+#include "biome.h"
 #include "gfx/shader.h"
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
@@ -63,7 +64,10 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
     auto noise_map = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
     auto vertices = generateVertices(noise_map);
     auto normals = generateNormals(indices, vertices);
-    auto colors = generateBiome(vertices);
+
+    // biomes
+    Biome biome(0, 0, meshHeight, waterHeight);
+    auto colors = biome.getColorAtPoint(vertices);
 
     GLuint VBO[3], EBO;
 
@@ -72,33 +76,28 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
     glGenBuffers(1, &EBO);
     glGenVertexArrays(1, &VAO);
 
-    // Bind vertices to VBO
     glBindVertexArray(VAO);
+
+    // vertices
     glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-
-    // Create element buffer
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
-
-    // Configure vertex position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Bind vertices to VBO
+    // indices
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
+
+    // Normals
     glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
-
-    // Configure vertex normals attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
 
-    // Bind vertices to VBO
+    // Color
     glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
     glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
-
-    // Configure vertex colors attribute
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
     glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -181,45 +180,4 @@ std::vector<float> World::generateNormals(const std::vector<int>& indices, const
     }
 
     return normals;
-}
-
-std::vector<glm::vec3> World::generateBiome(const std::vector<float>& vertices)
-{
-    std::vector<glm::vec3> colors;
-
-    for (auto i = 1.0f; i < vertices.size(); i += 3) {
-        glm::vec3 color;
-
-        if (vertices[i] <= meshHeight * waterHeight * 0.5f) {
-            color = glm::vec3(60, 95, 190); // Deep water
-        }
-        else if (vertices[i] <= meshHeight * waterHeight) {
-            color = glm::vec3(60, 100, 190); // Shallow water
-        }
-        else if (vertices[i] <= meshHeight * 0.15f) {
-            color = glm::vec3(210, 215, 130); // Sand
-        }
-        else if (vertices[i] <= meshHeight * 0.3f) {
-            color = glm::vec3(95, 165, 30); // Grass 1
-        }
-        else if (vertices[i] <= meshHeight * 0.4f) {
-            color = glm::vec3(65, 115, 20); // Grass 2
-        }
-        else if (vertices[i] <= meshHeight * 0.5f) {
-            color = glm::vec3(90, 65, 60); // Rock 1
-        }
-        else if (vertices[i] <= meshHeight * 0.8f) {
-            color = glm::vec3(75, 60, 55); // Rock 2
-        }
-        else {
-            color = glm::vec3(255, 255, 255); // Snow
-        }
-
-        // normalize
-        color = glm::vec3(color.r / 255.0, color.g / 255.0, color.b / 255.0);
-
-        colors.push_back(color);
-    }
-
-    return colors;
 }
