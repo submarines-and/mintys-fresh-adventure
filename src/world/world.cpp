@@ -3,9 +3,12 @@
 #include "gfx/shader.h"
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <random>
 
 World::World(int numberOfChunks)
 {
+    srand((unsigned)time(NULL));
+
     global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
 
@@ -66,7 +69,10 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
     auto normals = generateNormals(indices, vertices);
 
     // biomes
-    Biome biome(1.0f, 1.0f, meshHeight, waterHeight);
+    auto rainfall = (float)rand() / (float)RAND_MAX;
+    auto temperature = (float)rand() / (float)RAND_MAX;
+
+    Biome biome(rainfall, temperature, meshHeight, waterHeight);
     auto colors = biome.getColorAtPoint(vertices);
 
     GLuint VBO[3], EBO;
