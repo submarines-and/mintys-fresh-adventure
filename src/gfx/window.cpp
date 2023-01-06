@@ -10,6 +10,7 @@ static void errorCallback(int code, const char* description)
 
 void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
+#pragma unused(window)
     global.camera->processScroll(yOffset);
 }
 
