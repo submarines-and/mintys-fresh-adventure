@@ -7,7 +7,8 @@
 class Shader {
 public:
     enum ShaderType {
-        TERRAIN
+        TERRAIN,
+        SPRITE
     };
 
 public:
