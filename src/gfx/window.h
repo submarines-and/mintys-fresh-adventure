@@ -4,11 +4,13 @@
 
 // callback type for main loop
 using WindowFunction = void (*)();
+using WindowFunctionWithTime = void (*)(int ticks, float deltaTime);
 
 class Window {
 private:
     GLFWwindow* window;
-    WindowFunction init, update, render, destroy;
+    WindowFunction init, destroy;
+    WindowFunctionWithTime update, render;
 
     void handleInput(GLFWwindow* window);
     void handleMouseMovement(GLFWwindow* window);
@@ -21,7 +23,7 @@ private:
     bool firstMouse = true;
 
 public:
-    Window(int width, int height, WindowFunction init, WindowFunction update, WindowFunction render, WindowFunction destroy);
+    Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunctionWithTime render);
     ~Window();
 
     void loop();

@@ -32,6 +32,7 @@ void init()
                                          .textureFilePath = "assets/hood.png",
                                          .atlasSize = glm::vec2(8, 9),
                                          .atlasOffset = glm::vec2(0, 0),
+                                         .animationFrames = 2,
                                      });
 
     global.ecs->addComponent(player, TransformComponent{
@@ -40,15 +41,15 @@ void init()
                                      });
 }
 
-void update()
+void update(int ticks, float deltaTime)
 {
-    global.ecs->getSystem<TransformSystem>()->update();
+    global.ecs->getSystem<TransformSystem>()->update(deltaTime);
 }
 
-void render()
+void render(int ticks, float deltaTime)
 {
     global.world->render();
-    global.ecs->getSystem<SpriteSystem>()->update();
+    global.ecs->getSystem<SpriteSystem>()->update(ticks);
 }
 
 void destroy()
@@ -63,7 +64,7 @@ int main()
     global.width = 1920;
     global.height = 1080;
 
-    Window window(global.width, global.height, init, update, render, destroy);
+    Window window(global.width, global.height, init, destroy, update, render);
 
     window.loop();
 

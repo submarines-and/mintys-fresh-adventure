@@ -1,10 +1,10 @@
 #include "sprite.system.h"
 #define STB_IMAGE_IMPLEMENTATION
+#include "components/transform.component.h"
 #include "gfx/opengl.h"
 #include "global.h"
 #include "stb_image.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include "components/transform.component.h"
 
 SpriteSystem::SpriteSystem() : shader(Shader("shaders/sprite.vert", "shaders/sprite.frag"))
 {
@@ -60,13 +60,19 @@ void SpriteSystem::entityAdded(Entity entity)
     stbi_image_free(data);
 }
 
-void SpriteSystem::update()
+void SpriteSystem::update(int ticks)
 {
     shader.start();
 
     for (auto entity : entities) {
         auto& sprite = global.ecs->getComponent<SpriteComponent>(entity);
         auto transform = global.ecs->getComponent<TransformComponent>(entity);
+
+        // apply animation
+        // speed is number of game loops elapsed per frame
+        if (sprite.animationFrames > 0) {
+            sprite.atlasOffset.x = ticks / sprite.animationSpeed % sprite.animationFrames;
+        }
 
         // animation frame
         shader.setInt("image", 0);
