@@ -1,5 +1,7 @@
+#include "components/sprite.component.h"
 #include "gfx/window.h"
 #include "global.h"
+#include "systems/sprite.system.h"
 #include <glm/glm.hpp>
 
 /** Init global state and make accessible for main function. */
@@ -13,10 +15,20 @@ void init()
     global.camera = new Camera(glm::vec3(0.0f, 30.0f, 0.0f));
     global.ecs = new ECS();
 
-    auto player = global.renderer->loadSprite(Sprite::PLAYER, "assets/hood.png");
-    player->atlasSize = glm::vec2(8, 9);
-    player->worldPosition = glm::vec3(15.0f, 5.0f, -5.0f);
-    player->worldSize = glm::vec2(2.0f, 2.0f);
+    // Register systems
+    auto spriteSystem = global.ecs->registerSystem<SpriteSystem>(std::vector<ComponentType>{
+        global.ecs->getComponentType<SpriteComponent>(),
+    });
+
+    // create player
+    auto player = global.ecs->createEntity();
+    global.ecs->addComponent(player, SpriteComponent{
+                                         .filepath = "assets/hood.png",
+                                         .atlasSize = glm::vec2(8, 9),
+                                         .atlasOffset = glm::vec2(0, 0),
+                                         .worldPosition = glm::vec3(15.0f, 5.0f, -5.0f),
+                                         .worldSize = glm::vec2(2.0f, 2.0f),
+                                     });
 }
 
 void update()
@@ -26,7 +38,7 @@ void update()
 void render()
 {
     global.world->render();
-    global.renderer->getSprite(Sprite::PLAYER)->render();
+    global.ecs->getSystem<SpriteSystem>()->update();
 }
 
 void destroy()

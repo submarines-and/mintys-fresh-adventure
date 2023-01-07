@@ -3,6 +3,7 @@
 #include "entity-manager.h"
 #include "system-manager.h"
 #include <memory>
+#include <vector>
 
 class ECS {
 private:
@@ -86,14 +87,14 @@ public:
         System methods
     */
     template <typename T>
-    std::shared_ptr<T> registerSystem()
+    std::shared_ptr<T> registerSystem(std::vector<ComponentType> components)
     {
-        return systemManager->registerSystem<T>();
+        return systemManager->registerSystem<T>(components);
     }
 
     template <typename T>
-    void setSystemSignature(Signature signature)
+    std::shared_ptr<T> getSystem()
     {
-        systemManager->setSignature<T>(signature);
+        return systemManager->getSystem<T>();
     }
 };
