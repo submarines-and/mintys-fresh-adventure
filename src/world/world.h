@@ -20,7 +20,7 @@ private:
 
     float meshHeight = 10.0f;
     float waterHeight = 0.1f;
-    int renderDistance = chunkHeight * 3;
+    int renderDistance = chunkHeight * 2;
 
     std::vector<WorldChunk> chunks;
     Noise noise;
