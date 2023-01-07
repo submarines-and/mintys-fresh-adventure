@@ -1,6 +1,5 @@
 #pragma once
 #include "gfx/camera.h"
-#include "gfx/renderer.h"
 #include "world/world.h"
 #include "ecs/ecs.h"
 
@@ -14,7 +13,6 @@ struct Global {
     World* world;
 
     Camera* camera;
-    Renderer* renderer;
 };
 
 /** Will be created by main.cpp */

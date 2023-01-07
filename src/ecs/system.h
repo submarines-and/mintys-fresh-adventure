@@ -10,6 +10,8 @@ public:
 
     virtual void entityAdded(Entity entity)
     {
-#pragma unused(entity);
+#pragma unused(entity)
     }
+
+    virtual ~System() {}
 };

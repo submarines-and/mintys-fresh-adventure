@@ -3,6 +3,7 @@
 #include "noise.h"
 #include <glm/glm.hpp>
 #include <vector>
+#include "gfx/shader.h"
 
 struct WorldChunk {
     GLuint id;
@@ -12,6 +13,8 @@ struct WorldChunk {
 
 class World {
 private:
+    Shader shader;
+
     int chunkWidth = 100;
     int chunkHeight = 100;
 

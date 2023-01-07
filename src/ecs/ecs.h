@@ -20,6 +20,13 @@ public:
         systemManager = std::make_unique<SystemManager>();
     }
 
+    ~ECS()
+    {
+        componentManager.release();
+        entityManager.release();
+        systemManager.release();
+    }
+
     /*
 
        Entity methods

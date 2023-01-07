@@ -52,6 +52,8 @@ void Camera::processKeyboard(CameraDirection direction, float deltaTime)
 
 void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
 {
+#pragma unused(leftButtonHeld)
+
     // only move when mouse held
     if (!rightButtonHeld) {
         return;

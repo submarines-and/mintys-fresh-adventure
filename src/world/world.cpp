@@ -1,15 +1,13 @@
 #include "world.h"
 #include "biome.h"
-#include "gfx/shader.h"
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <random>
 
-World::World(int numberOfChunks)
+World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag"))
 {
     srand((unsigned)time(NULL));
 
-    global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
     sharedIndices = generateIndices();
 
@@ -25,8 +23,6 @@ World::World(int numberOfChunks)
 
 World::~World()
 {
-    printf("Deleting world \n");
-
     for (auto chunk : chunks) {
         glDeleteVertexArrays(1, &chunk.id);
     }
@@ -40,15 +36,14 @@ void World::render()
     glm::mat4 projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, (float)chunkWidth * (renderDistance - 1.2f));
     glm::mat4 view = global.camera->getViewMatrix();
 
-    Shader* objectShader = global.renderer->getShader(Shader::TERRAIN);
-    objectShader->start();
+    shader.start();
 
-    objectShader->setMat4("projection", projection);
-    objectShader->setMat4("view", view);
+    shader.setMat4("projection", projection);
+    shader.setMat4("view", view);
 
-    objectShader->setVec3("lightDirection", glm::vec3(0.3f, -1.0f, 0.5f));
-    objectShader->setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
-    objectShader->setVec2("lightBias", glm::vec2(0.3f, 0.8f));
+    shader.setVec3("lightDirection", glm::vec3(0.3f, -1.0f, 0.5f));
+    shader.setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
+    shader.setVec2("lightBias", glm::vec2(0.3f, 0.8f));
 
     // Render map chunks
     for (auto& chunk : chunks) {
@@ -64,7 +59,7 @@ void World::render()
 
             glm::mat4 transform = glm::mat4(1.0f);
             transform = glm::translate(transform, glm::vec3(-chunkWidth / 2.0 + (chunkWidth - 1) * chunk.x, 0.0, -chunkHeight / 2.0 + (chunkHeight - 1) * chunk.y));
-            objectShader->setMat4("transform", transform);
+            shader.setMat4("transform", transform);
 
             // Terrain chunk
             glBindVertexArray(chunk.id);

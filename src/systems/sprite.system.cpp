@@ -5,9 +5,8 @@
 #include "stb_image.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-SpriteSystem::SpriteSystem()
+SpriteSystem::SpriteSystem() : shader(Shader("shaders/sprite.vert", "shaders/sprite.frag"))
 {
-    global.renderer->loadShader(Shader::SPRITE, "shaders/sprite.vert", "shaders/sprite.frag");
     stbi_set_flip_vertically_on_load(true);
 
     float vertices[] = {
@@ -62,30 +61,29 @@ void SpriteSystem::entityAdded(Entity entity)
 
 void SpriteSystem::update()
 {
-    auto shader = global.renderer->getShader(Shader::SPRITE);
-    shader->start();
+    shader.start();
 
     for (auto entity : entities) {
         auto& sprite = global.ecs->getComponent<SpriteComponent>(entity);
 
         // animation frame
-        shader->setInt("image", 0);
-        shader->setVec2("atlasSize", sprite.atlasSize);
-        shader->setVec2("offset", sprite.atlasOffset);
+        shader.setInt("image", 0);
+        shader.setVec2("atlasSize", sprite.atlasSize);
+        shader.setVec2("offset", sprite.atlasOffset);
 
         // projection and view
         auto projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, 1000.0f);
         auto view = global.camera->getViewMatrix();
-        shader->setMat4("projection", projection);
-        shader->setMat4("view", view);
+        shader.setMat4("projection", projection);
+        shader.setMat4("view", view);
 
         // camera positions for billboarding
-        shader->setVec3("cameraRight", global.camera->right);
-        shader->setVec3("cameraUp", global.camera->up);
+        shader.setVec3("cameraRight", global.camera->right);
+        shader.setVec3("cameraUp", global.camera->up);
 
         // position and size
-        shader->setVec3("position", sprite.worldPosition);
-        shader->setVec2("size", sprite.worldSize);
+        shader.setVec3("position", sprite.worldPosition);
+        shader.setVec2("size", sprite.worldSize);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, sprite.textureId);
@@ -97,5 +95,5 @@ void SpriteSystem::update()
         glBindVertexArray(0);
     }
 
-    shader->stop();
+    shader.stop();
 }
