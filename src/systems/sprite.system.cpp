@@ -4,6 +4,7 @@
 #include "global.h"
 #include "stb_image.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "components/transform.component.h"
 
 SpriteSystem::SpriteSystem() : shader(Shader("shaders/sprite.vert", "shaders/sprite.frag"))
 {
@@ -41,7 +42,7 @@ void SpriteSystem::entityAdded(Entity entity)
     glGenTextures(1, &sprite.textureId);
 
     int width, height, nrChannels;
-    unsigned char* data = stbi_load(sprite.filepath, &width, &height, &nrChannels, 4);
+    unsigned char* data = stbi_load(sprite.textureFilePath, &width, &height, &nrChannels, 4);
 
     glBindTexture(GL_TEXTURE_2D, sprite.textureId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -65,6 +66,7 @@ void SpriteSystem::update()
 
     for (auto entity : entities) {
         auto& sprite = global.ecs->getComponent<SpriteComponent>(entity);
+        auto transform = global.ecs->getComponent<TransformComponent>(entity);
 
         // animation frame
         shader.setInt("image", 0);
@@ -82,8 +84,8 @@ void SpriteSystem::update()
         shader.setVec3("cameraUp", global.camera->up);
 
         // position and size
-        shader.setVec3("position", sprite.worldPosition);
-        shader.setVec2("size", sprite.worldSize);
+        shader.setVec3("position", transform.position);
+        shader.setVec2("size", transform.size);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, sprite.textureId);

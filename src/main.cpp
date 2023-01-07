@@ -1,7 +1,9 @@
 #include "components/sprite.component.h"
+#include "components/transform.component.h"
 #include "gfx/window.h"
 #include "global.h"
 #include "systems/sprite.system.h"
+#include "systems/transform.system.h"
 #include <glm/glm.hpp>
 
 /** Init global state and make accessible for main function. */
@@ -15,23 +17,32 @@ void init()
     global.ecs = new ECS();
 
     // Register systems
-    auto spriteSystem = global.ecs->registerSystem<SpriteSystem>(std::vector<ComponentType>{
+    global.ecs->registerSystem<SpriteSystem>(std::vector<ComponentType>{
         global.ecs->getComponentType<SpriteComponent>(),
+        global.ecs->getComponentType<TransformComponent>(),
+    });
+
+    global.ecs->registerSystem<TransformSystem>(std::vector<ComponentType>{
+        global.ecs->getComponentType<TransformComponent>(),
     });
 
     // create player
     auto player = global.ecs->createEntity();
     global.ecs->addComponent(player, SpriteComponent{
-                                         .filepath = "assets/hood.png",
+                                         .textureFilePath = "assets/hood.png",
                                          .atlasSize = glm::vec2(8, 9),
                                          .atlasOffset = glm::vec2(0, 0),
-                                         .worldPosition = glm::vec3(15.0f, 5.0f, -5.0f),
-                                         .worldSize = glm::vec2(2.0f, 2.0f),
+                                     });
+
+    global.ecs->addComponent(player, TransformComponent{
+                                         .position = glm::vec3(15.0f, 5.0f, -5.0f),
+                                         .size = glm::vec2(2.0f, 2.0f),
                                      });
 }
 
 void update()
 {
+    global.ecs->getSystem<TransformSystem>()->update();
 }
 
 void render()
