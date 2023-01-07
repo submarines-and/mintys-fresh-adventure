@@ -15,7 +15,7 @@ private:
     int chunkWidth = 100;
     int chunkHeight = 100;
 
-    float meshHeight = 20.0f;
+    float meshHeight = 10.0f;
     float waterHeight = 0.1f;
     int renderDistance = chunkHeight * 3;
 
