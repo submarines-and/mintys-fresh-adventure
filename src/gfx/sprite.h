@@ -17,7 +17,7 @@ public:
 
     glm::vec2 atlasSize = glm::vec2(1, 1);
     glm::vec2 atlasOffset = glm::vec2(0, 0);
-    glm::vec2 worldPosition = glm::vec2(0.0f, 0.0f);
+    glm::vec3 worldPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec2 worldSize = glm::vec2(200.0f, 200.0f);
     float rotation = 0.0f;
 

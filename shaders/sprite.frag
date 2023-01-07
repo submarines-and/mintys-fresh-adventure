@@ -9,7 +9,7 @@ void main()
 {
     vec4 texColor = texture(image, texCoords);
 
-    // transparent
+    // transparent parts of image
     if(texColor.a < 0.1)
         discard;
 

@@ -24,6 +24,9 @@ void render()
 
 void destroy()
 {
+    delete global.camera;
+    delete global.world;
+    delete global.renderer;
 }
 
 int main()

@@ -16,6 +16,6 @@ void main()
     float scaleX = 1.0 / atlasSize.x;
     float scaleY = 1.0 / atlasSize.y;
 
-    gl_Position = projection * view * transform * vec4(vertex.xy, 0.0, 1.0);
+    gl_Position = projection * view * transform * vec4(vertex.xyz, 1.0);
     texCoords = vec2((vertex.z + offset.x) * scaleX, (vertex.w + offset.y) * scaleY);
 }

@@ -69,6 +69,7 @@ Sprite::~Sprite()
 {
     printf("Deleting sprite %i\n", id);
     glDeleteTextures(1, &id);
+    glDeleteVertexArrays(1, &vao);
 }
 
 void Sprite::render()
@@ -83,7 +84,7 @@ void Sprite::render()
     shader->setVec2("offset", atlasOffset);
 
     glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(worldPosition, 0.0f));
+    transform = glm::translate(transform, worldPosition);
     transform = glm::translate(transform, glm::vec3(0.5f * worldSize.x, 0.5f * worldSize.y, 0.0f));
     transform = glm::rotate(transform, glm::radians(rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
     transform = glm::translate(transform, glm::vec3(-0.5f * worldSize.x, -0.5f * worldSize.y, 0.0f));
@@ -97,5 +98,6 @@ void Sprite::render()
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
     shader->stop();
 }
