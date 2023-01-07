@@ -11,6 +11,7 @@ void init()
     global.renderer = new Renderer();
     global.world = new World(1000);
     global.camera = new Camera(glm::vec3(0.0f, 30.0f, 0.0f));
+    global.ecs = new ECS();
 
     auto player = global.renderer->loadSprite(Sprite::PLAYER, "assets/hood.png");
     player->atlasSize = glm::vec2(8, 9);
@@ -30,6 +31,7 @@ void render()
 
 void destroy()
 {
+    delete global.ecs;
     delete global.camera;
     delete global.world;
     delete global.renderer;
