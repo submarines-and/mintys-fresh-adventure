@@ -19,7 +19,6 @@ public:
     glm::vec2 atlasOffset = glm::vec2(0, 0);
     glm::vec3 worldPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec2 worldSize = glm::vec2(50.0f, 50.0f);
-    float rotation = 180.0f;
 
 public:
     Sprite(const char* filepath);
