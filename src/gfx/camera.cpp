@@ -1,5 +1,4 @@
 #include "camera.h"
-#include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera(glm::vec3 position) : position(position)
@@ -10,11 +9,6 @@ Camera::Camera(glm::vec3 position) : position(position)
 glm::mat4 Camera::getViewMatrix()
 {
     return glm::lookAt(position, position + front, up);
-}
-
-glm::mat4 Camera::getProjectionMatrix()
-{
-    return glm::ortho(0.0f, (float)global.width, 0.0f, (float)global.height, -100.0f, 100.0f);
 }
 
 void Camera::updateCameraVectors()

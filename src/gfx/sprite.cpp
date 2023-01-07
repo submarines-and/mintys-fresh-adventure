@@ -77,17 +77,28 @@ void Sprite::render()
     auto shader = global.renderer->getShader(Shader::SPRITE);
     shader->start();
 
-    shader->setMat4("projection", global.camera->getProjectionMatrix());
-    shader->setMat4("view", global.camera->getViewMatrix());
+    // animation frame
     shader->setInt("image", 0);
     shader->setVec2("atlasSize", atlasSize);
     shader->setVec2("offset", atlasOffset);
 
+    // projection
+    glm::mat4 projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, 1000.0f);
+    shader->setMat4("projection", projection);
+    shader->setMat4("view", global.camera->getViewMatrix());
+
+    // world position
     glm::mat4 transform = glm::mat4(1.0f);
     transform = glm::translate(transform, worldPosition);
-    transform = glm::translate(transform, glm::vec3(0.5f * worldSize.x, 0.5f * worldSize.y, 0.0f));
-    transform = glm::rotate(transform, glm::radians(rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform = glm::translate(transform, glm::vec3(-0.5f * worldSize.x, -0.5f * worldSize.y, 0.0f));
+
+    // optional rotation
+    if (rotation > 0.0f) {
+        transform = glm::translate(transform, glm::vec3(0.5f * worldSize.x, 0.5f * worldSize.y, 0.0f));
+        transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::translate(transform, glm::vec3(-0.5f * worldSize.x, -0.5f * worldSize.y, 0.0f));
+    }
+
+    // scale
     transform = glm::scale(transform, glm::vec3(worldSize, 1.0f));
     shader->setMat4("transform", transform);
 
