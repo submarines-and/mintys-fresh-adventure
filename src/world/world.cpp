@@ -11,6 +11,7 @@ World::World(int numberOfChunks)
 
     global.renderer->loadShader(Shader::TERRAIN, "shaders/terrain.vert", "shaders/terrain.frag");
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
+    sharedIndices = generateIndices();
 
     for (int y = 0; y < numberOfChunks; y++) {
         for (int x = 0; x < numberOfChunks; x++) {
@@ -62,10 +63,9 @@ void World::render()
 
 void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
 {
-    auto indices = generateIndices();
     auto noise_map = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
     auto vertices = generateVertices(noise_map);
-    auto normals = generateNormals(indices, vertices);
+    auto normals = generateNormals(sharedIndices, vertices);
 
     // biomes
     auto rainfall = (float)rand() / (float)RAND_MAX;
@@ -91,7 +91,7 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
 
     // indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sharedIndices.size() * sizeof(int), &sharedIndices[0], GL_STATIC_DRAW);
 
     // Normals
     glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);

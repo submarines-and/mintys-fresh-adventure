@@ -22,6 +22,9 @@ private:
     std::vector<WorldChunk> chunks;
     Noise noise;
 
+    /** shared*/
+    std::vector<int> sharedIndices;
+
 private:
     void generateWorldChunk(GLuint& VAO, int xOffset, int yOffset);
 
