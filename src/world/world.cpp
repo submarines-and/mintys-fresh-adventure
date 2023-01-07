@@ -23,6 +23,18 @@ World::World(int numberOfChunks)
     }
 }
 
+World::~World()
+{
+    printf("Deleting world \n");
+
+    for (auto chunk : chunks) {
+        glDeleteVertexArrays(1, &chunk.id);
+    }
+
+    chunks.clear();
+    sharedIndices.clear();
+}
+
 void World::render()
 {
     glm::mat4 projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, (float)chunkWidth * (renderDistance - 1.2f));

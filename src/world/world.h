@@ -34,5 +34,6 @@ private:
 
 public:
     World(int numberOfChunks);
+    ~World();
     void render();
 };
