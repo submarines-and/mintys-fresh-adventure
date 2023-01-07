@@ -63,8 +63,8 @@ void World::render()
 
 void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
 {
-    auto noise_map = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
-    auto vertices = generateVertices(noise_map);
+    auto noiseMap = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
+    auto vertices = generateVertices(noiseMap);
     auto normals = generateNormals(sharedIndices, vertices);
 
     // biomes
