@@ -29,14 +29,14 @@ void World::render()
 
     Shader* objectShader = global.renderer->getShader(Shader::TERRAIN);
     objectShader->start();
-    objectShader->setBool("isFlat", true);
-    objectShader->setVec3("light.ambient", 0.2, 0.2, 0.2);
-    objectShader->setVec3("light.diffuse", 0.3, 0.3, 0.3);
-    objectShader->setVec3("light.specular", 1.0, 1.0, 1.0);
-    objectShader->setVec3("light.direction", -0.2f, -1.0f, -0.3f);
-    objectShader->setMat4("u_projection", projection);
-    objectShader->setMat4("u_view", view);
-    objectShader->setVec3("u_viewPos", global.camera->position);
+
+    objectShader->setMat4("projection", projection);
+    objectShader->setMat4("view", view);
+    
+    objectShader->setVec3("lightDirection", glm::vec3(0.3f, -1.0f, 0.5f));
+    objectShader->setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
+    objectShader->setVec2("lightBias", glm::vec2(0.3f, 0.8f));
+
 
     // Render map chunks
     for (auto& chunk : chunks) {
@@ -50,9 +50,9 @@ void World::render()
                 chunk.generated = true;
             }
 
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(-chunkWidth / 2.0 + (chunkWidth - 1) * chunk.x, 0.0, -chunkHeight / 2.0 + (chunkHeight - 1) * chunk.y));
-            objectShader->setMat4("u_model", model);
+            glm::mat4 transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, glm::vec3(-chunkWidth / 2.0 + (chunkWidth - 1) * chunk.x, 0.0, -chunkHeight / 2.0 + (chunkHeight - 1) * chunk.y));
+            objectShader->setMat4("transform", transform);
 
             // Terrain chunk
             glBindVertexArray(chunk.id);

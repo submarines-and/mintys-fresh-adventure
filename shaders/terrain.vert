@@ -1,53 +1,30 @@
-#version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aNormal;
-layout (location = 2) in vec3 aColor;
+#version 330
 
-flat out vec3 flatColor;
-out vec3 Color;
+layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec3 inColor;
 
-struct Light {
-    vec3 direction;
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
+flat out vec3 passColor;
 
-uniform Light light;
-uniform vec3 u_viewPos;
+uniform vec3 lightDirection;
+uniform vec3 lightColor;
+uniform vec2 lightBias;
 
-uniform mat4 u_model;
-uniform mat4 u_view;
-uniform mat4 u_projection;
+uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 transform;
 
-vec3 calculateLighting(vec3 Normal, vec3 FragPos) {
-    // Ambient lighting
-    vec3 ambient = light.ambient;
-    
-    // Diffuse lighting
-    vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(-light.direction);
-    float diff = max(dot(lightDir, norm), 0.0);
-    vec3 diffuse = light.diffuse * diff;
+// diffuse lighting
+vec3 calculateLighting(){
+	float brightness = max(dot(-lightDirection, inNormal), 0.0);
 
-    // Specular lighting
-    float specularStrength = 0.5;
-    vec3 viewDir = normalize(u_viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, Normal);
-
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
-    vec3 specular = light.specular * spec;
-    
-    return (ambient + diffuse + specular);
+	return (lightColor * lightBias.x) + (brightness * lightColor * lightBias.y);
 }
 
-void main() {
-    vec3 FragPos = vec3(u_model * vec4(aPos, 1.0));
-    vec3 Normal = transpose(inverse(mat3(u_model))) * aNormal;
+void main(void){
 
-    vec3 lighting = calculateLighting(Normal, FragPos);
-    Color = aColor * lighting;
-    flatColor = Color;
-    
-    gl_Position = u_projection * u_view * u_model * vec4(aPos, 1.0);
+	gl_Position = projection * view * transform * vec4(inPosition, 1.0);
+	
+	vec3 lighting = calculateLighting();
+	passColor = inColor.rgb * lighting;
 }

@@ -1,16 +1,10 @@
-#version 330 core
-flat in vec3 flatColor;
-in vec3 Color;
+#version 330
 
-out vec4 FragColor;
+flat in vec3 passColor;
 
-uniform bool isFlat;
+out vec4 outColor;
 
-void main() {
-    if (isFlat) {
-        FragColor = vec4(flatColor, 1.0);
-    } 
-    else {
-        FragColor = vec4(Color, 1.0);
-    }
+
+void main(void){
+	outColor = vec4(passColor, 1.0);
 }
