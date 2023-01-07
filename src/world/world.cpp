@@ -32,11 +32,10 @@ void World::render()
 
     objectShader->setMat4("projection", projection);
     objectShader->setMat4("view", view);
-    
+
     objectShader->setVec3("lightDirection", glm::vec3(0.3f, -1.0f, 0.5f));
     objectShader->setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
     objectShader->setVec2("lightBias", glm::vec2(0.3f, 0.8f));
-
 
     // Render map chunks
     for (auto& chunk : chunks) {
@@ -96,14 +95,14 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
 
     // Normals
     glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
     glEnableVertexAttribArray(1);
 
     // Color
     glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
     glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
     glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -127,6 +126,7 @@ std::vector<int> World::generateIndices()
                 indices.push_back(pos + chunkWidth);
                 indices.push_back(pos);
                 indices.push_back(pos + chunkWidth + 1);
+
                 // Bottom right triangle of square
                 indices.push_back(pos + 1);
                 indices.push_back(pos + 1 + chunkWidth);
@@ -157,11 +157,9 @@ std::vector<float> World::generateVertices(const std::vector<float>& noiseMap)
     return v;
 }
 
-std::vector<float> World::generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices)
+std::vector<glm::vec3> World::generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices)
 {
-    int pos;
-    glm::vec3 normal;
-    std::vector<float> normals;
+    std::vector<glm::vec3> normals;
     std::vector<glm::vec3> verts;
 
     // Get the vertices of each triangle in mesh
@@ -170,7 +168,7 @@ std::vector<float> World::generateNormals(const std::vector<int>& indices, const
 
         // Get the vertices (point) for each index
         for (auto j = 0; j < 3; j++) {
-            pos = indices[i + j] * 3;
+            int pos = indices[i + j] * 3;
             verts.push_back(glm::vec3(vertices[pos], vertices[pos + 1], vertices[pos + 2]));
         }
 
@@ -179,10 +177,8 @@ std::vector<float> World::generateNormals(const std::vector<int>& indices, const
         glm::vec3 V = verts[i + 2] - verts[i];
 
         // Calculate normal
-        normal = glm::normalize(-glm::cross(U, V));
-        normals.push_back(normal.x);
-        normals.push_back(normal.y);
-        normals.push_back(normal.z);
+        glm::vec3 normal = glm::normalize(-glm::cross(U, V));
+        normals.push_back(normal);
     }
 
     return normals;
