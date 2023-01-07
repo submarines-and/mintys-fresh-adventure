@@ -5,17 +5,15 @@
 
 class Renderer {
 private:
-    unsigned int quadVAO;
-    std::map<const char*, Sprite*> sprites;
+    std::map<Sprite::SpriteType, Sprite*> sprites;
     std::map<Shader::ShaderType, Shader*> shaders;
 
 public:
-    Renderer();
     ~Renderer();
 
-    Sprite* loadSprite(const char* path);
-    Shader* loadShader(Shader::ShaderType shaderKey, const char* vertexPath, const char* fragmentPath);
-    Shader* getShader(Shader::ShaderType shaderKey);
+    Sprite* getSprite(Sprite::SpriteType key);
+    Shader* getShader(Shader::ShaderType key);
 
-    void renderSprite(const char* spritePath, Shader::ShaderType shaderKey, glm::vec2 atlasSize, glm::vec2 atlasOffset, glm::vec2 worldPosition, glm::vec2 worldSize, float rotation);
+    Sprite* loadSprite(Sprite::SpriteType key, const char* spritePath);
+    Shader* loadShader(Shader::ShaderType key, const char* vertexPath, const char* fragmentPath);
 };

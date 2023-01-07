@@ -1,12 +1,21 @@
 #include "sprite.h"
 #define STB_IMAGE_IMPLEMENTATION
+#include "global.h"
 #include "opengl.h"
 #include "stb_image.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 Sprite::Sprite(const char* filepath)
 {
-    // stbi_set_flip_vertically_on_load(true);
+    loadFile(filepath);
+    setupVao();
 
+    global.renderer->loadShader(Shader::SPRITE, "shaders/sprite.vert", "shaders/sprite.frag");
+}
+
+void Sprite::loadFile(const char* filepath)
+{
+    // stbi_set_flip_vertically_on_load(true);
     glGenTextures(1, &id);
 
     int width, height, nrChannels;
@@ -28,13 +37,65 @@ Sprite::Sprite(const char* filepath)
     stbi_image_free(data);
 }
 
+void Sprite::setupVao()
+{
+    float vertices[] = {
+        // pos      // tex
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f,
+
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f};
+
+    unsigned int vbo;
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindVertexArray(vao);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
+    // unbind
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
 Sprite::~Sprite()
 {
     printf("Deleting sprite %i\n", id);
     glDeleteTextures(1, &id);
 }
 
-void Sprite::bind()
+void Sprite::render()
 {
+    auto shader = global.renderer->getShader(Shader::SPRITE);
+    shader->start();
+
+    shader->setMat4("projection", global.camera->getProjectionMatrix());
+    shader->setMat4("view", global.camera->getViewMatrix());
+    shader->setInt("image", 0);
+    shader->setVec2("atlasSize", atlasSize);
+    shader->setVec2("offset", atlasOffset);
+
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::translate(transform, glm::vec3(worldPosition, 0.0f));
+    transform = glm::translate(transform, glm::vec3(0.5f * worldSize.x, 0.5f * worldSize.y, 0.0f));
+    transform = glm::rotate(transform, glm::radians(rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
+    transform = glm::translate(transform, glm::vec3(-0.5f * worldSize.x, -0.5f * worldSize.y, 0.0f));
+    transform = glm::scale(transform, glm::vec3(worldSize, 1.0f));
+    shader->setMat4("transform", transform);
+
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, id);
+
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    shader->stop();
 }

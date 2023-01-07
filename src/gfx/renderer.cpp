@@ -1,35 +1,4 @@
 #include "renderer.h"
-#include "global.h"
-#include "opengl.h"
-#include <glm/gtc/matrix_transform.hpp>
-
-Renderer::Renderer()
-{
-    float vertices[] = {
-        // pos      // tex
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 0.0f,
-
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f};
-
-    unsigned int vbo;
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &vbo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindVertexArray(quadVAO);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-
-    // unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
 
 Renderer::~Renderer()
 {
@@ -42,56 +11,40 @@ Renderer::~Renderer()
     }
 }
 
-Shader* Renderer::loadShader(Shader::ShaderType shaderKey, const char* vertexPath, const char* fragmentPath)
+Sprite* Renderer::getSprite(Sprite::SpriteType key)
 {
-    if (!shaders.count(shaderKey)) {
-        shaders.emplace(shaderKey, new Shader(vertexPath, fragmentPath));
+    if (!sprites.count(key)) {
+        printf("Sprite not loaded %i\n", key);
     }
 
-    return shaders[shaderKey];
+    return sprites[key];
 }
 
-Shader* Renderer::getShader(Shader::ShaderType shaderKey)
+Shader* Renderer::getShader(Shader::ShaderType key)
 {
-    return shaders[shaderKey];
-}
-
-Sprite* Renderer::loadSprite(const char* path)
-{
-    if (!sprites.count(path)) {
-        sprites.emplace(path, new Sprite(path));
+    if (!shaders.count(key)) {
+        printf("Shader not loaded %i\n", key);
     }
 
-    return sprites[path];
+    return shaders[key];
 }
 
-void Renderer::renderSprite(const char* spritePath, Shader::ShaderType shaderKey, glm::vec2 atlasSize, glm::vec2 atlasOffset, glm::vec2 worldPosition, glm::vec2 worldSize, float rotation)
+Sprite* Renderer::loadSprite(Sprite::SpriteType key, const char* spritePath)
 {
-    auto shader = getShader(shaderKey);
-    shader->start();
+    if (!sprites.count(key)) {
+        printf("Loading sprite %s\n", spritePath);
+        sprites.emplace(key, new Sprite(spritePath));
+    }
 
-    shader->setMat4("projection", global.camera->getProjectionMatrix());
-    shader->setMat4("view", global.camera->getViewMatrix());
-    shader->setInt("image", 0);
-    shader->setVec2("atlasSize", atlasSize);
-    shader->setVec2("offset", atlasOffset);
+    return sprites[key];
+}
 
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(worldPosition, 0.0f));
-    transform = glm::translate(transform, glm::vec3(0.5f * worldSize.x, 0.5f * worldSize.y, 0.0f));
-    transform = glm::rotate(transform, glm::radians(rotation + 180), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform = glm::translate(transform, glm::vec3(-0.5f * worldSize.x, -0.5f * worldSize.y, 0.0f));
+Shader* Renderer::loadShader(Shader::ShaderType key, const char* vertexPath, const char* fragmentPath)
+{
+    if (!shaders.count(key)) {
+        printf("Loading shader %s\n", vertexPath);
+        shaders.emplace(key, new Shader(vertexPath, fragmentPath));
+    }
 
-    transform = glm::scale(transform, glm::vec3(worldSize, 1.0f));
-
-    shader->setMat4("transform", transform);
-
-    glActiveTexture(GL_TEXTURE0);
-    auto sprite = loadSprite(spritePath);
-    sprite->bind();
-
-    glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    shader->stop();
+    return shaders[key];
 }
