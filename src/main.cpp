@@ -31,8 +31,8 @@ void init()
     global.ecs->addComponent(player, SpriteComponent{
                                          .textureFilePath = "assets/hood.png",
                                          .atlasSize = glm::vec2(8, 9),
-                                         .atlasOffset = glm::vec2(0, 0),
-                                         .animationFrames = 2,
+                                         .atlasOffset = glm::vec2(0, 5),
+                                         .animationFrames = 8,
                                      });
 
     global.ecs->addComponent(player, TransformComponent{

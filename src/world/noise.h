@@ -65,7 +65,7 @@ private:
 
         for (int j = 0; j < 2; j++)
             for (int i = 0; i < 256; i++) {
-                p.push_back(permutation[i]);
+                p.emplace_back(permutation[i]);
             }
 
         return p;

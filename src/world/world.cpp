@@ -130,14 +130,14 @@ std::vector<int> World::generateIndices()
             }
             else {
                 // Top left triangle of square
-                indices.push_back(pos + chunkWidth);
-                indices.push_back(pos);
-                indices.push_back(pos + chunkWidth + 1);
+                indices.emplace_back(pos + chunkWidth);
+                indices.emplace_back(pos);
+                indices.emplace_back(pos + chunkWidth + 1);
 
                 // Bottom right triangle of square
-                indices.push_back(pos + 1);
-                indices.push_back(pos + 1 + chunkWidth);
-                indices.push_back(pos);
+                indices.emplace_back(pos + 1);
+                indices.emplace_back(pos + 1 + chunkWidth);
+                indices.emplace_back(pos);
             }
         }
 
@@ -150,15 +150,15 @@ std::vector<float> World::generateVertices(const std::vector<float>& noiseMap)
 
     for (int y = 0; y < chunkHeight + 1; y++)
         for (int x = 0; x < chunkWidth; x++) {
-            v.push_back(x);
+            v.emplace_back(x);
 
             // Apply cubic easing to the noise
             float easedNoise = std::pow(noiseMap[x + y * chunkWidth] * 1.1f, 3);
 
             // Scale noise to match meshHeight
             // Pervent vertex height from being below WATER_HEIGHT
-            v.push_back(std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight));
-            v.push_back(y);
+            v.emplace_back(std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight));
+            v.emplace_back(y);
         }
 
     return v;
@@ -176,7 +176,7 @@ std::vector<glm::vec3> World::generateNormals(const std::vector<int>& indices, c
         // Get the vertices (point) for each index
         for (auto j = 0; j < 3; j++) {
             int pos = indices[i + j] * 3;
-            verts.push_back(glm::vec3(vertices[pos], vertices[pos + 1], vertices[pos + 2]));
+            verts.emplace_back(glm::vec3(vertices[pos], vertices[pos + 1], vertices[pos + 2]));
         }
 
         // Get vectors of two edges of triangle
@@ -185,7 +185,7 @@ std::vector<glm::vec3> World::generateNormals(const std::vector<int>& indices, c
 
         // Calculate normal
         glm::vec3 normal = glm::normalize(-glm::cross(U, V));
-        normals.push_back(normal);
+        normals.emplace_back(normal);
     }
 
     return normals;

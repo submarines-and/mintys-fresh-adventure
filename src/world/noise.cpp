@@ -37,14 +37,14 @@ std::vector<float> Noise::generateNoiseMap(int offsetX, int offsetY, int height,
                 freq *= lacunarity;
             }
 
-            noiseValues.push_back(noiseHeight);
+            noiseValues.emplace_back(noiseHeight);
         }
     }
 
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             // Inverse lerp and scale values to range from 0 to 1
-            normalizedNoiseValues.push_back((noiseValues[x + y * width] + 1) / maxPossibleHeight);
+            normalizedNoiseValues.emplace_back((noiseValues[x + y * width] + 1) / maxPossibleHeight);
         }
     }
 
