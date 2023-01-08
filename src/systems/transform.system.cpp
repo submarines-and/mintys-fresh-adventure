@@ -4,8 +4,8 @@
 
 void TransformSystem::update(float deltaTime)
 {
-    for (auto e : entities) {
-        auto& transform = global.ecs->getComponent<TransformComponent>(e);
+    for (auto entity : entities) {
+        auto& transform = global.ecs->getComponent<TransformComponent>(entity);
 
         transform.positionLastFrame = transform.position;
         transform.position += transform.direction * transform.speed * deltaTime;

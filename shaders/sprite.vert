@@ -9,13 +9,14 @@ uniform mat4 view;
 // position and size
 uniform vec3 position;
 uniform vec2 size;
+uniform vec2 rotation;
 
 // camera info
 uniform vec3 cameraRight;
 uniform vec3 cameraUp;
 
 // sprite atlas
-uniform vec2 offset;
+uniform vec2 atlasOffset;
 uniform vec2 atlasSize;
 
 void main()
@@ -23,7 +24,8 @@ void main()
     // select position in atlas
     float scaleX = 1.0 / atlasSize.x;
     float scaleY = 1.0 / atlasSize.y;
-    texCoords = vec2((vertex.z + offset.x) * scaleX, (vertex.w + offset.y) * scaleY);
+
+    texCoords = vec2((vertex.z * rotation.x + atlasOffset.x) * scaleX, (vertex.w * rotation.y + atlasOffset.y) * scaleY);
 
     // billboarding
     vec3 transform = position + cameraRight * vertex.x * size.x + cameraUp * vertex.y * size.y;

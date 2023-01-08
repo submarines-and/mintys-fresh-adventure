@@ -77,7 +77,7 @@ void SpriteSystem::update(int ticks)
         // animation frame
         shader.setInt("image", 0);
         shader.setVec2("atlasSize", sprite.atlasSize);
-        shader.setVec2("offset", sprite.atlasOffset);
+        shader.setVec2("atlasOffset", sprite.atlasOffset);
 
         // projection and view
         auto projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, 10000.0f);
@@ -92,6 +92,7 @@ void SpriteSystem::update(int ticks)
         // position and size
         shader.setVec3("position", transform.position);
         shader.setVec2("size", transform.size);
+        shader.setVec2("rotation", sprite.rotation);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, sprite.textureId);
