@@ -44,10 +44,9 @@ void World::render()
     shader.setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
     shader.setVec2("lightBias", glm::vec2(0.3f, 0.8f));
 
-    // Render map chunks
+    // render visible chunks
     for (auto& chunk : chunks) {
 
-        // Only render chunk if it's within render distance
         if (std::abs(chunk.x * chunkWidth - global.camera->position.x) <= renderDistance && std::abs(chunk.y * chunkHeight - global.camera->position.z) <= renderDistance) {
 
             // generate if missing
@@ -85,33 +84,33 @@ void World::generateWorldChunk(WorldChunk& chunk)
     Biome biome(rainfall, temperature, meshHeight, waterHeight);
     auto colors = biome.getColorAtPoint(vertices);
 
-    GLuint VBO[3], EBO;
+    GLuint vbo[3], ibo;
 
     // Create buffers and arrays
-    glGenBuffers(3, VBO);
-    glGenBuffers(1, &EBO);
+    glGenBuffers(3, vbo);
+    glGenBuffers(1, &ibo);
     glGenVertexArrays(1, &chunk.id);
 
     glBindVertexArray(chunk.id);
 
     // vertices
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // indices
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sharedIndices.size() * sizeof(int), &sharedIndices[0], GL_STATIC_DRAW);
 
     // Normals
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
     glEnableVertexAttribArray(1);
 
     // Color
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
     glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
     glEnableVertexAttribArray(2);

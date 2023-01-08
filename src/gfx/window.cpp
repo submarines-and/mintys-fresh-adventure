@@ -39,8 +39,11 @@ void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods
     }
 
     // wireframe
-    if (key == GLFW_KEY_G) {
+    if (key == GLFW_KEY_P) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else if (key == GLFW_KEY_O) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
     switch (action) {
