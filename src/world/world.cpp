@@ -146,22 +146,22 @@ std::vector<int> World::generateIndices()
 
 std::vector<float> World::generateVertices(const std::vector<float>& noiseMap)
 {
-    std::vector<float> v;
+    std::vector<float> verticies;
 
     for (int y = 0; y < chunkHeight + 1; y++)
         for (int x = 0; x < chunkWidth; x++) {
-            v.emplace_back(x);
+            verticies.emplace_back(x);
 
             // Apply cubic easing to the noise
             float easedNoise = std::pow(noiseMap[x + y * chunkWidth] * 1.1f, 3);
 
             // Scale noise to match meshHeight
             // Pervent vertex height from being below WATER_HEIGHT
-            v.emplace_back(std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight));
-            v.emplace_back(y);
+            verticies.emplace_back(std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight));
+            verticies.emplace_back(y);
         }
 
-    return v;
+    return verticies;
 }
 
 std::vector<glm::vec3> World::generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices)

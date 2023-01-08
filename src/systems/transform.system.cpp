@@ -6,6 +6,6 @@ void TransformSystem::update(float deltaTime)
 {
     for (auto e : entities) {
         auto& transform = global.ecs->getComponent<TransformComponent>(e);
-        transform.position += transform.velocity * deltaTime;
+        transform.position += transform.direction * transform.speed * deltaTime;
     }
 }
