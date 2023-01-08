@@ -86,7 +86,6 @@ float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
     int adjustedX = position.x - currentChunk.x * chunkWidth;
     int adjustedZ = position.z - currentChunk.y * chunkHeight;
 
-    printf("%f\n", currentChunk.heights[adjustedX + adjustedZ * chunkWidth]);
     return currentChunk.heights[adjustedX + adjustedZ * chunkWidth] + size.y;
 }
 
