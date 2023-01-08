@@ -7,11 +7,12 @@ void CollisionSystem::update()
     for (auto entity : entities) {
         auto& transform = global.ecs->getComponent<TransformComponent>(entity);
 
-        auto terrainType = Biome::GRASS;
+        auto terrainType = global.world->getTerrainType(transform.position, transform.size);
 
         switch (terrainType) {
         case Biome::SHALLOW_WATER:
         case Biome::DEEP_WATER:
+        case Biome::SLOPE:
         case Biome::ROCK:
         case Biome::MOUNTAIN:
             transform.position = transform.positionLastFrame;

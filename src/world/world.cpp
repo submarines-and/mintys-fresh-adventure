@@ -66,7 +66,7 @@ void World::render()
     }
 }
 
-float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
+WorldChunk World::getWorldChunk(glm::vec3 position, glm::vec2 size)
 {
     // get active chunk
     int gridX = position.x / (chunkWidth);
@@ -75,18 +75,36 @@ float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
     auto chunkIndex = gridX + gridZ * numberOfChunks;
     if (chunkIndex > (int)chunks.size() - 1) {
         printf("Out of bounds: x:%i, z:%i, chunk index: %i\n", gridX, gridZ, chunkIndex);
+        return WorldChunk();
+    }
+
+    return chunks[chunkIndex];
+}
+
+float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
+{
+    auto chunk = getWorldChunk(position, size);
+    if (!chunk.generated) {
         return 1.0f;
     }
 
-    auto currentChunk = chunks[chunkIndex];
-    if (!currentChunk.generated) {
-        return 1.0f;
+    int adjustedX = position.x - chunk.x * chunkWidth;
+    int adjustedZ = position.z - chunk.y * chunkHeight;
+
+    return chunk.heights[adjustedX + adjustedZ * chunkWidth] + size.y;
+}
+
+Biome::TerrainType World::getTerrainType(glm::vec3 position, glm::vec2 size)
+{
+    auto chunk = getWorldChunk(position, size);
+    if (!chunk.generated) {
+        return Biome::GRASS;
     }
 
-    int adjustedX = position.x - currentChunk.x * chunkWidth;
-    int adjustedZ = position.z - currentChunk.y * chunkHeight;
+    int adjustedX = position.x - chunk.x * chunkWidth;
+    int adjustedZ = position.z - chunk.y * chunkHeight;
 
-    return currentChunk.heights[adjustedX + adjustedZ * chunkWidth] + size.y;
+    return chunk.terrain[adjustedX + adjustedZ * chunkWidth];
 }
 
 void World::generateWorldChunk(WorldChunk& chunk)
@@ -126,12 +144,20 @@ void World::generateWorldChunk(WorldChunk& chunk)
     auto temperature = (float)rand() / (float)RAND_MAX;
     chunk.biomeType = biomeGen.getBiomeType(rainfall, temperature);
 
+    // reserve memory for terrain
+    chunk.terrain = std::vector<Biome::TerrainType>(chunkHeight * chunkWidth);
+
     // get colors per point and save biome type to chunk
     std::vector<glm::vec3> colors;
     for (auto i = 1; i < (int)vertices.size(); i += 3) {
         auto terrainType = biomeGen.getTerrainType(vertices[i]);
         auto color = biomeGen.getTerrainColor(chunk.biomeType, terrainType);
         colors.emplace_back(color);
+
+        // persist terrain type
+        auto x = vertices[i - 1];
+        auto z = vertices[i + 1];
+        chunk.terrain[x + z * chunkWidth] = terrainType;
     }
 
     GLuint vbo[3], ibo;
