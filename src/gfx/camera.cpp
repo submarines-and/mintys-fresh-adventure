@@ -1,5 +1,7 @@
 #include "camera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "global.h"
+#include "gfx/opengl.h"
 
 Camera::Camera(glm::vec3 position) : position(position)
 {
@@ -26,20 +28,20 @@ void Camera::updateCameraVectors()
     up = glm::normalize(glm::cross(right, front));
 }
 
-void Camera::processKeyboard(CameraDirection direction, float deltaTime)
+void Camera::processKeyboard(float deltaTime)
 {
     float velocity = MOVEMENT_SPEED * deltaTime;
 
-    if (direction == UP)
+    if (global.keys[GLFW_KEY_UP])
         position += front * velocity;
 
-    if (direction == DOWN)
+    if (global.keys[GLFW_KEY_DOWN])
         position -= front * velocity;
 
-    if (direction == LEFT)
+    if (global.keys[GLFW_KEY_LEFT])
         position -= right * velocity;
 
-    if (direction == RIGHT)
+    if (global.keys[GLFW_KEY_RIGHT])
         position += right * velocity;
 
     // clamp

@@ -156,6 +156,7 @@ void Window::loop()
         lastFrame = currentFrame;
 
         handleMouseMovement(window);
+        global.camera->processKeyboard(deltaTime);
         update(ticks, deltaTime);
 
         glClearColor(255, 255, 255, 255);

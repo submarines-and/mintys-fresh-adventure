@@ -1,13 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
 
-enum CameraDirection {
-    UP,
-    DOWN,
-    RIGHT,
-    LEFT,
-};
-
 class Camera {
 private:
     float yaw = 0.0f;
@@ -34,7 +27,7 @@ public:
 
     glm::mat4 getViewMatrix();
 
-    void processKeyboard(CameraDirection direction, float deltaTime);
+    void processKeyboard(float deltaTime);
     void processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld);
     void processScroll(float yOffset);
 };
