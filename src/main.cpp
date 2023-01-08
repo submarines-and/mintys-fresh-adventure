@@ -27,12 +27,21 @@ void init()
                                      });
 
     global.ecs->addComponent(player, TransformComponent{
-                                         .position = glm::vec3(30.0f, 15.0f, 50.0f),
-                                         .size = glm::vec2(5.0f, 5.0f),
+                                         .position = glm::vec3(30.0f, 0.0f, 50.0f),
+                                         .size = glm::vec2(5.0f, 4.0f),
                                      });
 
     global.ecs->addComponent(player, InputComponent());
     global.ecs->addComponent(player, CollisionComponent());
+
+    auto tree = global.ecs->createEntity();
+    global.ecs->addComponent(tree, TransformComponent{
+                                       .position = glm::vec3(30.0f, 0.0f, 50.0f),
+                                       .size = glm::vec2(15.0f, 15.0f),
+                                   });
+    global.ecs->addComponent(tree, SpriteComponent{
+                                       .textureFilePath = "assets/tree.png",
+                                   });
 }
 
 void update(int ticks, float deltaTime)

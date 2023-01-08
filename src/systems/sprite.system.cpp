@@ -80,7 +80,7 @@ void SpriteSystem::update(int ticks)
         shader.setVec2("offset", sprite.atlasOffset);
 
         // projection and view
-        auto projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, 1000.0f);
+        auto projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, 10000.0f);
         auto view = global.camera->getViewMatrix();
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);

@@ -91,7 +91,7 @@ float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
     int adjustedX = position.x - chunk.x * chunkWidth;
     int adjustedZ = position.z - chunk.y * chunkHeight;
 
-    return chunk.heights[adjustedX + adjustedZ * chunkWidth] + size.y;
+    return chunk.heights[adjustedX + adjustedZ * chunkWidth] + 1.0f;
 }
 
 Biome::TerrainType World::getTerrainType(glm::vec3 position, glm::vec2 size)
