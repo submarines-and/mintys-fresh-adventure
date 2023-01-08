@@ -3,10 +3,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <random>
 
-World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag"))
+World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag")), biomeGen(meshHeight, waterHeight)
 {
     srand((unsigned)time(NULL));
 
+    this->numberOfChunks = numberOfChunks;
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
     sharedIndices = generateIndices();
 
@@ -68,7 +69,18 @@ void World::render()
 
 Biome::TerrainType World::getTerrainAtPosition(glm::vec3 position, glm::vec2 size)
 {
-    return Biome::GRASS;
+    // get active chunk
+    int x = (position.x - size.x) / (chunkWidth);
+    int y = (position.z - size.y) / (chunkHeight);
+
+    auto index = x + y * numberOfChunks;
+    if (index > (int)chunks.size() - 1) {
+        printf("Out of bounds: x:%i, y:%i, index: %i\n", x, y, index);
+        return Biome::GRASS;
+    }
+
+    auto currentChunk = chunks[index];
+    return currentChunk.terrain[position.x];
 }
 
 void World::generateWorldChunk(WorldChunk& chunk)
@@ -77,12 +89,22 @@ void World::generateWorldChunk(WorldChunk& chunk)
     auto vertices = generateVertices(noiseMap);
     auto normals = generateNormals(sharedIndices, vertices);
 
-    // biomes
+    // randomize biometype
     auto rainfall = (float)rand() / (float)RAND_MAX;
     auto temperature = (float)rand() / (float)RAND_MAX;
+    chunk.biomeType = biomeGen.getBiomeType(rainfall, temperature);
 
-    Biome biome(rainfall, temperature, meshHeight, waterHeight);
-    auto colors = biome.getColorAtPoint(vertices);
+    // get colors per point and save biome type to chunk
+    std::vector<glm::vec3> colors;
+    for (auto i = 1; i < (int)vertices.size(); i += 3) {
+
+        // persist terrain type
+        auto terrainType = biomeGen.getTerrainType(vertices[i]);
+
+        // send color to buffer
+        auto color = biomeGen.getTerrainColor(chunk.biomeType, terrainType);
+        colors.emplace_back(color);
+    }
 
     GLuint vbo[3], ibo;
 
@@ -174,7 +196,7 @@ std::vector<glm::vec3> World::generateNormals(const std::vector<int>& indices, c
 
     // Get the vertices of each triangle in mesh
     // For each group of indices
-    for (auto i = 0.0f; i < indices.size(); i += 3) {
+    for (auto i = 0; i < (int)indices.size(); i += 3) {
 
         // Get the vertices (point) for each index
         for (auto j = 0; j < 3; j++) {

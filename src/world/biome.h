@@ -26,7 +26,6 @@ public:
     };
 
 private:
-    BiomeType type;
     float meshHeight, waterHeight;
 
     std::map<BiomeType, std::map<TerrainType, glm::vec3>> colors = {
@@ -92,11 +91,9 @@ private:
                  }},
     };
 
-private:
-    BiomeType getBiomeType(float rainfall, float temperature);
-
 public:
-    Biome(float rainfall, float temperature, float meshHeight, float waterHeight);
-    glm::vec3 getColorAtPoint(float noise);
-    std::vector<glm::vec3> getColorAtPoint(std::vector<float> noise);
+    Biome(float meshHeight, float waterHeight);
+    BiomeType getBiomeType(float rainfall, float temperature);
+    TerrainType getTerrainType(float vertexHeight);
+    glm::vec3 getTerrainColor(BiomeType biomeType, TerrainType terrainType);
 };
