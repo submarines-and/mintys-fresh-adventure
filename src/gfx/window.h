@@ -12,7 +12,6 @@ private:
     WindowFunction init, destroy;
     WindowFunctionWithTime update, render;
 
-    void handleInput(GLFWwindow* window);
     void handleMouseMovement(GLFWwindow* window);
 
     float deltaTime = 0.0f;

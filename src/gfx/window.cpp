@@ -24,25 +24,34 @@ void onResize(GLFWwindow* window, int width, int height)
     global.height = height;
 }
 
-void Window::handleInput(GLFWwindow* window)
+void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+#pragma unused(mods);
+
+    if (key < 0) {
+        return;
+    }
+
+    if (key == GLFW_KEY_ESCAPE) {
         glfwSetWindowShouldClose(window, true);
+        return;
     }
 
     // wireframe
-    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+    if (key == GLFW_KEY_G) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        global.camera->processKeyboard(UP, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        global.camera->processKeyboard(DOWN, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        global.camera->processKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        global.camera->processKeyboard(RIGHT, deltaTime);
+    switch (action) {
+    case GLFW_PRESS:
+        global.keys[key] = true;
+        break;
+    case GLFW_RELEASE:
+        global.keys[key] = false;
+        break;
+    default:
+        break;
+    }
 }
 
 void Window::handleMouseMovement(GLFWwindow* window)
@@ -104,6 +113,7 @@ Window::Window(int width, int height, WindowFunction init, WindowFunction destro
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, onResize);
     glfwSetScrollCallback(window, scrollCallback);
+    glfwSetKeyCallback(window, handleInput);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         printf("Failed to load GLAD\n");
@@ -141,7 +151,6 @@ void Window::loop()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        handleInput(window);
         handleMouseMovement(window);
         update(ticks, deltaTime);
 

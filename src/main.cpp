@@ -1,9 +1,6 @@
-#include "components/sprite.component.h"
-#include "components/transform.component.h"
+#include "ecs/registry.h"
 #include "gfx/window.h"
 #include "global.h"
-#include "systems/sprite.system.h"
-#include "systems/transform.system.h"
 #include <glm/glm.hpp>
 
 /** Init global state and make accessible for main function. */
@@ -16,15 +13,9 @@ void init()
     global.camera = new Camera(glm::vec3(0.0f, 30.0f, 0.0f));
     global.ecs = new ECS();
 
-    // Register systems
-    global.ecs->registerSystem<SpriteSystem>(std::vector<ComponentType>{
-        global.ecs->getComponentType<SpriteComponent>(),
-        global.ecs->getComponentType<TransformComponent>(),
-    });
-
-    global.ecs->registerSystem<TransformSystem>(std::vector<ComponentType>{
-        global.ecs->getComponentType<TransformComponent>(),
-    });
+    // register all systems
+    // this also ensures components/systems are imported in the main file
+    Registry::addAllSystems();
 
     // create player
     auto player = global.ecs->createEntity();
@@ -39,10 +30,13 @@ void init()
                                          .position = glm::vec3(15.0f, 5.0f, -5.0f),
                                          .size = glm::vec2(2.0f, 2.0f),
                                      });
+
+    global.ecs->addComponent(player, InputComponent());
 }
 
 void update(int ticks, float deltaTime)
 {
+    global.ecs->getSystem<InputSystem>()->update();
     global.ecs->getSystem<TransformSystem>()->update(deltaTime);
 }
 
