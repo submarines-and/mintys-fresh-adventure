@@ -4,6 +4,7 @@
 
 void InputSystem::update()
 {
+    // this will always have 1 entry, the currently controlled player
     for (auto entity : entities) {
         auto& transform = global.ecs->getComponent<TransformComponent>(entity);
 
@@ -25,5 +26,7 @@ void InputSystem::update()
         // fix horizontal movement
         if (transform.direction.x != 0.0f || transform.direction.z != 0.0f)
             transform.direction = glm::normalize(transform.direction);
+
+        global.camera->centerOn(transform.position);
     }
 }

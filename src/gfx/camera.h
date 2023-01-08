@@ -26,6 +26,7 @@ public:
     Camera(glm::vec3 position);
 
     glm::mat4 getViewMatrix();
+    void centerOn(glm::vec3 position);
 
     void processKeyboard(float deltaTime);
     void processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld);

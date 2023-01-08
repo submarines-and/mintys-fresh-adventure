@@ -1,7 +1,7 @@
 #include "camera.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include "global.h"
 #include "gfx/opengl.h"
+#include "global.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera(glm::vec3 position) : position(position)
 {
@@ -11,6 +11,18 @@ Camera::Camera(glm::vec3 position) : position(position)
 glm::mat4 Camera::getViewMatrix()
 {
     return glm::lookAt(position, position + front, up);
+}
+
+void Camera::centerOn(glm::vec3 position)
+{
+    auto horizontalDistance = zoom * glm::cos(glm::radians(pitch));
+    auto verticalDistance = zoom * glm::sin(glm::radians(pitch));
+    float theta = 90;
+    float offsetX = horizontalDistance * glm::sin(glm::radians(theta));
+    float offsetZ = horizontalDistance * glm::cos(glm::radians(theta));
+
+    this->position.x = position.x - offsetX + 5.0f;
+    this->position.z = position.z - offsetZ;
 }
 
 void Camera::updateCameraVectors()
@@ -64,9 +76,10 @@ void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonH
     xOffset *= LOOK_SENTITIVITY;
     yOffset *= LOOK_SENTITIVITY;
 
-    // always add to y
+    //  yaw += xOffset;
+
     pitch += yOffset;
-    yaw += xOffset;
+    position.y -= yOffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (pitch > 89.0f)
