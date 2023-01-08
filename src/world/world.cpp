@@ -69,8 +69,8 @@ void World::render()
 WorldChunk World::getWorldChunk(glm::vec3 position, glm::vec2 size)
 {
     // get active chunk
-    int gridX = position.x / (chunkWidth);
-    int gridZ = position.z / (chunkHeight);
+    int gridX = (position.x + (size.x / 2)) / (chunkWidth);
+    int gridZ = (position.z + (size.y / 2)) / (chunkHeight);
 
     auto chunkIndex = gridX + gridZ * numberOfChunks;
     if (chunkIndex > (int)chunks.size() - 1) {
