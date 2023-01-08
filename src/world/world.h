@@ -11,6 +11,7 @@ struct WorldChunk {
     GLuint id;
     int x, y;
     Biome::BiomeType biomeType;
+    std::vector<float> heights;
     bool generated = false;
 };
 
@@ -18,7 +19,7 @@ class World {
 private:
     Shader shader;
 
-    int numberOfChunks = 1;
+    int numberOfChunks = 100;
     int chunkWidth = 100;
     int chunkHeight = 100;
 
@@ -38,12 +39,11 @@ private:
     void generateWorldChunk(WorldChunk& chunk);
 
     std::vector<int> generateIndices();
-    std::vector<float> generateVertices(const std::vector<float>& noiseMap);
     std::vector<glm::vec3> generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices);
 
 public:
     World(int numberOfChunks);
     ~World();
     void render();
-    float getTerrainHeight(glm::vec2 position);
+    float getTerrainHeight(glm::vec3 position, glm::vec2 size);
 };

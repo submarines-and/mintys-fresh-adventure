@@ -9,5 +9,7 @@ void TransformSystem::update(float deltaTime)
 
         transform.positionLastFrame = transform.position;
         transform.position += transform.direction * transform.speed * deltaTime;
+
+        transform.position.y = global.world->getTerrainHeight(transform.position, transform.size);
     }
 }

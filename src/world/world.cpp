@@ -53,7 +53,6 @@ void World::render()
             // generate if missing
             if (!chunk.generated) {
                 generateWorldChunk(chunk);
-                chunk.generated = true;
             }
 
             glm::mat4 transform = glm::mat4(1.0f);
@@ -67,27 +66,60 @@ void World::render()
     }
 }
 
-float World::getTerrainHeight(glm::vec2 position)
+float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
 {
     // get active chunk
-    int x = position.x / (chunkWidth);
-    int y = position.y / (chunkHeight);
+    int gridX = position.x / (chunkWidth);
+    int gridZ = position.z / (chunkHeight);
 
-    auto index = x + y * numberOfChunks;
-    if (index > (int)chunks.size() - 1) {
-        printf("Out of bounds: x:%i, y:%i, index: %i\n", x, y, index);
+    auto chunkIndex = gridX + gridZ * numberOfChunks;
+    if (chunkIndex > (int)chunks.size() - 1) {
+        printf("Out of bounds: x:%i, z:%i, chunk index: %i\n", gridX, gridZ, chunkIndex);
         return 1.0f;
     }
 
-    auto currentChunk = chunks[index];
+    auto currentChunk = chunks[chunkIndex];
+    if (!currentChunk.generated) {
+        return 1.0f;
+    }
 
-    return 1.0f;
+    int adjustedX = position.x - currentChunk.x * chunkWidth;
+    int adjustedZ = position.z - currentChunk.y * chunkHeight;
+
+    printf("%f\n", currentChunk.heights[adjustedX + adjustedZ * chunkWidth]);
+    return currentChunk.heights[adjustedX + adjustedZ * chunkWidth] + size.y;
 }
 
 void World::generateWorldChunk(WorldChunk& chunk)
 {
+    // reserve memory for heights vector
+    chunk.heights = std::vector<float>(chunkHeight * chunkWidth);
+
+    // create noise
     auto noiseMap = noise.generateNoiseMap(chunk.x, chunk.y, chunkHeight, chunkWidth);
-    auto vertices = generateVertices(noiseMap);
+
+    // generate vertices
+    std::vector<float> vertices;
+
+    for (int y = 0; y < chunkHeight + 1; y++)
+        for (int x = 0; x < chunkWidth; x++) {
+            vertices.emplace_back(x);
+
+            // Apply cubic easing to the noise
+            float easedNoise = std::pow(noiseMap[x + y * chunkWidth] * 1.1f, 3);
+
+            // Scale noise to match meshHeight
+            // Pervent vertex height from being below WATER_HEIGHT
+            auto height = std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight);
+            vertices.emplace_back(height);
+
+            // also persist height to chunk map
+            chunk.heights[x + y * chunkWidth] = height;
+
+            vertices.emplace_back(y);
+        }
+
+    // normals
     auto normals = generateNormals(sharedIndices, vertices);
 
     // randomize biometype
@@ -136,6 +168,9 @@ void World::generateWorldChunk(WorldChunk& chunk)
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    // flag as done
+    chunk.generated = true;
 }
 
 std::vector<int> World::generateIndices()
@@ -164,26 +199,6 @@ std::vector<int> World::generateIndices()
         }
 
     return indices;
-}
-
-std::vector<float> World::generateVertices(const std::vector<float>& noiseMap)
-{
-    std::vector<float> verticies;
-
-    for (int y = 0; y < chunkHeight + 1; y++)
-        for (int x = 0; x < chunkWidth; x++) {
-            verticies.emplace_back(x);
-
-            // Apply cubic easing to the noise
-            float easedNoise = std::pow(noiseMap[x + y * chunkWidth] * 1.1f, 3);
-
-            // Scale noise to match meshHeight
-            // Pervent vertex height from being below WATER_HEIGHT
-            verticies.emplace_back(std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight));
-            verticies.emplace_back(y);
-        }
-
-    return verticies;
 }
 
 std::vector<glm::vec3> World::generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices)
