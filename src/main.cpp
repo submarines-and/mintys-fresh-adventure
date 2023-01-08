@@ -10,7 +10,7 @@ Global& global = global_instance;
 void init()
 {
     global.world = new World(1000);
-    global.camera = new Camera(glm::vec3(0.0f, 30.0f, 0.0f));
+    global.camera = new Camera(glm::vec3(10.0f, 30.0f, 50.0f));
     global.ecs = new ECS();
 
     // register all systems
@@ -27,7 +27,7 @@ void init()
                                      });
 
     global.ecs->addComponent(player, TransformComponent{
-                                         .position = glm::vec3(55.0f, 15.0f, 55.0f),
+                                         .position = glm::vec3(30.0f, 15.0f, 50.0f),
                                          .size = glm::vec2(5.0f, 5.0f),
                                      });
 

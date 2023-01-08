@@ -81,12 +81,12 @@ void Camera::processScroll(float yOffset)
 {
     yOffset *= LOOK_SENTITIVITY;
 
-    if (zoom >= 1.0f && zoom <= 45.0f)
+    if (zoom >= 1.0f && zoom <= 50.0f)
         zoom -= yOffset;
 
     if (zoom <= 1.0f)
         zoom = 1.0f;
 
-    if (zoom >= 45.0f)
-        zoom = 45.0f;
+    if (zoom >= 50.0f)
+        zoom = 50.0f;
 }

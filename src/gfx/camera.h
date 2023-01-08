@@ -20,7 +20,7 @@ public:
     glm::vec3 right;
     glm::vec3 up;
 
-    float zoom = 30.0f;
+    float zoom = 45.0f;
 
 public:
     Camera(glm::vec3 position);
