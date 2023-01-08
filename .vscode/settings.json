@@ -4,6 +4,7 @@
     "bin": true,
     "*/**/*.tmp": true,
     "*/**/*.o": true,
+    "*/**/*.d": true,
     "*/**/*.log": true,
   },
   "files.associations": {

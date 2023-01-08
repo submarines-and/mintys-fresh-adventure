@@ -2,7 +2,7 @@ UNAME_S = $(shell uname -s)
 
 CXX = clang++
 
-CXXFLAGS = -Wall -Wextra --std=c++17 -g
+CXXFLAGS = -Wall -Wextra --std=c++17 -g -MMD
 CXXFLAGS += -I./src -Ilib/glad/include -Ilib/glfw/include -Ilib/glm -Ilib/stb 
 
 LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a 
@@ -22,6 +22,7 @@ endif
 
 SRC = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp) 
 OBJ = $(SRC:.cpp=.o)
+DEPS = $(OBJ:.o=.d)
 BIN = bin
 
 .PHONY: start build clean install
@@ -37,7 +38,7 @@ build: $(OBJ)
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
 clean:
-	rm -rf $(BIN) $(OBJ)
+	rm -rf $(BIN) $(OBJ) $(DEPS)
 
 install:
 # Reload and ignore output changes
@@ -51,3 +52,5 @@ install:
 # Assimp
 	cd lib/assimp && cmake CMakeLists.txt -D BUILD_SHARED_LIBS=OFF -D ASSIMP_INSTALL=OFF -D ASSIMP_WARNINGS_AS_ERRORS=OFF -D CMAKE_INSTALL_PREFIX=bin && cmake --build . 
 	
+
+-include $(DEPS)
