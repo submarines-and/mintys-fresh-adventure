@@ -7,4 +7,7 @@ struct TransformComponent {
 
     glm::vec3 direction = glm::vec3(0.0f, 0.0f, 0.0f);
     float speed = 5.0f;
+
+    /** For collision */
+    glm::vec3 positionLastFrame = glm::vec3(0.0f, 0.0f, 0.0f);
 };

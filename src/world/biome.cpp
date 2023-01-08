@@ -5,7 +5,7 @@ Biome::Biome(float rainfall, float temperature, float meshHeight, float waterHei
     this->type = getBiomeType(rainfall, temperature);
 };
 
-BiomeType Biome::getBiomeType(float rainfall, float temperature)
+Biome::BiomeType Biome::getBiomeType(float rainfall, float temperature)
 {
     if (rainfall < 1.1f && temperature < 0.2f) {
         return TUNDRA;

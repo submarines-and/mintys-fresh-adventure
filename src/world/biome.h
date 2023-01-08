@@ -3,27 +3,28 @@
 #include <map>
 #include <vector>
 
-enum BiomeType {
-    TUNDRA,
-    PLAINS,
-    SWAMP,
-    FOREST,
-    RAIN_FOREST,
-    DESERT,
-};
-
-enum TerrainType {
-    DEEP_WATER,
-    SHALLOW_WATER,
-    SAND,
-    GRASS,
-    SLOPE,
-    ROCK,
-    MOUNTAIN,
-    SNOW,
-};
-
 class Biome {
+public:
+    enum BiomeType {
+        TUNDRA,
+        PLAINS,
+        SWAMP,
+        FOREST,
+        RAIN_FOREST,
+        DESERT,
+    };
+
+    enum TerrainType {
+        DEEP_WATER,
+        SHALLOW_WATER,
+        SAND,
+        GRASS,
+        SLOPE,
+        ROCK,
+        MOUNTAIN,
+        SNOW,
+    };
+
 private:
     BiomeType type;
     float meshHeight, waterHeight;

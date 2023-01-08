@@ -1,9 +1,10 @@
 #pragma once
+#include "biome.h"
 #include "gfx/opengl.h"
+#include "gfx/shader.h"
 #include "noise.h"
 #include <glm/glm.hpp>
 #include <vector>
-#include "gfx/shader.h"
 
 struct WorldChunk {
     GLuint id;
@@ -29,7 +30,7 @@ private:
     std::vector<int> sharedIndices;
 
 private:
-    void generateWorldChunk(GLuint& VAO, int xOffset, int yOffset);
+    void generateWorldChunk(WorldChunk& chunk);
 
     std::vector<int> generateIndices();
     std::vector<float> generateVertices(const std::vector<float>& noiseMap);
@@ -39,4 +40,5 @@ public:
     World(int numberOfChunks);
     ~World();
     void render();
+    Biome::TerrainType getTerrainAtPosition(glm::vec3 position, glm::vec2 size);
 };

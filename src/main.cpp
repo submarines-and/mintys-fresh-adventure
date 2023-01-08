@@ -32,12 +32,14 @@ void init()
                                      });
 
     global.ecs->addComponent(player, InputComponent());
+    global.ecs->addComponent(player, CollisionComponent());
 }
 
 void update(int ticks, float deltaTime)
 {
     global.ecs->getSystem<InputSystem>()->update();
     global.ecs->getSystem<TransformSystem>()->update(deltaTime);
+    global.ecs->getSystem<CollisionSystem>()->update();
 }
 
 void render(int ticks, float deltaTime)

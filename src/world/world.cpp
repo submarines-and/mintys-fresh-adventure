@@ -1,5 +1,4 @@
 #include "world.h"
-#include "biome.h"
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <random>
@@ -53,7 +52,7 @@ void World::render()
 
             // generate if missing
             if (!chunk.generated) {
-                generateWorldChunk(chunk.id, chunk.x, chunk.y);
+                generateWorldChunk(chunk);
                 chunk.generated = true;
             }
 
@@ -68,9 +67,14 @@ void World::render()
     }
 }
 
-void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
+Biome::TerrainType World::getTerrainAtPosition(glm::vec3 position, glm::vec2 size)
 {
-    auto noiseMap = noise.generateNoiseMap(xOffset, yOffset, chunkHeight, chunkWidth);
+    return Biome::GRASS;
+}
+
+void World::generateWorldChunk(WorldChunk& chunk)
+{
+    auto noiseMap = noise.generateNoiseMap(chunk.x, chunk.y, chunkHeight, chunkWidth);
     auto vertices = generateVertices(noiseMap);
     auto normals = generateNormals(sharedIndices, vertices);
 
@@ -86,9 +90,9 @@ void World::generateWorldChunk(GLuint& VAO, int xOffset, int yOffset)
     // Create buffers and arrays
     glGenBuffers(3, VBO);
     glGenBuffers(1, &EBO);
-    glGenVertexArrays(1, &VAO);
+    glGenVertexArrays(1, &chunk.id);
 
-    glBindVertexArray(VAO);
+    glBindVertexArray(chunk.id);
 
     // vertices
     glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
