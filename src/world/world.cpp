@@ -56,7 +56,7 @@ void World::render()
             }
 
             glm::mat4 transform = glm::mat4(1.0f);
-            transform = glm::translate(transform, glm::vec3(-chunkWidth / 2.0 + (chunkWidth - 1) * chunk.x, 0.0, -chunkHeight / 2.0 + (chunkHeight - 1) * chunk.y));
+            transform = glm::translate(transform, glm::vec3((chunkWidth - 1) * chunk.x, 0.0, (chunkHeight - 1) * chunk.y));
             shader.setMat4("transform", transform);
 
             // Terrain chunk
