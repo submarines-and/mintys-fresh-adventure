@@ -26,7 +26,8 @@ void onResize(GLFWwindow* window, int width, int height)
 
 void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-#pragma unused(mods);
+#pragma unused(scancode)
+#pragma unused(mods)
 
     if (key < 0) {
         return;
