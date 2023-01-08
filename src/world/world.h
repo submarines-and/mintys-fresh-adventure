@@ -11,7 +11,6 @@ struct WorldChunk {
     GLuint id;
     int x, y;
     Biome::BiomeType biomeType;
-    std::map<int, Biome::TerrainType> terrain;
     bool generated = false;
 };
 
@@ -46,5 +45,5 @@ public:
     World(int numberOfChunks);
     ~World();
     void render();
-    Biome::TerrainType getTerrainAtPosition(glm::vec3 position, glm::vec2 size);
+    float getTerrainHeight(glm::vec2 position);
 };

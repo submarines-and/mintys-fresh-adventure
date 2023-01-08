@@ -27,8 +27,8 @@ void init()
                                      });
 
     global.ecs->addComponent(player, TransformComponent{
-                                         .position = glm::vec3(15.0f, 5.0f, -5.0f),
-                                         .size = glm::vec2(2.0f, 2.0f),
+                                         .position = glm::vec3(55.0f, 15.0f, 55.0f),
+                                         .size = glm::vec2(5.0f, 5.0f),
                                      });
 
     global.ecs->addComponent(player, InputComponent());

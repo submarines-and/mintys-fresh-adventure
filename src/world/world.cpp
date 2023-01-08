@@ -67,20 +67,21 @@ void World::render()
     }
 }
 
-Biome::TerrainType World::getTerrainAtPosition(glm::vec3 position, glm::vec2 size)
+float World::getTerrainHeight(glm::vec2 position)
 {
     // get active chunk
-    int x = (position.x - size.x) / (chunkWidth);
-    int y = (position.z - size.y) / (chunkHeight);
+    int x = position.x / (chunkWidth);
+    int y = position.y / (chunkHeight);
 
     auto index = x + y * numberOfChunks;
     if (index > (int)chunks.size() - 1) {
         printf("Out of bounds: x:%i, y:%i, index: %i\n", x, y, index);
-        return Biome::GRASS;
+        return 1.0f;
     }
 
     auto currentChunk = chunks[index];
-    return currentChunk.terrain[position.x];
+
+    return 1.0f;
 }
 
 void World::generateWorldChunk(WorldChunk& chunk)
@@ -97,11 +98,7 @@ void World::generateWorldChunk(WorldChunk& chunk)
     // get colors per point and save biome type to chunk
     std::vector<glm::vec3> colors;
     for (auto i = 1; i < (int)vertices.size(); i += 3) {
-
-        // persist terrain type
         auto terrainType = biomeGen.getTerrainType(vertices[i]);
-
-        // send color to buffer
         auto color = biomeGen.getTerrainColor(chunk.biomeType, terrainType);
         colors.emplace_back(color);
     }
