@@ -8,5 +8,4 @@ struct SpriteComponent {
     glm::vec2 atlasOffset = glm::vec2(0, 0);
 
     int animationFrames = 0;
-    int animationSpeed = 50;
 };

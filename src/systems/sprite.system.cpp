@@ -71,7 +71,7 @@ void SpriteSystem::update(int ticks)
         // apply animation
         // speed is number of game loops elapsed per frame
         if (sprite.animationFrames > 0) {
-            sprite.atlasOffset.x = ticks / sprite.animationSpeed % sprite.animationFrames;
+            sprite.atlasOffset.x = ticks / (sprite.animationFrames * 1) % sprite.animationFrames;
         }
 
         // animation frame
