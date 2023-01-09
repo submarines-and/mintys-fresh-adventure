@@ -34,6 +34,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
         printf("=== Failed to load shader files ===\n");
         printf("Vertext: %s\n", vertexPath);
         printf("Fragment: %s\n", fragmentPath);
+        return;
     }
 
     const char* vertexShaderSource = vertexCode.c_str();
