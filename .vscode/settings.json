@@ -85,6 +85,8 @@
     "numeric": "cpp",
     "random": "cpp",
     "future": "cpp",
-    "thread": "cpp"
+    "thread": "cpp",
+    "forward_list": "cpp",
+    "valarray": "cpp"
   }
 }

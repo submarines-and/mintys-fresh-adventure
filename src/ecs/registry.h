@@ -1,11 +1,13 @@
 #pragma once
 #include "components/collision.component.h"
 #include "components/input.component.h"
+#include "components/model.component.h"
 #include "components/sprite.component.h"
 #include "components/transform.component.h"
 #include "global.h"
 #include "systems/collision.system.h"
 #include "systems/input.system.h"
+#include "systems/model.system.h"
 #include "systems/sprite.system.h"
 #include "systems/transform.system.h"
 
@@ -15,6 +17,11 @@ public:
     {
         global.ecs->registerSystem<SpriteSystem>(std::vector<ComponentType>{
             global.ecs->getComponentType<SpriteComponent>(),
+            global.ecs->getComponentType<TransformComponent>(),
+        });
+
+        global.ecs->registerSystem<ModelSystem>(std::vector<ComponentType>{
+            global.ecs->getComponentType<ModelComponent>(),
             global.ecs->getComponentType<TransformComponent>(),
         });
 

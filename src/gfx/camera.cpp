@@ -76,7 +76,7 @@ void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonH
     xOffset *= LOOK_SENTITIVITY;
     yOffset *= LOOK_SENTITIVITY;
 
-    //  yaw += xOffset;
+    yaw += xOffset;
 
     pitch += yOffset;
     position.y -= yOffset;

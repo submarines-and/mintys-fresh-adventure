@@ -10,7 +10,7 @@ Global& global = global_instance;
 void init()
 {
     global.world = new World(1000);
-    global.camera = new Camera(glm::vec3(10.0f, 30.0f, 50.0f));
+    global.camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
     global.ecs = new ECS();
 
     // register all systems
@@ -19,29 +19,13 @@ void init()
 
     // create player
     auto player = global.ecs->createEntity();
-    global.ecs->addComponent(player, SpriteComponent{
-                                         .textureFilePath = "assets/hood.png",
-                                         .atlasSize = glm::vec2(8, 9),
-                                         .atlasOffset = glm::vec2(0, 5),
-                                         .animationFrames = 8,
-                                     });
+    global.ecs->addComponent(player, InputComponent());
+    global.ecs->addComponent(player, ModelComponent{.modelFilePath = "obj/tree.obj"});
 
     global.ecs->addComponent(player, TransformComponent{
                                          .position = glm::vec3(30.0f, 0.0f, 50.0f),
                                          .size = glm::vec2(5.0f, 4.0f),
                                      });
-
-    global.ecs->addComponent(player, InputComponent());
-    global.ecs->addComponent(player, CollisionComponent());
-
-    auto tree = global.ecs->createEntity();
-    global.ecs->addComponent(tree, TransformComponent{
-                                       .position = glm::vec3(30.0f, 0.0f, 50.0f),
-                                       .size = glm::vec2(15.0f, 15.0f),
-                                   });
-    global.ecs->addComponent(tree, SpriteComponent{
-                                       .textureFilePath = "assets/tree.png",
-                                   });
 }
 
 void update(int ticks, float deltaTime)
@@ -54,7 +38,7 @@ void update(int ticks, float deltaTime)
 void render(int ticks, float deltaTime)
 {
     global.world->render();
-    global.ecs->getSystem<SpriteSystem>()->update(ticks);
+    global.ecs->getSystem<ModelSystem>()->update();
 }
 
 void destroy()
