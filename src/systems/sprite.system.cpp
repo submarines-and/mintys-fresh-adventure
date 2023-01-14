@@ -80,10 +80,8 @@ void SpriteSystem::update(int ticks)
         shader.setVec2("atlasOffset", sprite.atlasOffset);
 
         // projection and view
-        auto projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, 10000.0f);
-        auto view = global.camera->getViewMatrix();
-        shader.setMat4("projection", projection);
-        shader.setMat4("view", view);
+        shader.setMat4("projection", global.camera->getProjectionMatrix());
+        shader.setMat4("view", global.camera->getViewMatrix());
 
         // camera positions for billboarding
         shader.setVec3("cameraRight", global.camera->right);

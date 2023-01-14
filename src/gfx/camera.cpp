@@ -8,11 +8,6 @@ Camera::Camera(glm::vec3 position) : position(position)
     updateCameraVectors();
 }
 
-glm::mat4 Camera::getViewMatrix()
-{
-    return glm::lookAt(position, position + front, up);
-}
-
 void Camera::centerOn(glm::vec3 position)
 {
     auto horizontalDistance = zoom * glm::cos(glm::radians(pitch));
@@ -23,6 +18,16 @@ void Camera::centerOn(glm::vec3 position)
 
     this->position.x = position.x - offsetX + 5.0f;
     this->position.z = position.z - offsetZ;
+}
+
+glm::mat4 Camera::getViewMatrix()
+{
+    return glm::lookAt(position, position + front, up);
+}
+
+glm::mat4 Camera::getProjectionMatrix()
+{
+    return glm::perspective(glm::radians(zoom), (float)global.width / (float)global.height, 0.1f, 10000.0f);
 }
 
 void Camera::updateCameraVectors()
@@ -60,8 +65,6 @@ void Camera::processKeyboard(float deltaTime)
     if (position.y < 10.0f) {
         position.y = 10.0f;
     }
-
-    glm::normalize(position);
 }
 
 void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)

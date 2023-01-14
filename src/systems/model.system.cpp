@@ -97,10 +97,8 @@ void ModelSystem::update()
         auto transformComponent = global.ecs->getComponent<TransformComponent>(entity);
         auto model = global.ecs->getComponent<ModelComponent>(entity);
 
-        glm::mat4 projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, 100.0f);
-        glm::mat4 view = global.camera->getViewMatrix();
-        shader.setMat4("u_projection", projection);
-        shader.setMat4("u_view", view);
+        shader.setMat4("u_projection", global.camera->getProjectionMatrix());
+        shader.setMat4("u_view", global.camera->getViewMatrix());
         shader.setVec3("u_viewPos", global.camera->position);
 
         // render the loaded model

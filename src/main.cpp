@@ -9,8 +9,8 @@ Global& global = global_instance;
 
 void init()
 {
-    global.world = new World(1000);
-    global.camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+    global.world = new World(2);
+    global.camera = new Camera(glm::vec3(30.0f, 0.0f, 50.0f));
     global.ecs = new ECS();
 
     // register all systems
@@ -19,12 +19,12 @@ void init()
 
     // create player
     auto player = global.ecs->createEntity();
-    global.ecs->addComponent(player, InputComponent());
+  //  global.ecs->addComponent(player, InputComponent());
     global.ecs->addComponent(player, ModelComponent{.modelFilePath = "obj/tree.obj"});
 
     global.ecs->addComponent(player, TransformComponent{
-                                         .position = glm::vec3(30.0f, 0.0f, 50.0f),
-                                         .size = glm::vec2(5.0f, 4.0f),
+                                         .position = glm::vec3(50.0f, 0.0f, 50.0f),
+                                         .size = glm::vec2(2.0f, 2.0f),
                                      });
 }
 
