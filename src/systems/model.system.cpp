@@ -97,15 +97,14 @@ void ModelSystem::update()
         auto transformComponent = global.ecs->getComponent<TransformComponent>(entity);
         auto model = global.ecs->getComponent<ModelComponent>(entity);
 
-        shader.setMat4("u_projection", global.camera->getProjectionMatrix());
-        shader.setMat4("u_view", global.camera->getViewMatrix());
-        shader.setVec3("u_viewPos", global.camera->position);
+        shader.setMat4("projection", global.camera->getProjectionMatrix());
+        shader.setMat4("view", global.camera->getViewMatrix());
 
         // render the loaded model
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::translate(transform, transformComponent.position);
         transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
-        shader.setMat4("u_model", transform);
+        shader.setMat4("transform", transform);
 
         glBindVertexArray(model.vao);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 10192, 8);
