@@ -60,8 +60,8 @@ Sky::Sky() : shader(Shader("shaders/sky.vert", "shaders/sky.frag"))
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
     std::vector<const char*> faces{
-        "assets/sky/bluecloud_rt.jpg",
         "assets/sky/bluecloud_lf.jpg",
+        "assets/sky/bluecloud_rt.jpg",
         "assets/sky/bluecloud_up.jpg",
         "assets/sky/bluecloud_dn.jpg",
         "assets/sky/bluecloud_ft.jpg",
