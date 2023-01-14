@@ -9,6 +9,7 @@ Global& global = global_instance;
 
 void init()
 {
+    global.sky = new Sky();
     global.world = new World(2);
     global.camera = new Camera(glm::vec3(30.0f, 0.0f, 50.0f));
     global.ecs = new ECS();
@@ -19,7 +20,7 @@ void init()
 
     // create player
     auto player = global.ecs->createEntity();
-  //  global.ecs->addComponent(player, InputComponent());
+    //  global.ecs->addComponent(player, InputComponent());
     global.ecs->addComponent(player, ModelComponent{.modelFilePath = "obj/tree.obj"});
 
     global.ecs->addComponent(player, TransformComponent{
@@ -39,6 +40,7 @@ void render(int ticks, float deltaTime)
 {
     global.world->render();
     global.ecs->getSystem<ModelSystem>()->update();
+    global.sky->render();
 }
 
 void destroy()
@@ -46,6 +48,7 @@ void destroy()
     delete global.ecs;
     delete global.camera;
     delete global.world;
+    delete global.sky;
 }
 
 int main()

@@ -1,6 +1,7 @@
 #pragma once
 #include "ecs/ecs.h"
 #include "gfx/camera.h"
+#include "world/sky.h"
 #include "world/world.h"
 
 /** All globally available objects */
@@ -13,6 +14,7 @@ struct Global {
 
     ECS* ecs;
     World* world;
+    Sky* sky;
 
     Camera* camera;
 };

@@ -8,7 +8,6 @@
 
 SpriteSystem::SpriteSystem() : shader(Shader("shaders/sprite.vert", "shaders/sprite.frag"))
 {
-    stbi_set_flip_vertically_on_load(true);
 
     float vertices[] = {
         // pos      // tex
@@ -42,7 +41,10 @@ void SpriteSystem::entityAdded(Entity entity)
     glGenTextures(1, &sprite.textureId);
 
     int width, height, nrChannels;
+
+    stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load(sprite.textureFilePath, &width, &height, &nrChannels, 4);
+    stbi_set_flip_vertically_on_load(false);
 
     glBindTexture(GL_TEXTURE_2D, sprite.textureId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
