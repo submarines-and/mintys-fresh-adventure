@@ -64,6 +64,8 @@ void World::render()
             glDrawElements(GL_TRIANGLES, chunkWidth * chunkHeight * 6, GL_UNSIGNED_INT, 0);
         }
     }
+
+    shader.stop();
 }
 
 WorldChunk World::getWorldChunk(glm::vec3 position, glm::vec2 size)
