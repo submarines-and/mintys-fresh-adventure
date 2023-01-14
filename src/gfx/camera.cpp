@@ -49,16 +49,16 @@ void Camera::processKeyboard(float deltaTime)
 {
     float velocity = MOVEMENT_SPEED * deltaTime;
 
-    if (global.keys[GLFW_KEY_UP])
+    if (global.keys[GLFW_KEY_W])
         position += front * velocity;
 
-    if (global.keys[GLFW_KEY_DOWN])
+    if (global.keys[GLFW_KEY_S])
         position -= front * velocity;
 
-    if (global.keys[GLFW_KEY_LEFT])
+    if (global.keys[GLFW_KEY_A])
         position -= right * velocity;
 
-    if (global.keys[GLFW_KEY_RIGHT])
+    if (global.keys[GLFW_KEY_D])
         position += right * velocity;
 
     // clamp
@@ -82,7 +82,7 @@ void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonH
     yaw += xOffset;
 
     pitch += yOffset;
-    position.y -= yOffset;
+    // position.y -= yOffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (pitch > 89.0f)
