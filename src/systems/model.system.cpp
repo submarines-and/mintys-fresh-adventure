@@ -115,6 +115,7 @@ void ModelSystem::update()
         transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
         shader.setMat4("transform", transform);
 
+        glEnable(GL_CULL_FACE);
         glBindVertexArray(model.vao);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 10192, 8);
         glDisable(GL_CULL_FACE);
