@@ -119,7 +119,7 @@ void World::generateWorldChunk(WorldChunk& chunk)
     // generate vertices
     std::vector<float> vertices;
 
-    for (int y = 0; y < chunkHeight; y++)
+    for (int y = 0; y < chunkHeight; y++) {
         for (int x = 0; x < chunkWidth; x++) {
 
             // pervent vertex from being below water
@@ -136,13 +136,11 @@ void World::generateWorldChunk(WorldChunk& chunk)
             // small chance to generate a tree
             if (rand() % 1000 < 2) {
                 auto tree = global.ecs->createEntity();
+                global.ecs->addComponent(tree, TransformComponent{.position = glm::vec3(x + chunk.x * chunkWidth, height, y + chunk.y * chunkHeight)});
                 global.ecs->addComponent(tree, ModelComponent{.modelFilePath = "obj/tree.obj"});
-                global.ecs->addComponent(tree, TransformComponent{
-                                                   .position = glm::vec3(x + chunk.x * chunkWidth, height, y + chunk.y * chunkHeight),
-                                                   .size = glm::vec2(2.0f, 2.0f),
-                                               });
             }
         }
+    }
 
     // normals
     auto normals = generateNormals(indices, vertices);
