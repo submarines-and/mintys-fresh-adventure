@@ -5,7 +5,6 @@
 #include "components/transform.component.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "global.h"
-#include <memory>
 #include <tiny_obj_loader.h>
 
 ModelSystem::ModelSystem() : shader(Shader("shaders/model.vert", "shaders/model.frag")) {}

@@ -2,6 +2,7 @@
 #include "ecs/system.h"
 #include "gfx/shader.h"
 #include <map>
+#include <memory>
 #include <vector>
 
 class ModelSystem : public System {
