@@ -1,12 +1,9 @@
 #include "world.h"
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include <random>
 
 World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag")), biomeGen(meshHeight, waterHeight)
 {
-    srand((unsigned)time(NULL));
-
     this->numberOfChunks = numberOfChunks;
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
     sharedIndices = generateIndices();
@@ -120,21 +117,18 @@ void World::generateWorldChunk(WorldChunk& chunk)
     // generate vertices
     std::vector<float> vertices;
 
-    for (int y = 0; y < chunkHeight + 1; y++)
+    for (int y = 0; y < chunkHeight; y++)
         for (int x = 0; x < chunkWidth; x++) {
-            vertices.emplace_back(x);
 
-            // Apply cubic easing to the noise
-            float easedNoise = std::pow(noiseMap[x + y * chunkWidth] * 1.1f, 3);
+            // pervent vertex from being below water
+            float noiseAtPoint = noiseMap[x + y * chunkWidth];
+            auto height = std::fmax(noiseAtPoint * meshHeight, waterHeight * 0.5f * meshHeight);
 
-            // Scale noise to match meshHeight
-            // Pervent vertex height from being below WATER_HEIGHT
-            auto height = std::fmax(easedNoise * meshHeight, waterHeight * 0.5f * meshHeight);
-            vertices.emplace_back(height);
-
-            // also persist height to chunk map
+            // persist height to chunk map for later lookup
             chunk.heights[x + y * chunkWidth] = height;
 
+            vertices.emplace_back(x);
+            vertices.emplace_back(height);
             vertices.emplace_back(y);
         }
 

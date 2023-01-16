@@ -2,6 +2,7 @@
 #include "gfx/window.h"
 #include "global.h"
 #include <glm/glm.hpp>
+#include <random>
 
 /** Init global state and make accessible for main function. */
 static Global global_instance;
@@ -10,7 +11,7 @@ Global& global = global_instance;
 void init()
 {
     global.sky = new Sky();
-    global.world = new World(2);
+    global.world = new World(4);
     global.camera = new Camera(glm::vec3(30.0f, 0.0f, 50.0f));
     global.ecs = new ECS();
 
@@ -53,6 +54,8 @@ void destroy()
 
 int main()
 {
+    srand((unsigned)time(NULL));
+
     global.width = 1920;
     global.height = 1080;
 

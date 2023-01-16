@@ -15,7 +15,8 @@
                 "-Ilib/glad/include",
                 "-Ilib/glm",
                 "-Ilib/stb",
-                "-Ilib/tinyobjloader"
+                "-Ilib/tinyobjloader",
+                "-Ilib/FastNoiseLite/Cpp",
             ]
         }
     ],
