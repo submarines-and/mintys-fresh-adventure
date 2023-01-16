@@ -1,4 +1,6 @@
 #include "world.h"
+#include "components/model.component.h"
+#include "components/transform.component.h"
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -130,6 +132,16 @@ void World::generateWorldChunk(WorldChunk& chunk)
             vertices.emplace_back(x);
             vertices.emplace_back(height);
             vertices.emplace_back(y);
+
+            // small chance to generate a tree
+            if (rand() % 1000 < 2) {
+                auto tree = global.ecs->createEntity();
+                global.ecs->addComponent(tree, ModelComponent{.modelFilePath = "obj/tree.obj"});
+                global.ecs->addComponent(tree, TransformComponent{
+                                                   .position = glm::vec3(x + chunk.x * chunkWidth, height, y + chunk.y * chunkHeight),
+                                                   .size = glm::vec2(2.0f, 2.0f),
+                                               });
+            }
         }
 
     // normals

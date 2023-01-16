@@ -2,7 +2,6 @@
 #include "gfx/window.h"
 #include "global.h"
 #include <glm/glm.hpp>
-#include <random>
 
 /** Init global state and make accessible for main function. */
 static Global global_instance;
@@ -18,16 +17,6 @@ void init()
     // register all systems
     // this also ensures components/systems are imported in the main file
     Registry::addAllSystems();
-
-    // create player
-    auto player = global.ecs->createEntity();
-    //  global.ecs->addComponent(player, InputComponent());
-    global.ecs->addComponent(player, ModelComponent{.modelFilePath = "obj/tree.obj"});
-
-    global.ecs->addComponent(player, TransformComponent{
-                                         .position = glm::vec3(50.0f, 0.0f, 50.0f),
-                                         .size = glm::vec2(2.0f, 2.0f),
-                                     });
 }
 
 void update(int ticks, float deltaTime)
@@ -54,7 +43,6 @@ void destroy()
 
 int main()
 {
-    srand((unsigned)time(NULL));
 
     global.width = 1920;
     global.height = 1080;

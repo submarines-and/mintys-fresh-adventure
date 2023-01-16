@@ -1,5 +1,6 @@
 #include "window.h"
 #include "global.h"
+#include <random>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -92,6 +93,10 @@ Window::Window(int width, int height, WindowFunction init, WindowFunction destro
       lastX(width / 2.0f),
       lastY(height / 2.0f)
 {
+
+    // seed random for the entire app
+    srand((unsigned)time(NULL));
+
     glfwSetErrorCallback(errorCallback);
 
     if (!glfwInit()) {
