@@ -2,7 +2,7 @@ UNAME_S = $(shell uname -s)
 
 CXX = clang++
 
-CXXFLAGS = -Wall -Wextra --std=c++17 -g -MMD
+CXXFLAGS = -Wall -Wextra --std=c++17 -g -MMD -O1
 CXXFLAGS += -I./src -Ilib/glad/include -Ilib/glfw/include -Ilib/glm -Ilib/stb -Ilib/tinyobjloader -Ilib/FastNoiseLite/Cpp
 
 LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a
