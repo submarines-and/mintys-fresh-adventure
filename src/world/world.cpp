@@ -136,9 +136,11 @@ void World::generateWorldChunk(WorldChunk& chunk)
     auto normals = generateNormals(indices, vertices);
 
     // randomize biometype
+    /*
     auto rainfall = (float)rand() / (float)RAND_MAX;
     auto temperature = (float)rand() / (float)RAND_MAX;
-    chunk.biomeType = biomeGen.getBiomeType(rainfall, temperature);
+    chunk.biomemaiType = biomeGen.getBiomeType(rainfall, temperature);
+    */
 
     // reserve memory for terrain
     chunk.terrain = std::vector<Biome::TerrainType>(chunkHeight * chunkWidth);

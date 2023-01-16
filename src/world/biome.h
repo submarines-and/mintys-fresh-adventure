@@ -28,12 +28,12 @@ private:
     float meshHeight;
 
     std::map<TerrainType, float> heights = {
-        {WATER, 0.1f},
-        {SAND, 0.15f},
-        {GRASS, 0.3f},
-        {SLOPE, 0.4f},
-        {MOUNTAIN, 0.5f},
-        {ROCK, 0.8f},
+        {WATER, 0.15f},
+        {SAND, 0.25f},
+        {GRASS, 0.65f},
+        {SLOPE, 0.75f},
+        {MOUNTAIN, 0.85f},
+        {ROCK, 0.95f},
         {SNOW, 1.1f},
     };
 

@@ -12,7 +12,7 @@ struct WorldChunk {
     int x, y;
     bool generated = false;
 
-    Biome::BiomeType biomeType;
+    Biome::BiomeType biomeType = Biome::DESERT;
     std::vector<float> heights;
     std::vector<Biome::TerrainType> terrain;
 };
@@ -24,7 +24,7 @@ private:
     int chunkHeight = 100;
     int renderDistance = chunkHeight * 2;
 
-    float meshHeight = 15.0f;
+    float meshHeight = 12.0f;
 
     Shader shader;
     Biome biomeGen;
