@@ -2,7 +2,6 @@
 layout (location = 0) in vec3 inPos;
 layout (location = 1) in vec3 inNormal;
 layout (location = 2) in vec3 inColor;
-layout (location = 3) in vec3 inOffset;
 
 flat out vec3 passColor;
 
@@ -22,5 +21,5 @@ vec3 calculateLighting(){
 
 void main() {
  	passColor = inColor.rgb * calculateLighting();
-    gl_Position = projection * view * transform * vec4(inPos + inOffset, 1.0);
+    gl_Position = projection * view * transform * vec4(inPos, 1.0);
 }
