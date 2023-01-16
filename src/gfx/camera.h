@@ -4,7 +4,7 @@
 class Camera {
 private:
     float yaw = 0.0f;
-    float pitch = -10.0f;
+    float pitch = -30.0f;
 
     float MOVEMENT_SPEED = 50.0f;
     float LOOK_SENTITIVITY = 0.1f;

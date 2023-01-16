@@ -11,7 +11,7 @@ void init()
 {
     global.sky = new Sky();
     global.world = new World(4);
-    global.camera = new Camera(glm::vec3(30.0f, 0.0f, 50.0f));
+    global.camera = new Camera(glm::vec3(30.0f, 60.0f, 50.0f));
     global.ecs = new ECS();
 
     // register all systems
