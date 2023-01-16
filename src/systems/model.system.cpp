@@ -24,9 +24,6 @@ void ModelSystem::entityAdded(Entity entity)
     std::string warn;
     std::string err;
 
-    float MODEL_SCALE = 3;
-    float MODEL_BRIGHTNESS = 6;
-
     tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, modelData.modelFilePath, "obj");
 
     if (!warn.empty()) {
@@ -55,9 +52,9 @@ void ModelSystem::entityAdded(Entity entity)
                 vertices.push_back(attrib.normals[3 * idx.normal_index + 2]);
 
                 if (materials.size() > 0) {
-                    vertices.push_back(materials[shapes[s].mesh.material_ids[f]].diffuse[0] * MODEL_BRIGHTNESS);
-                    vertices.push_back(materials[shapes[s].mesh.material_ids[f]].diffuse[1] * MODEL_BRIGHTNESS);
-                    vertices.push_back(materials[shapes[s].mesh.material_ids[f]].diffuse[2] * MODEL_BRIGHTNESS);
+                    vertices.push_back(materials[shapes[s].mesh.material_ids[f]].diffuse[0]);
+                    vertices.push_back(materials[shapes[s].mesh.material_ids[f]].diffuse[1]);
+                    vertices.push_back(materials[shapes[s].mesh.material_ids[f]].diffuse[2]);
                 }
             }
             index_offset += fv;
