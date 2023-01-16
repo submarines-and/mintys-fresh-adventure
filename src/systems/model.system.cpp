@@ -35,14 +35,13 @@ void ModelSystem::entityAdded(Entity entity)
         return;
     }
 
-    for (auto s = 0; s < (int)shapes.size(); s++) {
-        // Loop over faces(polygon)
+    for (int s = 0; s < (int)shapes.size(); s++) {
         size_t index_offset = 0;
-        for (auto f = 0; f < (int)shapes[s].mesh.num_face_vertices.size(); f++) {
+        for (int f = 0; f < (int)shapes[s].mesh.num_face_vertices.size(); f++) {
             int fv = shapes[s].mesh.num_face_vertices[f];
 
             // Loop over vertices in the face.
-            for (auto v = 0; v < fv; v++) {
+            for (int v = 0; v < fv; v++) {
                 tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
                 vertices.push_back(attrib.vertices[3 * idx.vertex_index + 0]);
                 vertices.push_back(attrib.vertices[3 * idx.vertex_index + 1]);
@@ -96,6 +95,10 @@ void ModelSystem::update()
 
         shader.setMat4("projection", global.camera->getProjectionMatrix());
         shader.setMat4("view", global.camera->getViewMatrix());
+
+        shader.setVec3("lightDirection", glm::vec3(0.3f, -1.0f, 0.5f));
+        shader.setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
+        shader.setVec2("lightBias", glm::vec2(0.3f, 0.8f));
 
         // render the loaded model
         glm::mat4 transform = glm::mat4(1.0f);

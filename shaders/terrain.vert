@@ -14,17 +14,12 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 transform;
 
-// diffuse lighting
 vec3 calculateLighting(){
 	float brightness = max(dot(-lightDirection, inNormal), 0.0);
-
 	return (lightColor * lightBias.x) + (brightness * lightColor * lightBias.y);
 }
 
-void main(void){
-
+void main(void) {
 	gl_Position = projection * view * transform * vec4(inPosition, 1.0);
-	
-	vec3 lighting = calculateLighting();
-	passColor = inColor.rgb * lighting;
+	passColor = inColor.rgb * calculateLighting();
 }
