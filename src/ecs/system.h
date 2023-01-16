@@ -13,5 +13,10 @@ public:
 #pragma unused(entity)
     }
 
+    virtual void entityRemoved(Entity entity)
+    {
+#pragma unused(entity)
+    }
+
     virtual ~System() {}
 };

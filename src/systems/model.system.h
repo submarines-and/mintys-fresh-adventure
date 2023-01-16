@@ -15,6 +15,9 @@ private:
         std::vector<glm::vec3> normals;
         std::vector<glm::vec3> colors;
         std::vector<glm::mat4> transformations;
+
+        /** Map entity index:transformation index in the other list*/
+        std::map<unsigned int, unsigned int> entityTransformationIndex;
     };
 
     std::map<const char*, ModelFile*> modelCache;
@@ -27,5 +30,7 @@ public:
     ~ModelSystem();
 
     void entityAdded(Entity entity);
+    void entityRemoved(Entity entity);
+
     void update();
 };

@@ -30,6 +30,7 @@ void ModelSystem::entityAdded(Entity entity)
     transform = glm::translate(transform, transformComponent.position);
     transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
     data->transformations.emplace_back(transform);
+    data->entityTransformationIndex.emplace(entity, data->transformations.size() - 1);
 
     // re-buffer
     glBindBuffer(GL_ARRAY_BUFFER, data->transformationVbo);
@@ -37,6 +38,15 @@ void ModelSystem::entityAdded(Entity entity)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void ModelSystem::entityRemoved(Entity entity)
+{
+    auto& modelComponent = global.ecs->getComponent<ModelComponent>(entity);
+    auto data = loadModel(modelComponent.modelFilePath);
+
+    auto index = data->entityTransformationIndex[entity];
+    data->transformations.erase(data->transformations.begin() + index);
+    data->entityTransformationIndex.erase(entity);
+}
 
 ModelSystem::ModelFile* ModelSystem::loadModel(const char* filePath)
 {
