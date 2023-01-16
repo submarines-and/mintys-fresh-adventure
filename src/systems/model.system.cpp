@@ -5,6 +5,7 @@
 #include "components/transform.component.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "global.h"
+#include <memory>
 #include <tiny_obj_loader.h>
 
 ModelSystem::ModelSystem() : shader(Shader("shaders/model.vert", "shaders/model.frag")) {}
@@ -14,8 +15,9 @@ ModelSystem::~ModelSystem()
     for (auto data : modelCache) {
         glDeleteVertexArrays(1, &data.second->vao);
         glDeleteBuffers(1, &data.second->transformationVbo);
-        delete data.second;
     }
+
+    modelCache.clear();
 }
 
 void ModelSystem::entityAdded(Entity entity)
@@ -44,11 +46,17 @@ void ModelSystem::entityRemoved(Entity entity)
     auto data = loadModel(modelComponent.modelFilePath);
 
     auto index = data->entityTransformationIndex[entity];
-    data->transformations.erase(data->transformations.begin() + index);
     data->entityTransformationIndex.erase(entity);
+
+    data->transformations.erase(data->transformations.begin() + index);
+
+    // check if last item removed
+    if (data->transformations.size() == 0) {
+        modelCache.erase(modelComponent.modelFilePath);
+    }
 }
 
-ModelSystem::ModelFile* ModelSystem::loadModel(const char* filePath)
+std::shared_ptr<ModelSystem::ModelFile> ModelSystem::loadModel(const char* filePath)
 {
     if (modelCache.count(filePath)) {
         return modelCache[filePath];
@@ -71,7 +79,7 @@ ModelSystem::ModelFile* ModelSystem::loadModel(const char* filePath)
         return nullptr;
     }
 
-    ModelFile* data = new ModelFile();
+    auto data = std::make_shared<ModelFile>(ModelFile());
 
     for (int s = 0; s < (int)shapes.size(); s++) {
         size_t indexOffset = 0;

@@ -20,10 +20,10 @@ private:
         std::map<unsigned int, unsigned int> entityTransformationIndex;
     };
 
-    std::map<const char*, ModelFile*> modelCache;
+    std::map<const char*, std::shared_ptr<ModelFile>> modelCache;
 
 private:
-    ModelFile* loadModel(const char* filePath);
+    std::shared_ptr<ModelFile> loadModel(const char* filePath);
 
 public:
     ModelSystem();

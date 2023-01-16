@@ -32,7 +32,7 @@ glm::mat4 Camera::getProjectionMatrix()
 
 void Camera::updateCameraVectors()
 {
-    // calculate the new Front vector
+    // calculate front vector
     glm::vec3 newFront;
     newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     newFront.y = sin(glm::radians(pitch));
