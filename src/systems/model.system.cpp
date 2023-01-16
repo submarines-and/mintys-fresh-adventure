@@ -9,17 +9,34 @@
 
 ModelSystem::ModelSystem() : shader(Shader("shaders/model.vert", "shaders/model.frag")) {}
 
+ModelSystem::~ModelSystem()
+{
+    for (auto data : modelCache) {
+        glDeleteVertexArrays(1, &data.second->vao);
+        glDeleteBuffers(1, &data.second->transformationVbo);
+        delete data.second;
+    }
+}
+
 void ModelSystem::entityAdded(Entity entity)
 {
+    // get or create model
     auto& modelComponent = global.ecs->getComponent<ModelComponent>(entity);
     auto data = loadModel(modelComponent.modelFilePath);
 
+    // setup transoformation
     auto transformComponent = global.ecs->getComponent<TransformComponent>(entity);
     glm::mat4 transform = glm::mat4(1.0f);
     transform = glm::translate(transform, transformComponent.position);
     transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
     data->transformations.emplace_back(transform);
+
+    // re-buffer
+    glBindBuffer(GL_ARRAY_BUFFER, data->transformationVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * data->transformations.size(), &data->transformations[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
 
 ModelSystem::ModelFile* ModelSystem::loadModel(const char* filePath)
 {
@@ -129,15 +146,9 @@ void ModelSystem::update()
 
     for (auto object : modelCache) {
         glBindVertexArray(object.second->vao);
-
-        glBindBuffer(GL_ARRAY_BUFFER, object.second->transformationVbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * object.second->transformations.size(), &object.second->transformations[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
         glDrawArraysInstanced(GL_TRIANGLES, 0, object.second->vertices.size(), object.second->transformations.size());
-
-        glBindVertexArray(0);
     }
 
+    glBindVertexArray(0);
     shader.stop();
 }

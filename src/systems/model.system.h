@@ -24,6 +24,8 @@ private:
 
 public:
     ModelSystem();
+    ~ModelSystem();
+
     void entityAdded(Entity entity);
     void update();
 };
