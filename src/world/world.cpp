@@ -122,7 +122,7 @@ void World::generateWorldChunk(WorldChunk& chunk)
 
             // pervent vertex from being below water
             float noiseAtPoint = noiseMap[x + y * chunkWidth];
-            auto height = std::fmax(noiseAtPoint * meshHeight, waterHeight * 0.5f * meshHeight);
+            auto height = std::fmax(noiseAtPoint * meshHeight, waterHeight * meshHeight);
 
             // persist height to chunk map for later lookup
             chunk.heights[x + y * chunkWidth] = height;

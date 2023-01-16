@@ -10,8 +10,7 @@ void CollisionSystem::update()
         auto terrainType = global.world->getTerrainType(transform.position, transform.size);
 
         switch (terrainType) {
-        case Biome::SHALLOW_WATER:
-        case Biome::DEEP_WATER:
+        case Biome::WATER:
             //   case Biome::ROCK:
             //    case Biome::MOUNTAIN:
             transform.position = transform.positionLastFrame;

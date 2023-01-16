@@ -26,11 +26,8 @@ Biome::BiomeType Biome::getBiomeType(float rainfall, float temperature)
 
 Biome::TerrainType Biome::getTerrainType(float vertexHeight)
 {
-    if (vertexHeight <= meshHeight * waterHeight * 0.5f) {
-        return DEEP_WATER;
-    }
-    else if (vertexHeight <= meshHeight * waterHeight) {
-        return SHALLOW_WATER;
+    if (vertexHeight <= meshHeight * waterHeight) {
+        return WATER;
     }
     else if (vertexHeight <= meshHeight * 0.15f) {
         return SAND;
