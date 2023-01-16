@@ -12,7 +12,7 @@ struct WorldChunk {
     int x, y;
     bool generated = false;
 
-    Biome::BiomeType biomeType = Biome::DESERT;
+    Biome::BiomeType biomeType = Biome::FOREST;
     std::vector<float> heights;
     std::vector<Biome::TerrainType> terrain;
 };

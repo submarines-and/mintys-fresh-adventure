@@ -33,7 +33,7 @@ private:
         {GRASS, 0.65f},
         {SLOPE, 0.75f},
         {MOUNTAIN, 0.85f},
-        {ROCK, 0.95f},
+        {ROCK, 0.9f},
         {SNOW, 1.1f},
     };
 
