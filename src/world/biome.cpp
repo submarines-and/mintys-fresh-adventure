@@ -1,6 +1,6 @@
 #include "biome.h"
 
-Biome::Biome(float meshHeight, float waterHeight) : meshHeight(meshHeight), waterHeight(waterHeight){};
+Biome::Biome(float meshHeight) : meshHeight(meshHeight){};
 
 Biome::BiomeType Biome::getBiomeType(float rainfall, float temperature)
 {
@@ -24,31 +24,6 @@ Biome::BiomeType Biome::getBiomeType(float rainfall, float temperature)
     }
 }
 
-Biome::TerrainType Biome::getTerrainType(float vertexHeight)
-{
-    if (vertexHeight <= meshHeight * waterHeight) {
-        return WATER;
-    }
-    else if (vertexHeight <= meshHeight * 0.15f) {
-        return SAND;
-    }
-    else if (vertexHeight <= meshHeight * 0.3f) {
-        return GRASS;
-    }
-    else if (vertexHeight <= meshHeight * 0.4f) {
-        return SLOPE;
-    }
-    else if (vertexHeight <= meshHeight * 0.5f) {
-        return MOUNTAIN;
-    }
-    else if (vertexHeight <= meshHeight * 0.8f) {
-        return ROCK;
-    }
-    else {
-        return SNOW;
-    }
-}
-
 glm::vec3 Biome::getTerrainColor(BiomeType biomeType, TerrainType terrainType)
 {
     glm::vec3 color;
@@ -64,4 +39,27 @@ glm::vec3 Biome::getTerrainColor(BiomeType biomeType, TerrainType terrainType)
 
     // normalize and add transparency
     return glm::vec3(color.r / 255.0, color.g / 255.0, color.b / 255.0);
+}
+
+Biome::TerrainType Biome::getTerrainType(float vertexHeight)
+{
+    for (auto h : heights) {
+        if (vertexHeight <= h.second * meshHeight) {
+            return h.first;
+        }
+    }
+
+    // in case of bad config
+    return SNOW;
+}
+
+float Biome::getTerrainHeight(Biome::TerrainType type)
+{
+    for (auto h : heights) {
+        if (h.first == type) {
+            return h.second;
+        }
+    }
+
+    return 0.0f;
 }

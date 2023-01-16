@@ -25,7 +25,17 @@ public:
     };
 
 private:
-    float meshHeight, waterHeight;
+    float meshHeight;
+
+    std::map<TerrainType, float> heights = {
+        {WATER, 0.1f},
+        {SAND, 0.15f},
+        {GRASS, 0.3f},
+        {SLOPE, 0.4f},
+        {MOUNTAIN, 0.5f},
+        {ROCK, 0.8f},
+        {SNOW, 1.1f},
+    };
 
     std::map<BiomeType, std::map<TerrainType, glm::vec3>> colors = {
         {TUNDRA, {
@@ -85,8 +95,10 @@ private:
     };
 
 public:
-    Biome(float meshHeight, float waterHeight);
+    Biome(float meshHeight);
     BiomeType getBiomeType(float rainfall, float temperature);
-    TerrainType getTerrainType(float vertexHeight);
     glm::vec3 getTerrainColor(BiomeType biomeType, TerrainType terrainType);
+
+    TerrainType getTerrainType(float vertexHeight);
+    float getTerrainHeight(Biome::TerrainType type);
 };

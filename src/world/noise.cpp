@@ -23,7 +23,7 @@ std::vector<float> Noise::generateNoiseMap(int offsetX, int offsetY, int height,
             float noiseX = x + offsetX * width - offsetX;
             float noiseY = y + offsetY * height - offsetY;
 
-            float noiseValue = normalize(generator.GetNoise(noiseX, noiseY), 0, 1);
+            float noiseValue = normalize(generator.GetNoise(noiseX, noiseY), -1.0f, 1.0f);
             returnList.emplace_back(noiseValue);
         }
     }

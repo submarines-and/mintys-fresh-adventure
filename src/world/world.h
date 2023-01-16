@@ -19,23 +19,19 @@ struct WorldChunk {
 
 class World {
 private:
-    Shader shader;
-
     int numberOfChunks = 100;
     int chunkWidth = 100;
     int chunkHeight = 100;
-
-    float meshHeight = 10.0f;
-    float waterHeight = 0.1f;
-    Biome biomeGen;
-
     int renderDistance = chunkHeight * 2;
 
-    std::vector<WorldChunk> chunks;
+    float meshHeight = 15.0f;
+
+    Shader shader;
+    Biome biomeGen;
     Noise noise;
 
-    /** shared*/
-    std::vector<int> sharedIndices;
+    std::vector<int> indices;
+    std::vector<WorldChunk> chunks;
 
 private:
     void generateWorldChunk(WorldChunk& chunk);

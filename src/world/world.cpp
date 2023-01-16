@@ -2,11 +2,11 @@
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag")), biomeGen(meshHeight, waterHeight)
+World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag")), biomeGen(meshHeight)
 {
     this->numberOfChunks = numberOfChunks;
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
-    sharedIndices = generateIndices();
+    indices = generateIndices();
 
     for (int y = 0; y < numberOfChunks; y++) {
         for (int x = 0; x < numberOfChunks; x++) {
@@ -25,7 +25,7 @@ World::~World()
     }
 
     chunks.clear();
-    sharedIndices.clear();
+    indices.clear();
 }
 
 void World::render()
@@ -122,7 +122,7 @@ void World::generateWorldChunk(WorldChunk& chunk)
 
             // pervent vertex from being below water
             float noiseAtPoint = noiseMap[x + y * chunkWidth];
-            auto height = std::fmax(noiseAtPoint * meshHeight, waterHeight * meshHeight);
+            auto height = std::fmax(noiseAtPoint * meshHeight, biomeGen.getTerrainHeight(Biome::WATER) * meshHeight);
 
             // persist height to chunk map for later lookup
             chunk.heights[x + y * chunkWidth] = height;
@@ -133,7 +133,7 @@ void World::generateWorldChunk(WorldChunk& chunk)
         }
 
     // normals
-    auto normals = generateNormals(sharedIndices, vertices);
+    auto normals = generateNormals(indices, vertices);
 
     // randomize biometype
     auto rainfall = (float)rand() / (float)RAND_MAX;
@@ -173,7 +173,7 @@ void World::generateWorldChunk(WorldChunk& chunk)
 
     // indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sharedIndices.size() * sizeof(int), &sharedIndices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
 
     // Normals
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
