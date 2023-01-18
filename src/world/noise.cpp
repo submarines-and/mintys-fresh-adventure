@@ -3,7 +3,7 @@
 
 Noise::Noise()
 {
-    int seed = rand() % RAND_MAX;
+    int seed = Math::random(0, RAND_MAX);
     generator.SetSeed(seed);
     generator.SetFractalOctaves(5);
     generator.SetFrequency(0.01f);

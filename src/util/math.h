@@ -12,4 +12,9 @@ public:
     {
         return rand() % (max - min + 1) + min;
     }
+
+    static float random(float min, float max)
+    {
+        return (min + 1) + (((float)rand()) / (float)RAND_MAX) * (max - (min + 1));
+    }
 };

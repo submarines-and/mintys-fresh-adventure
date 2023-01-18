@@ -2,6 +2,7 @@
 #include "components/model.component.h"
 #include "components/transform.component.h"
 #include "global.h"
+#include "util/math.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag")), biomeGen(meshHeight)
@@ -134,11 +135,13 @@ void World::generateWorldChunk(WorldChunk& chunk)
             vertices.emplace_back(y);
 
             // small chance to generate a tree
-            if (rand() % 1000 < 2) {
+            if (Math::random(0, 1000) < 2) {
                 auto tree = global.ecs->createEntity();
                 global.ecs->addComponent(tree, TransformComponent{.position = glm::vec3(x + chunk.x * chunkWidth, height, y + chunk.y * chunkHeight)});
                 global.ecs->addComponent(tree, ModelComponent{.modelFilePath = "obj/tree.obj"});
             }
+
+            // generate a sheep
         }
     }
 
@@ -147,8 +150,8 @@ void World::generateWorldChunk(WorldChunk& chunk)
 
     // randomize biometype
     /*
-    auto rainfall = (float)rand() / (float)RAND_MAX;
-    auto temperature = (float)rand() / (float)RAND_MAX;
+    auto rainfall = Math::random(0.0f, 1.0f);
+    auto temperature = Math::random(0.0f, 1.0f);
     chunk.biomemaiType = biomeGen.getBiomeType(rainfall, temperature);
     */
 
