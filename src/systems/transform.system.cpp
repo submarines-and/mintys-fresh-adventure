@@ -40,5 +40,13 @@ void TransformSystem::update(float deltaTime)
             transform.direction.y = 0.0f;
             transform.position.y = heightAtPosition;
         }
+
+        // clamp x/z to world edge
+        if (transform.position.x <= 0.0f) {
+            transform.position.x = 0.0f;
+        }
+        if (transform.position.z <= 0.0f) {
+            transform.position.z = 0.0f;
+        }
     }
 }
