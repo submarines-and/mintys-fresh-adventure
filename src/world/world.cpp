@@ -9,6 +9,9 @@
 World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag")), biomeGen(meshHeight)
 {
     this->numberOfChunks = numberOfChunks;
+    this->worldWidth = numberOfChunks * chunkWidth;
+    this->worldHeight = numberOfChunks * chunkHeight;
+
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
     indices = generateIndices();
 
@@ -77,7 +80,7 @@ WorldChunk World::getWorldChunk(glm::vec3 position, glm::vec2 size)
 
     auto chunkIndex = gridX + gridZ * numberOfChunks;
     if (chunkIndex > (int)chunks.size() - 1) {
-        printf("Out of bounds: x:%i, z:%i, chunk index: %i\n", gridX, gridZ, chunkIndex);
+        printf("Out of bounds: x:%i, z:%i, chunk index: %i, pX: %f, pY: %f, pZ: %f\n", gridX, gridZ, chunkIndex, position.x, position.y, position.z);
         return WorldChunk();
     }
 

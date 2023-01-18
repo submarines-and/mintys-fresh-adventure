@@ -48,5 +48,11 @@ void TransformSystem::update(float deltaTime)
         if (transform.position.z <= 0.0f) {
             transform.position.z = 0.0f;
         }
+        if (transform.position.x >= global.world->worldHeight) {
+            transform.position.x = global.world->worldHeight;
+        }
+        if (transform.position.z >= global.world->worldWidth) {
+            transform.position.z = global.world->worldWidth;
+        }
     }
 }

@@ -19,7 +19,7 @@ struct WorldChunk {
 
 class World {
 private:
-    int numberOfChunks = 100;
+    int numberOfChunks = 0;
     int chunkWidth = 100;
     int chunkHeight = 100;
     int renderDistance = chunkHeight * 2;
@@ -39,6 +39,10 @@ private:
     std::vector<glm::vec3> generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices);
 
     WorldChunk getWorldChunk(glm::vec3 position, glm::vec2 size);
+
+public:
+    int worldWidth = 0;
+    int worldHeight = 0;
 
 public:
     World(int numberOfChunks);
