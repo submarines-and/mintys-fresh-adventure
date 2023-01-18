@@ -23,36 +23,7 @@ void ModelSystem::entityAdded(Entity entity)
 {
     // get or create model
     auto& modelComponent = global.ecs->getComponent<ModelComponent>(entity);
-    auto data = loadModel(modelComponent.modelFilePath);
-
-    // setup transoformation
-    auto transformComponent = global.ecs->getComponent<TransformComponent>(entity);
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, transformComponent.position);
-    transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
-    data->transformations.emplace_back(transform);
-    data->entityTransformationIndex.emplace(entity, data->transformations.size() - 1);
-
-    // re-buffer
-    glBindBuffer(GL_ARRAY_BUFFER, data->transformationVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * data->transformations.size(), &data->transformations[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void ModelSystem::entityRemoved(Entity entity)
-{
-    auto& modelComponent = global.ecs->getComponent<ModelComponent>(entity);
-    auto data = loadModel(modelComponent.modelFilePath);
-
-    auto index = data->entityTransformationIndex[entity];
-    data->entityTransformationIndex.erase(entity);
-
-    data->transformations.erase(data->transformations.begin() + index);
-
-    // check if last item removed
-    if (data->transformations.size() == 0) {
-        modelCache.erase(modelComponent.modelFilePath);
-    }
+    loadModel(modelComponent.modelFilePath);
 }
 
 std::shared_ptr<ModelSystem::ModelFile> ModelSystem::loadModel(const char* filePath)
@@ -161,9 +132,35 @@ void ModelSystem::update()
     shader.setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
     shader.setVec2("lightBias", glm::vec2(0.3f, 0.8f));
 
+    // create transformation vectors
+    std::map<const char*, std::vector<glm::mat4>> transformations;
+
+    for (auto entity : entities) {
+        auto transformComponent = global.ecs->getComponent<TransformComponent>(entity);
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, transformComponent.position);
+        transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
+
+        auto modelComponent = global.ecs->getComponent<ModelComponent>(entity);
+        transformations[modelComponent.modelFilePath].emplace_back(transform);
+    }
+
+    // render each models using the transformations
     for (auto object : modelCache) {
+
+        if (!transformations.count(object.first) || !transformations[object.first].size()) {
+            printf("No transformations found for model: %s\n", object.first);
+            continue;
+        }
+
+        // buffer positions
+        glBindBuffer(GL_ARRAY_BUFFER, object.second->transformationVbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transformations[object.first].size(), &transformations[object.first][0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        // draw
         glBindVertexArray(object.second->vao);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, object.second->vertices.size(), object.second->transformations.size());
+        glDrawArraysInstanced(GL_TRIANGLES, 0, object.second->vertices.size(), transformations[object.first].size());
     }
 
     glBindVertexArray(0);

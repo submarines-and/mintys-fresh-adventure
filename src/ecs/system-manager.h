@@ -72,6 +72,7 @@ public:
             else {
                 // Entity signature does not match system signature - erase from set
                 system->entities.erase(entity);
+                system->entityRemoved(entity);
             }
         }
     }
