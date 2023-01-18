@@ -1,4 +1,5 @@
 #include "world.h"
+#include "components/ai.component.h"
 #include "components/model.component.h"
 #include "components/transform.component.h"
 #include "global.h"
@@ -140,8 +141,16 @@ void World::generateWorldChunk(WorldChunk& chunk)
                 global.ecs->addComponent(tree, TransformComponent{.position = glm::vec3(x + chunk.x * chunkWidth, height, y + chunk.y * chunkHeight)});
                 global.ecs->addComponent(tree, ModelComponent{.modelFilePath = "obj/tree.obj"});
             }
-
-            // generate a sheep
+            else if (Math::random(0, 10000) < 5) {
+                // sheep
+                auto sheep = global.ecs->createEntity();
+                global.ecs->addComponent(sheep, TransformComponent{
+                                                    .position = glm::vec3(x + chunk.x * chunkWidth, height, y + chunk.y * chunkHeight),
+                                                    .speed = 2.0f,
+                                                });
+                global.ecs->addComponent(sheep, ModelComponent{.modelFilePath = "obj/sheep.obj"});
+                global.ecs->addComponent(sheep, AIComponent{});
+            }
         }
     }
 
