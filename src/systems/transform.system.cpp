@@ -14,6 +14,9 @@ void TransformSystem::update(float deltaTime)
         transform.positionLastFrame = transform.position;
         transform.position += transform.direction * transform.speed * deltaTime;
 
-        transform.position.y = global.world->getTerrainHeight(transform.position, transform.size);
+        // clamp to ground unless entity is traveling up/down
+        if (transform.direction.y == 0.0f) {
+            transform.position.y = global.world->getTerrainHeight(transform.position, transform.size);
+        }
     }
 }
