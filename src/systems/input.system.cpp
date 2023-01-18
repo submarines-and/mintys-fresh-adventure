@@ -33,6 +33,11 @@ void InputSystem::update()
             sprite.rotation.x = 1;
         }
 
+        // jumping
+        if (global.keys[GLFW_KEY_SPACE]) {
+            transform.direction.y = 1;
+        }
+
         // fix horizontal movement
         if (transform.direction.x != 0.0f || transform.direction.z != 0.0f)
             transform.direction = glm::normalize(transform.direction);
