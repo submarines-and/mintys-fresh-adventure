@@ -4,5 +4,5 @@
 class AISystem : public System {
 
 public:
-    void update();
+    void update(float deltaTime);
 };

@@ -1,4 +1,5 @@
 #include "noise.h"
+#include "util/math.h"
 
 Noise::Noise()
 {
@@ -7,11 +8,6 @@ Noise::Noise()
     generator.SetFractalOctaves(5);
     generator.SetFrequency(0.01f);
     generator.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
-}
-
-float Noise::normalize(float input, float min, float max)
-{
-    return (input - min) / (max - min);
 }
 
 std::vector<float> Noise::generateNoiseMap(int offsetX, int offsetY, int height, int width)
@@ -25,7 +21,7 @@ std::vector<float> Noise::generateNoiseMap(int offsetX, int offsetY, int height,
             float noiseX = x + offsetX * width - offsetX;
             float noiseY = y + offsetY * height - offsetY;
 
-            float noiseValue = normalize(generator.GetNoise(noiseX, noiseY), -1.0f, 1.0f);
+            float noiseValue = Math::normalize(generator.GetNoise(noiseX, noiseY), -1.0f, 1.0f);
             returnList.emplace_back(noiseValue);
         }
     }

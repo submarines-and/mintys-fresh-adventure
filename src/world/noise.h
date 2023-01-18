@@ -5,7 +5,6 @@
 class Noise {
 private:
     FastNoiseLite generator;
-    float normalize(float input, float min, float max);
 
 public:
     Noise();

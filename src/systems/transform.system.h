@@ -3,7 +3,7 @@
 
 class TransformSystem : public System {
 private:
-    float GRAVITY = 10.0f;
+    float GRAVITY = 15.0f;
 
 public:
     void

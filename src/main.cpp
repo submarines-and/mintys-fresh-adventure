@@ -22,7 +22,7 @@ void init()
 void update(int ticks, float deltaTime)
 {
     global.ecs->getSystem<InputSystem>()->update();
-    global.ecs->getSystem<AISystem>()->update();
+    global.ecs->getSystem<AISystem>()->update(deltaTime);
     global.ecs->getSystem<TransformSystem>()->update(deltaTime);
     global.ecs->getSystem<CollisionSystem>()->update();
 }
