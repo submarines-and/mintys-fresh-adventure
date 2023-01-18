@@ -7,7 +7,7 @@ void TransformSystem::update(float deltaTime)
     for (auto entity : entities) {
         auto& transform = global.ecs->getComponent<TransformComponent>(entity);
 
-        if (transform.speed == 0.0f) {
+        if (transform.speed <= 0.0f) {
             continue;
         }
 
