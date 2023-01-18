@@ -141,6 +141,21 @@ void ModelSystem::update()
         transform = glm::translate(transform, transformComponent.position);
         transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
 
+        // rotate x
+        if (transformComponent.rotation.x > 0.0f) {
+            transform = glm::rotate(transform, glm::radians(transformComponent.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        }
+
+        // rotate y
+        if (transformComponent.rotation.y > 0.0f) {
+            transform = glm::rotate(transform, glm::radians(transformComponent.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        }
+
+        // rotate z
+        if (transformComponent.rotation.z > 0.0f) {
+            transform = glm::rotate(transform, glm::radians(transformComponent.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+        }
+
         auto modelComponent = global.ecs->getComponent<ModelComponent>(entity);
         transformations[modelComponent.modelFilePath].emplace_back(transform);
     }
