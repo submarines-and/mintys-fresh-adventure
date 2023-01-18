@@ -126,7 +126,8 @@ void World::generateWorldChunk(WorldChunk& chunk)
 
             // pervent vertex from being below water
             float noiseAtPoint = noiseMap[x + y * chunkWidth];
-            auto height = std::fmax(noiseAtPoint * meshHeight, biomeGen.getTerrainHeight(Biome::WATER) * meshHeight);
+            float waterHeight = biomeGen.getTerrainHeight(Biome::WATER) * meshHeight;
+            auto height = std::fmax(noiseAtPoint * meshHeight, waterHeight);
 
             // persist height to chunk map for later lookup
             chunk.heights[x + y * chunkWidth] = height;
@@ -134,6 +135,11 @@ void World::generateWorldChunk(WorldChunk& chunk)
             vertices.emplace_back(x);
             vertices.emplace_back(height);
             vertices.emplace_back(y);
+
+            // don't generate objects in water
+            if (height <= waterHeight) {
+                continue;
+            }
 
             // small chance to generate a tree
             if (Math::random(0, 1000) < 2) {
