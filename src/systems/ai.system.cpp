@@ -5,7 +5,10 @@
 void AISystem::update()
 {
     for (auto entity : entities) {
-        auto& transformComponent = global.ecs->getComponent<TransformComponent>(entity);
-        transformComponent.direction.y = 1.0f;
+        auto& transform = global.ecs->getComponent<TransformComponent>(entity);
+
+        if (transform.direction.y == 0.0f) {
+            transform.direction.y = 1.0f;
+        }
     }
 }
