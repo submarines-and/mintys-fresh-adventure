@@ -72,11 +72,11 @@ void World::render()
     shader.stop();
 }
 
-WorldChunk World::getWorldChunk(glm::vec3 position, glm::vec2 size)
+WorldChunk World::getWorldChunk(glm::vec3 position)
 {
     // get active chunk
-    int gridX = (position.x + (size.x / 2)) / (chunkWidth);
-    int gridZ = (position.z + (size.y / 2)) / (chunkHeight);
+    int gridX = position.x / chunkWidth;
+    int gridZ = position.z / chunkHeight;
 
     auto chunkIndex = gridX + gridZ * numberOfChunks;
     if (chunkIndex > (int)chunks.size() - 1) {
@@ -87,9 +87,9 @@ WorldChunk World::getWorldChunk(glm::vec3 position, glm::vec2 size)
     return chunks[chunkIndex];
 }
 
-float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
+float World::getTerrainHeight(glm::vec3 position)
 {
-    auto chunk = getWorldChunk(position, size);
+    auto chunk = getWorldChunk(position);
     if (!chunk.generated) {
         return 1.0f;
     }
@@ -100,9 +100,9 @@ float World::getTerrainHeight(glm::vec3 position, glm::vec2 size)
     return chunk.heights[adjustedX + adjustedZ * chunkWidth] + 1.0f;
 }
 
-Biome::TerrainType World::getTerrainType(glm::vec3 position, glm::vec2 size)
+Biome::TerrainType World::getTerrainType(glm::vec3 position)
 {
-    auto chunk = getWorldChunk(position, size);
+    auto chunk = getWorldChunk(position);
     if (!chunk.generated) {
         return Biome::GRASS;
     }

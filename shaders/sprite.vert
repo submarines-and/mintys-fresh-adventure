@@ -8,7 +8,7 @@ uniform mat4 view;
 
 // position and size
 uniform vec3 position;
-uniform vec2 size;
+uniform vec3 scale;
 uniform vec2 rotation;
 
 // camera info
@@ -28,6 +28,6 @@ void main()
     texCoords = vec2((vertex.z * rotation.x + atlasOffset.x) * scaleX, (vertex.w * rotation.y + atlasOffset.y) * scaleY);
 
     // billboarding
-    vec3 transform = position + cameraRight * vertex.x * size.x + cameraUp * vertex.y * size.y;
+    vec3 transform = position + cameraRight * vertex.x * scale.x + cameraUp * vertex.y * scale.y;
     gl_Position = projection * view  * vec4(transform, 1.0);
 }

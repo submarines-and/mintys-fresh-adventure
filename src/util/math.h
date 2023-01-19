@@ -8,6 +8,11 @@ public:
         return (input - min) / (max - min);
     }
 
+    static float normalize(float input, float min, float max, float range)
+    {
+        return normalize(input, min, max) * range;
+    }
+
     static int random(int min, int max)
     {
         return rand() % (max - min + 1) + min;

@@ -139,7 +139,7 @@ void ModelSystem::update()
         auto transformComponent = global.ecs->getComponent<TransformComponent>(entity);
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::translate(transform, transformComponent.position);
-        transform = glm::scale(transform, glm::vec3(transformComponent.size, 1.0f));
+        transform = glm::scale(transform,transformComponent.scale);
 
         // rotate x
         if (transformComponent.rotation.x > 0.0f) {

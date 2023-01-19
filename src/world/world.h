@@ -38,7 +38,7 @@ private:
     std::vector<int> generateIndices();
     std::vector<glm::vec3> generateNormals(const std::vector<int>& indices, const std::vector<float>& vertices);
 
-    WorldChunk getWorldChunk(glm::vec3 position, glm::vec2 size);
+    WorldChunk getWorldChunk(glm::vec3 position);
 
 public:
     int worldWidth = 0;
@@ -48,6 +48,6 @@ public:
     World(int numberOfChunks);
     ~World();
     void render();
-    float getTerrainHeight(glm::vec3 position, glm::vec2 size);
-    Biome::TerrainType getTerrainType(glm::vec3 position, glm::vec2 size);
+    float getTerrainHeight(glm::vec3 position);
+    Biome::TerrainType getTerrainType(glm::vec3 position);
 };

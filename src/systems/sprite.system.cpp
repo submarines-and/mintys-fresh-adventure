@@ -91,7 +91,7 @@ void SpriteSystem::update(int ticks)
 
         // position and size
         shader.setVec3("position", transform.position);
-        shader.setVec2("size", transform.size);
+        shader.setVec3("scale", transform.scale);
         shader.setVec2("rotation", sprite.rotation);
 
         glActiveTexture(GL_TEXTURE0);
