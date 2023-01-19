@@ -47,3 +47,8 @@ install:
 	cd lib/glfw && cmake . && make
 
 -include $(DEPS)
+
+
+# parallell builds
+NPROCS = $(shell sysctl hw.ncpu  | grep -o '[0-9]\+')
+MAKEFLAGS += -j$(NPROCS)
