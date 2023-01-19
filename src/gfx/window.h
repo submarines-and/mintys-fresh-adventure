@@ -9,8 +9,8 @@ using WindowFunctionWithTime = void (*)(float deltaTime);
 class Window {
 private:
     GLFWwindow* window;
-    WindowFunction init, destroy;
-    WindowFunctionWithTime update, render;
+    WindowFunction init, destroy, render;
+    WindowFunctionWithTime update;
 
     void handleMouseMovement(GLFWwindow* window);
 
@@ -19,7 +19,7 @@ private:
     bool firstMouse = true;
 
 public:
-    Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunctionWithTime render);
+    Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunction render);
     ~Window();
 
     void loop();

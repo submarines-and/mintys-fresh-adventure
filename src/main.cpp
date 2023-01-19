@@ -27,7 +27,7 @@ void update(float deltaTime)
     global.ecs->getSystem<CollisionSystem>()->update();
 }
 
-void render(float deltaTime)
+void render()
 {
     global.world->render();
     global.ecs->getSystem<ModelSystem>()->update();

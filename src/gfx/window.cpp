@@ -85,11 +85,11 @@ void Window::handleMouseMovement(GLFWwindow* window)
     global.camera->processMouseMovement(xoffset, yoffset, left, right);
 }
 
-Window::Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunctionWithTime render)
+Window::Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunction render)
     : init(init),
       destroy(destroy),
-      update(update),
       render(render),
+      update(update),
       lastX(width / 2.0f),
       lastY(height / 2.0f)
 {
@@ -168,7 +168,7 @@ void Window::loop()
 
         glClearColor(255, 255, 255, 255);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        render(deltaTime);
+        render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
