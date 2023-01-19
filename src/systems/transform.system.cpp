@@ -1,6 +1,7 @@
 #include "transform.system.h"
 #include "components/transform.component.h"
 #include "global.h"
+#include <glm/glm.hpp>
 
 void TransformSystem::update(float deltaTime)
 {
@@ -15,31 +16,11 @@ void TransformSystem::update(float deltaTime)
         // save old position (which will later be used for collision detection)
         transform.positionLastFrame = transform.position;
 
-        // update x, z
-        transform.position.x += transform.direction.x * transform.speed * deltaTime;
-        transform.position.z += transform.direction.z * transform.speed * deltaTime;
+        float distance = transform.speed * deltaTime;
+        float dx = distance * glm::sin(glm::radians(transform.rotation.y));
+        float dz = distance * glm::cos(glm::radians(transform.rotation.y));
 
-        // update y
-        auto heightAtPosition = global.world->getTerrainHeight(transform.position, transform.size);
-
-        // move up until jump height is reached
-        if (!transform.isFalling && transform.direction.y > 0.0f && transform.position.y < (heightAtPosition + transform.jumpHeight)) {
-            transform.position.y += GRAVITY * deltaTime;
-        }
-        else {
-            // gravity, also set y direction to 0
-            transform.direction.y = 0.0f;
-            transform.isFalling = true;
-            transform.position.y -= GRAVITY * deltaTime;
-        }
-
-        // clamp to ground
-        // also reset y direction
-        if (transform.position.y <= heightAtPosition) {
-            transform.isFalling = false;
-            transform.direction.y = 0.0f;
-            transform.position.y = heightAtPosition;
-        }
+        transform.position += glm::vec3(dx, 0.0f, dz);
 
         // clamp x/z to world edge
         if (transform.position.x <= 0.0f) {

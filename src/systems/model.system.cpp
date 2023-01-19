@@ -139,22 +139,12 @@ void ModelSystem::update()
         auto transformComponent = global.ecs->getComponent<TransformComponent>(entity);
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::translate(transform, transformComponent.position);
-        transform = glm::scale(transform,transformComponent.scale);
+        transform = glm::scale(transform, transformComponent.scale);
 
-        // rotate x
-        if (transformComponent.rotation.x > 0.0f) {
-            transform = glm::rotate(transform, glm::radians(transformComponent.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-        }
-
-        // rotate y
-        if (transformComponent.rotation.y > 0.0f) {
-            transform = glm::rotate(transform, glm::radians(transformComponent.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-        }
-
-        // rotate z
-        if (transformComponent.rotation.z > 0.0f) {
-            transform = glm::rotate(transform, glm::radians(transformComponent.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-        }
+        // rotate
+        transform = glm::rotate(transform, glm::radians(transformComponent.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        transform = glm::rotate(transform, glm::radians(transformComponent.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        transform = glm::rotate(transform, glm::radians(transformComponent.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
         auto modelComponent = global.ecs->getComponent<ModelComponent>(entity);
         transformations[modelComponent.modelFilePath].emplace_back(transform);

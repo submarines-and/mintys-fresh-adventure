@@ -12,8 +12,7 @@ void AISystem::update(float deltaTime)
 
         if (ai.distanceMoved == 0.0f) {
             // pick new direction
-            transform.direction.x = Math::random(-1, 1);
-            transform.direction.z = Math::random(-1, 1);
+            transform.rotation.y = Math::random(0, 360);
             ai.distanceMoved += deltaTime;
         }
         else if (ai.distanceMoved < 10.0f) {
@@ -23,11 +22,6 @@ void AISystem::update(float deltaTime)
         else {
             // reset, which triggrs picking a new direction
             ai.distanceMoved = 0.0f;
-        }
-
-        // jump unless stationary
-        if (transform.direction.x != 0.0f || transform.direction.z != 0.0f) {
-            transform.direction.y = 1.0f;
         }
     }
 }
