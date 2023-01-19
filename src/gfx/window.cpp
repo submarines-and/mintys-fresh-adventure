@@ -155,6 +155,8 @@ void Window::loop()
     init();
 
     float lastFrame = 0.0f;
+    float deltaTime = 0.0f;
+
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
@@ -162,15 +164,15 @@ void Window::loop()
 
         handleMouseMovement(window);
         global.camera->processKeyboard(deltaTime);
-        update(ticks, deltaTime);
+        update(deltaTime);
 
         glClearColor(255, 255, 255, 255);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        render(ticks, deltaTime);
+        render(deltaTime);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-        ticks++;
+        global.ticks++;
     }
 
     // main destroy

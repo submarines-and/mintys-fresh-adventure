@@ -12,5 +12,5 @@ private:
 public:
     SpriteSystem();
     void entityAdded(Entity entity);
-    void update(int ticks);
+    void update();
 };

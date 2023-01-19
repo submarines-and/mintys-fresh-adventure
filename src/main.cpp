@@ -19,7 +19,7 @@ void init()
     Registry::addAllSystems();
 }
 
-void update(int ticks, float deltaTime)
+void update(float deltaTime)
 {
     global.ecs->getSystem<InputSystem>()->update();
     global.ecs->getSystem<AISystem>()->update(deltaTime);
@@ -27,7 +27,7 @@ void update(int ticks, float deltaTime)
     global.ecs->getSystem<CollisionSystem>()->update();
 }
 
-void render(int ticks, float deltaTime)
+void render(float deltaTime)
 {
     global.world->render();
     global.ecs->getSystem<ModelSystem>()->update();

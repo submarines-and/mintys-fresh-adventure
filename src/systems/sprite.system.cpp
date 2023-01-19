@@ -62,7 +62,7 @@ void SpriteSystem::entityAdded(Entity entity)
     stbi_image_free(data);
 }
 
-void SpriteSystem::update(int ticks)
+void SpriteSystem::update()
 {
     shader.start();
 
@@ -73,7 +73,7 @@ void SpriteSystem::update(int ticks)
         // apply animation
         // speed is number of game loops elapsed per frame
         if (sprite.animationFrames > 0) {
-            sprite.atlasOffset.x = ticks / (sprite.animationFrames * 1) % sprite.animationFrames;
+            sprite.atlasOffset.x = global.ticks / (sprite.animationFrames * 1) % sprite.animationFrames;
         }
 
         // animation frame

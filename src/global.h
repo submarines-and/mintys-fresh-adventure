@@ -10,6 +10,9 @@ struct Global {
     /** Window with and height */
     int width, height;
 
+    /** Game ticks */
+    int ticks = 0;
+
     bool keys[GLFW_KEY_LAST];
 
     ECS* ecs;
