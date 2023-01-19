@@ -16,11 +16,31 @@ void TransformSystem::update(float deltaTime)
         // save old position (which will later be used for collision detection)
         transform.positionLastFrame = transform.position;
 
-        float distance = transform.speed * deltaTime;
-        float dx = distance * glm::sin(glm::radians(transform.rotation.y));
-        float dz = distance * glm::cos(glm::radians(transform.rotation.y));
+        float distanceMoved = transform.currentSpeed * deltaTime;
+        float dx = distanceMoved * glm::sin(glm::radians(transform.rotation.y));
+        float dz = distanceMoved * glm::cos(glm::radians(transform.rotation.y));
 
-        transform.position += glm::vec3(dx, 0.0f, dz);
+        // boost up if intent is to jumo
+        if (transform.jump && !transform.isJumping) {
+            transform.currentUpwardSpeed = transform.speed;
+            transform.isJumping = true;
+        }
+
+        // jumping
+        transform.currentUpwardSpeed -= GRAVITY * deltaTime;
+        float dy = transform.currentUpwardSpeed * deltaTime;
+        transform.position += glm::vec3(dx, dy, dz);
+
+        // clamp y to terrain height
+        auto heightAtPosition = global.world->getTerrainHeight(transform.position);
+        if (transform.position.y < heightAtPosition) {
+            transform.currentUpwardSpeed = 0.0f;
+            transform.position.y = heightAtPosition;
+
+            // end of jump
+            transform.isJumping = false;
+            transform.jump = false;
+        }
 
         // clamp x/z to world edge
         if (transform.position.x <= 0.0f) {

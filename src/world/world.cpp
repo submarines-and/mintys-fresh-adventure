@@ -155,7 +155,7 @@ void World::generateWorldChunk(WorldChunk& chunk)
                 auto sheep = global.ecs->createEntity();
                 global.ecs->addComponent(sheep, TransformComponent{
                                                     .position = glm::vec3(x + chunk.x * chunkWidth, height, y + chunk.y * chunkHeight),
-                                                    .speed = 2.0f,
+                                                    .speed = 3.0f,
                                                 });
                 global.ecs->addComponent(sheep, ModelComponent{.modelFilePath = "obj/sheep.obj"});
                 global.ecs->addComponent(sheep, AIComponent{});
