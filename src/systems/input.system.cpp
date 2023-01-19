@@ -20,20 +20,18 @@ void InputSystem::update()
         }
 
         if (global.keys[GLFW_KEY_A]) {
-            transform.currentTurnSpeed -= transform.speed;
+            transform.currentTurnSpeed = transform.speed;
         }
         else if (global.keys[GLFW_KEY_D]) {
-            transform.currentTurnSpeed -= transform.speed;
+            transform.currentTurnSpeed = -transform.speed;
         }
         else {
-            transform.currentTurnSpeed -= 0.0f;
+            transform.currentTurnSpeed = 0.0f;
         }
 
         // jumping
         if (global.keys[GLFW_KEY_SPACE]) {
             transform.jump = true;
         }
-
-        global.camera->centerOn(transform.position);
     }
 }

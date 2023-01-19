@@ -4,6 +4,7 @@
 class TransformSystem : public System {
 private:
     float GRAVITY = 9.82f;
+    int TURN_FACTOR = 40;
 
 public:
     void
