@@ -22,6 +22,9 @@ public:
 
     float zoom = 20.0f;
 
+    /** Following player */
+    bool follow = false;
+
 public:
     Camera(glm::vec3 position);
     void centerOn(glm::vec3 position);

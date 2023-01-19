@@ -10,6 +10,11 @@ Camera::Camera(glm::vec3 position) : position(position)
 
 void Camera::centerOn(glm::vec3 position)
 {
+    // check camera mode
+    if (!follow) {
+        return;
+    }
+
     auto horizontalDistance = zoom * glm::cos(glm::radians(pitch));
     auto verticalDistance = zoom * glm::sin(glm::radians(pitch));
     float theta = 90;
@@ -47,6 +52,11 @@ void Camera::updateCameraVectors()
 
 void Camera::processKeyboard(float deltaTime)
 {
+    // check camera mode
+    if (follow) {
+        return;
+    }
+
     float velocity = MOVEMENT_SPEED * deltaTime;
 
     if (global.keys[GLFW_KEY_W])

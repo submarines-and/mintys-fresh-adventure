@@ -33,5 +33,8 @@ void InputSystem::update()
         if (global.keys[GLFW_KEY_SPACE]) {
             transform.jump = true;
         }
+
+        // center on player
+        global.camera->centerOn(transform.position);
     }
 }

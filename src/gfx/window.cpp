@@ -47,6 +47,14 @@ void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
+    // camera mode (third, first person)
+    if (key == GLFW_KEY_3) {
+        global.camera->follow = true;
+    }
+    else if (key == GLFW_KEY_1) {
+        global.camera->follow = false;
+    }
+
     switch (action) {
     case GLFW_PRESS:
         global.keys[key] = true;
