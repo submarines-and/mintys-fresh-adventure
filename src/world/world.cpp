@@ -9,8 +9,8 @@
 World::World(int numberOfChunks) : shader(Shader("shaders/terrain.vert", "shaders/terrain.frag")), biomeGen(meshHeight)
 {
     this->numberOfChunks = numberOfChunks;
-    this->worldWidth = numberOfChunks * chunkWidth;
-    this->worldHeight = numberOfChunks * chunkHeight;
+    this->worldWidth = numberOfChunks * chunkWidth - numberOfChunks;
+    this->worldHeight = numberOfChunks * chunkHeight - numberOfChunks;
 
     chunks = std::vector<WorldChunk>(numberOfChunks * numberOfChunks);
     indices = generateIndices();
