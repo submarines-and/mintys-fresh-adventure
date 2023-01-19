@@ -16,6 +16,9 @@ void TransformSystem::update(float deltaTime)
         // save old position (which will later be used for collision detection)
         transform.positionLastFrame = transform.position;
 
+        // increase rotation
+        transform.rotation.y += transform.currentSpeed * deltaTime;
+
         float distanceMoved = transform.currentSpeed * deltaTime;
         float dx = distanceMoved * glm::sin(glm::radians(transform.rotation.y));
         float dz = distanceMoved * glm::cos(glm::radians(transform.rotation.y));

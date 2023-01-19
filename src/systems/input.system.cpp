@@ -8,26 +8,30 @@ void InputSystem::update()
     // this will always have 1 entry, the currently controlled player
     for (auto entity : entities) {
         auto& transform = global.ecs->getComponent<TransformComponent>(entity);
-        auto& sprite = global.ecs->getComponent<SpriteComponent>(entity);
 
         if (global.keys[GLFW_KEY_W]) {
-            //  sprite.rotation.y = 1;
+            transform.currentSpeed = transform.speed;
         }
-
-        if (global.keys[GLFW_KEY_S]) {
-            //  sprite.rotation.y = -1;
+        else if (global.keys[GLFW_KEY_S]) {
+            transform.currentSpeed = -transform.speed;
+        }
+        else {
+            transform.currentSpeed = 0.0f;
         }
 
         if (global.keys[GLFW_KEY_A]) {
-            sprite.rotation.x = -1;
+            transform.currentTurnSpeed -= transform.speed;
         }
-
-        if (global.keys[GLFW_KEY_D]) {
-            sprite.rotation.x = 1;
+        else if (global.keys[GLFW_KEY_D]) {
+            transform.currentTurnSpeed -= transform.speed;
+        }
+        else {
+            transform.currentTurnSpeed -= 0.0f;
         }
 
         // jumping
         if (global.keys[GLFW_KEY_SPACE]) {
+            transform.jump = true;
         }
 
         global.camera->centerOn(transform.position);
