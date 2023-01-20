@@ -4,13 +4,10 @@
 class Camera {
 private:
     float LOOK_SENTITIVITY = 0.1f;
-
-    float yaw = 0.0f;
     float pitch = 10.0f;
     float zoom = 30.0f;
-    float angleAroundPlayer = 0.0f;
 
-    /** First person variables*/
+    // First person only
 public:
     float MOVEMENT_SPEED = 50.0f;
 
@@ -18,13 +15,16 @@ public:
     glm::vec3 up;
     glm::vec3 front;
 
-    /** Shared */
+    // Third person only
 public:
-    glm::vec3 position = glm::vec3(30.0f, 60.0f, 50.0f);
+    float angleAroundPlayer = 0.0f;
     glm::vec3 targetPosition = glm::vec3(0, 0, 0);
 
-    /** Following player */
+    // Shared
+public:
+    glm::vec3 position = glm::vec3(30.0f, 60.0f, 50.0f);
     bool thirdPerson = true;
+    float yaw = 0.0f;
 
 public:
     void centerOn(glm::vec3 targetPosition, glm::vec3 rotation);

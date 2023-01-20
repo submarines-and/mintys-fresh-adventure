@@ -15,7 +15,21 @@ void InputSystem::update()
 
     // apply rotation
     if (global.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
-        transform.rotation.y -= global.mouseOffsetX * 0.5f; // scaling factor is arbitrary
+
+        // 1 time line up player with current camera ange
+        // might move this to a "on button down" trigger instead
+        if (!cameraSynced) {
+            cameraSynced = true;
+            transform.rotation.y = 180 - global.camera->yaw;
+            global.camera->angleAroundPlayer = 0.0f;
+        }
+
+        // rotate normally
+        transform.rotation.y -= global.mouseOffsetX * 0.5f;
+    }
+    else {
+        // reset sync
+        cameraSynced = false;
     }
 
     if (global.keys[GLFW_KEY_W]) {
