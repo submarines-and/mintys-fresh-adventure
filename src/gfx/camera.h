@@ -26,6 +26,7 @@ public:
 
 public:
     void centerOn(glm::vec3 targetPosition, glm::vec3 rotation);
+    void updateFirstPersonView();
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();

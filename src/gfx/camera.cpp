@@ -24,6 +24,19 @@ void Camera::centerOn(glm::vec3 targetPosition, glm::vec3 rotation)
     this->targetPosition = targetPosition;
 }
 
+void Camera::updateFirstPersonView()
+{
+    glm::vec3 newFront;
+    newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    newFront.y = sin(glm::radians(pitch));
+    newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front = glm::normalize(newFront);
+
+    // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+    right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
+    up = glm::normalize(glm::cross(right, front));
+}
+
 glm::mat4 Camera::getViewMatrix()
 {
     if (!thirdPerson) {
@@ -47,8 +60,15 @@ void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonH
     xOffset *= LOOK_SENTITIVITY;
     yOffset *= LOOK_SENTITIVITY;
 
-    pitch -= yOffset;
-    angleAroundPlayer -= xOffset;
+    if (thirdPerson) {
+        pitch -= yOffset;
+        angleAroundPlayer -= xOffset;
+    }
+    else {
+        pitch += yOffset;
+        yaw += xOffset;
+        updateFirstPersonView();
+    }
 }
 
 void Camera::processScroll(float yOffset)
@@ -91,4 +111,6 @@ void Camera::processKeyboard(float deltaTime)
     if (position.y < heightAtPosition) {
         position.y = heightAtPosition;
     }
+
+    updateFirstPersonView();
 }
