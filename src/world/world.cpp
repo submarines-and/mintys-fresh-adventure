@@ -48,7 +48,7 @@ void World::render()
     // render visible chunks
     for (auto& chunk : chunks) {
 
-        if (std::abs(chunk.x * chunkWidth - global.camera->position.x) <= renderDistance && std::abs(chunk.y * chunkHeight - global.camera->position.z) <= renderDistance) {
+        if (glm::abs(chunk.x * chunkWidth - global.camera->position.x) <= renderDistance && glm::abs(chunk.y * chunkHeight - global.camera->position.z) <= renderDistance) {
 
             // generate if missing
             if (!chunk.generated) {
@@ -90,23 +90,25 @@ float World::getTerrainHeight(glm::vec3 position)
         return 1.0f;
     }
 
-    int adjustedX = position.x - chunk.x * chunkWidth;
-    int adjustedZ = position.z - chunk.y * chunkHeight;
+    float terrainX = position.x - chunk.x * chunkWidth;
+    float terrainZ = position.z - chunk.y * chunkHeight;
+    float gridSquareSize = glm::abs(chunkWidth / (glm::sqrt(chunk.heights.size()) - 1));
+    int gridX = terrainX / gridSquareSize;
+    int gridZ = terrainZ / gridSquareSize;
+    float xCoord = fmod(terrainX, gridSquareSize) / gridSquareSize;
+    float zCoord = fmod(terrainZ, gridSquareSize) / gridSquareSize;
 
-    return chunk.heights[adjustedX + adjustedZ * chunkWidth] + 1.0f;
+    if (xCoord <= (1 - zCoord)) {
+        return Math::baryCentric(glm::vec3(0, chunk.heights[gridX + gridZ * chunkWidth], 0), glm::vec3(1, chunk.heights[gridX + 1 + gridZ * chunkWidth], 0), glm::vec3(0, chunk.heights[gridX + (gridZ + 1) * chunkWidth], 1), glm::vec2(xCoord, zCoord));
+    }
+    else {
+        return Math::baryCentric(glm::vec3(1, chunk.heights[gridX + 1 + gridZ * chunkWidth], 0), glm::vec3(1, chunk.heights[gridX + 1 + (gridZ + 1) * chunkWidth], 1), glm::vec3(0, chunk.heights[gridX + (gridZ + 1) * chunkWidth], 1), glm::vec2(xCoord, zCoord));
+    }
 }
 
 Biome::TerrainType World::getTerrainType(glm::vec3 position)
 {
-    auto chunk = getWorldChunk(position);
-    if (!chunk.generated) {
-        return Biome::GRASS;
-    }
-
-    int adjustedX = position.x - chunk.x * chunkWidth;
-    int adjustedZ = position.z - chunk.y * chunkHeight;
-
-    return chunk.terrain[adjustedX + adjustedZ * chunkWidth];
+    return Biome::GRASS;
 }
 
 void World::generateWorldChunk(WorldChunk& chunk)
