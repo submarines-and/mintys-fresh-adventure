@@ -30,7 +30,7 @@ void TransformSystem::update(float deltaTime)
         }
 
         // jumping
-        transform.currentUpwardSpeed -= GRAVITY * deltaTime;
+        transform.currentUpwardSpeed -= (GRAVITY * transform.speed) * deltaTime;
         float dy = transform.currentUpwardSpeed * deltaTime;
         transform.position += glm::vec3(dx, dy, dz);
 
