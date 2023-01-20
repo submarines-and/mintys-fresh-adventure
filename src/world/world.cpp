@@ -108,7 +108,13 @@ float World::getTerrainHeight(glm::vec3 position)
 
 Biome::TerrainType World::getTerrainType(glm::vec3 position)
 {
-    return Biome::GRASS;
+    auto chunk = getWorldChunk(position);
+    if (!chunk.generated) {
+        return Biome::GRASS;
+    }
+
+    auto heightAtPosition = getTerrainHeight(position);
+    return biomeGen.getTerrainType(heightAtPosition);
 }
 
 void World::generateWorldChunk(WorldChunk& chunk)
