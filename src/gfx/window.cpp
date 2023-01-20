@@ -87,10 +87,11 @@ void Window::handleMouseMovement(GLFWwindow* window)
     lastX = xPos;
     lastY = yPos;
 
-    auto left = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-    auto right = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
+    // flag mouse button
+    global.keys[GLFW_MOUSE_BUTTON_LEFT] = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+    global.keys[GLFW_MOUSE_BUTTON_RIGHT] = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 
-    global.camera->processMouseMovement(xoffset, yoffset, left, right);
+    global.camera->processMouseMovement(xoffset, yoffset);
 }
 
 Window::Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunction render)

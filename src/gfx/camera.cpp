@@ -51,9 +51,9 @@ glm::mat4 Camera::getProjectionMatrix()
     return glm::perspective(glm::radians(zoom), (float)global.width / (float)global.height, 0.001f, 1000000.0f);
 }
 
-void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
+void Camera::processMouseMovement(float xOffset, float yOffset)
 {
-    if (!rightButtonHeld && !leftButtonHeld) {
+    if (!global.keys[GLFW_MOUSE_BUTTON_LEFT] && !global.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
         return;
     }
 

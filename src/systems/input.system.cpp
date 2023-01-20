@@ -11,7 +11,6 @@ void InputSystem::update()
 
     // this will always have 1 entry, the currently controlled player
     auto entity = *next(entities.begin(), 0);
-
     auto& transform = global.ecs->getComponent<TransformComponent>(entity);
 
     if (global.keys[GLFW_KEY_W]) {

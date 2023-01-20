@@ -31,7 +31,7 @@ public:
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();
 
-    void processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld);
+    void processMouseMovement(float xOffset, float yOffset);
     void processScroll(float yOffset);
     void processKeyboard(float deltaTime);
 };
