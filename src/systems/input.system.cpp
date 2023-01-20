@@ -13,6 +13,11 @@ void InputSystem::update()
     auto entity = *next(entities.begin(), 0);
     auto& transform = global.ecs->getComponent<TransformComponent>(entity);
 
+    // apply rotation
+    if (global.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
+        transform.rotation.y -= global.mouseOffsetX * 0.5f; // scaling factor is arbitrary
+    }
+
     if (global.keys[GLFW_KEY_W]) {
         transform.currentSpeed = transform.speed;
     }

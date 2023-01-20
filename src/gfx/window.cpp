@@ -81,8 +81,8 @@ void Window::handleMouseMovement(GLFWwindow* window)
         firstMouse = false;
     }
 
-    float xoffset = xPos - lastX;
-    float yoffset = lastY - yPos; // reversed since y-coordinates go from bottom to top
+    global.mouseOffsetX = xPos - lastX;
+    global.mouseOffsetY = lastY - yPos; // reversed since y-coordinates go from bottom to top
 
     lastX = xPos;
     lastY = yPos;

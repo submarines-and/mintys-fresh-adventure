@@ -14,6 +14,8 @@ struct Global {
     int ticks = 0;
 
     bool keys[GLFW_KEY_LAST];
+    float mouseOffsetX = 0.0f;
+    float mouseOffsetY = 0.0f;
 
     ECS* ecs;
     World* world;

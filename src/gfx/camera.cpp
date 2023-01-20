@@ -53,6 +53,7 @@ glm::mat4 Camera::getProjectionMatrix()
 
 void Camera::processMouseMovement(float xOffset, float yOffset)
 {
+    // rotate camera when mouse buttons are held
     if (!global.keys[GLFW_MOUSE_BUTTON_LEFT] && !global.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
         return;
     }
@@ -62,7 +63,11 @@ void Camera::processMouseMovement(float xOffset, float yOffset)
 
     if (thirdPerson) {
         pitch -= yOffset;
-        angleAroundPlayer -= xOffset;
+
+        // right button controls player, which indirectly controls camera as well
+        if (!global.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
+            angleAroundPlayer -= xOffset;
+        }
     }
     else {
         pitch += yOffset;
