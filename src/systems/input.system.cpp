@@ -9,7 +9,7 @@ void InputSystem::update()
         return;
     }
 
-    // this will always have 1 entry, the currently controlled player
+    // this system will always have 1 entry - the currently controlled unit
     auto entity = *next(entities.begin(), 0);
     auto& transform = global.ecs->getComponent<TransformComponent>(entity);
 
@@ -38,6 +38,6 @@ void InputSystem::update()
         transform.jump = true;
     }
 
-    // center on player
+    // center on controlled unit
     global.camera->centerOn(transform.position, transform.rotation);
 }

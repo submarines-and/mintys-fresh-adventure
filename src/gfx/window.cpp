@@ -91,7 +91,14 @@ void Window::handleMouseMovement(GLFWwindow* window)
     global.keys[GLFW_MOUSE_BUTTON_LEFT] = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
     global.keys[GLFW_MOUSE_BUTTON_RIGHT] = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 
-    global.camera->processMouseMovement(xoffset, yoffset);
+    if (global.keys[GLFW_MOUSE_BUTTON_LEFT] || global.keys[GLFW_MOUSE_BUTTON_RIGHT]) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    }
+    else {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+
+    global.camera->processMouseMovement(global.mouseOffsetX, global.mouseOffsetY);
 }
 
 Window::Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunction render)

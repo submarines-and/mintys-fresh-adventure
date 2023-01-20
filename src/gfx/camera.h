@@ -3,15 +3,17 @@
 
 class Camera {
 private:
+    float LOOK_SENTITIVITY = 0.1f;
+
     float yaw = 0.0f;
     float pitch = 10.0f;
-    float zoom = 20.0f;
+    float zoom = 30.0f;
     float angleAroundPlayer = 0.0f;
-    float LOOK_SENTITIVITY = 0.1f;
 
     /** First person variables*/
 public:
     float MOVEMENT_SPEED = 50.0f;
+
     glm::vec3 right;
     glm::vec3 up;
     glm::vec3 front;
