@@ -4,35 +4,33 @@
 class Camera {
 private:
     float yaw = 0.0f;
-    float pitch = -30.0f;
-
-    float MOVEMENT_SPEED = 50.0f;
+    float pitch = 10.0f;
+    float zoom = 20.0f;
+    float angleAroundPlayer = 0.0f;
     float LOOK_SENTITIVITY = 0.1f;
 
-    // camera Attributes
-    glm::vec3 front;
-
-private:
-    void updateCameraVectors();
-
+    /** First person variables*/
 public:
-    glm::vec3 position;
+    float MOVEMENT_SPEED = 50.0f;
     glm::vec3 right;
     glm::vec3 up;
+    glm::vec3 front;
 
-    float zoom = 20.0f;
+    /** Shared */
+public:
+    glm::vec3 position = glm::vec3(0, 0, 0);
+    glm::vec3 targetPosition = glm::vec3(0, 0, 0);
 
     /** Following player */
-    bool follow = false;
+    bool thirdPerson = true;
 
 public:
-    Camera(glm::vec3 position);
-    void centerOn(glm::vec3 position);
+    void centerOn(glm::vec3 targetPosition, glm::vec3 rotation);
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();
 
-    void processKeyboard(float deltaTime);
     void processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld);
     void processScroll(float yOffset);
+    void processKeyboard(float deltaTime);
 };

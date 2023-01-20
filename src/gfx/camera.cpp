@@ -3,57 +3,72 @@
 #include "global.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera(glm::vec3 position) : position(position)
+void Camera::centerOn(glm::vec3 targetPosition, glm::vec3 rotation)
 {
-    updateCameraVectors();
-}
-
-void Camera::centerOn(glm::vec3 position)
-{
-    // check camera mode
-    if (!follow) {
+    if (!thirdPerson) {
         return;
     }
 
     auto horizontalDistance = zoom * glm::cos(glm::radians(pitch));
     auto verticalDistance = zoom * glm::sin(glm::radians(pitch));
-    float theta = 90;
+
+    float theta = rotation.y + angleAroundPlayer;
     float offsetX = horizontalDistance * glm::sin(glm::radians(theta));
     float offsetZ = horizontalDistance * glm::cos(glm::radians(theta));
 
-    this->position.x = position.x - offsetX + 5.0f;
-    this->position.z = position.z - offsetZ;
+    position.x = targetPosition.x - offsetX;
+    position.z = targetPosition.z - offsetZ;
+    position.y = targetPosition.y + verticalDistance;
+
+    yaw = 180 - (rotation.y + angleAroundPlayer);
+    this->targetPosition = targetPosition;
 }
 
 glm::mat4 Camera::getViewMatrix()
 {
-    return glm::lookAt(position, position + front, up);
+    if (!thirdPerson) {
+        return glm::lookAt(position, position + front, up);
+    }
+
+    return glm::lookAt(position, targetPosition, glm::vec3(0, 1, 0));
 }
 
 glm::mat4 Camera::getProjectionMatrix()
 {
-    return glm::perspective(glm::radians(zoom), (float)global.width / (float)global.height, 0.1f, 10000.0f);
+    return glm::perspective(glm::radians(zoom), (float)global.width / (float)global.height, 0.001f, 1000000.0f);
 }
 
-void Camera::updateCameraVectors()
+void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
 {
-    // calculate front vector
-    glm::vec3 newFront;
-    newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    newFront.y = sin(glm::radians(pitch));
-    newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front = glm::normalize(newFront);
+    if (!rightButtonHeld && !leftButtonHeld) {
+        return;
+    }
 
-    // also re-calculate the Right and Up vector
-    // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-    right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
-    up = glm::normalize(glm::cross(right, front));
+    xOffset *= LOOK_SENTITIVITY;
+    yOffset *= LOOK_SENTITIVITY;
+
+    pitch -= yOffset;
+    angleAroundPlayer -= xOffset;
+}
+
+void Camera::processScroll(float yOffset)
+{
+    yOffset *= LOOK_SENTITIVITY;
+
+    if (zoom >= 1.0f && zoom <= 50.0f)
+        zoom -= yOffset;
+
+    if (zoom <= 1.0f)
+        zoom = 1.0f;
+
+    if (zoom >= 80.0f)
+        zoom = 80.0f;
 }
 
 void Camera::processKeyboard(float deltaTime)
 {
     // check camera mode
-    if (follow) {
+    if (thirdPerson) {
         return;
     }
 
@@ -71,48 +86,9 @@ void Camera::processKeyboard(float deltaTime)
     if (global.keys[GLFW_KEY_D])
         position += right * velocity;
 
-    // clamp
-    if (position.y < 10.0f) {
-        position.y = 10.0f;
+    // clamp to ground
+    auto heightAtPosition = global.world->getTerrainHeight(position);
+    if (position.y < heightAtPosition) {
+        position.y = heightAtPosition;
     }
-}
-
-void Camera::processMouseMovement(float xOffset, float yOffset, bool leftButtonHeld, bool rightButtonHeld)
-{
-#pragma unused(leftButtonHeld)
-
-    // only move when mouse held
-    if (!rightButtonHeld) {
-        return;
-    }
-
-    xOffset *= LOOK_SENTITIVITY;
-    yOffset *= LOOK_SENTITIVITY;
-
-    yaw += xOffset;
-
-    pitch += yOffset;
-    // position.y -= yOffset;
-
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    updateCameraVectors();
-}
-
-void Camera::processScroll(float yOffset)
-{
-    yOffset *= LOOK_SENTITIVITY;
-
-    if (zoom >= 1.0f && zoom <= 50.0f)
-        zoom -= yOffset;
-
-    if (zoom <= 1.0f)
-        zoom = 1.0f;
-
-    if (zoom >= 50.0f)
-        zoom = 50.0f;
 }

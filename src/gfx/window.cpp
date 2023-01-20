@@ -49,10 +49,10 @@ void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods
 
     // camera mode (third, first person)
     if (key == GLFW_KEY_3) {
-        global.camera->follow = true;
+        global.camera->thirdPerson = true;
     }
     else if (key == GLFW_KEY_1) {
-        global.camera->follow = false;
+        global.camera->thirdPerson = false;
     }
 
     switch (action) {

@@ -5,36 +5,40 @@
 
 void InputSystem::update()
 {
-    // this will always have 1 entry, the currently controlled player
-    for (auto entity : entities) {
-        auto& transform = global.ecs->getComponent<TransformComponent>(entity);
-
-        if (global.keys[GLFW_KEY_W]) {
-            transform.currentSpeed = transform.speed;
-        }
-        else if (global.keys[GLFW_KEY_S]) {
-            transform.currentSpeed = -transform.speed;
-        }
-        else {
-            transform.currentSpeed = 0.0f;
-        }
-
-        if (global.keys[GLFW_KEY_A]) {
-            transform.currentTurnSpeed = transform.speed;
-        }
-        else if (global.keys[GLFW_KEY_D]) {
-            transform.currentTurnSpeed = -transform.speed;
-        }
-        else {
-            transform.currentTurnSpeed = 0.0f;
-        }
-
-        // jumping
-        if (global.keys[GLFW_KEY_SPACE]) {
-            transform.jump = true;
-        }
-
-        // center on player
-        global.camera->centerOn(transform.position);
+    if (entities.size() == 0) {
+        return;
     }
+
+    // this will always have 1 entry, the currently controlled player
+    auto entity = *next(entities.begin(), 0);
+
+    auto& transform = global.ecs->getComponent<TransformComponent>(entity);
+
+    if (global.keys[GLFW_KEY_W]) {
+        transform.currentSpeed = transform.speed;
+    }
+    else if (global.keys[GLFW_KEY_S]) {
+        transform.currentSpeed = -transform.speed;
+    }
+    else {
+        transform.currentSpeed = 0.0f;
+    }
+
+    if (global.keys[GLFW_KEY_A]) {
+        transform.currentTurnSpeed = transform.speed;
+    }
+    else if (global.keys[GLFW_KEY_D]) {
+        transform.currentTurnSpeed = -transform.speed;
+    }
+    else {
+        transform.currentTurnSpeed = 0.0f;
+    }
+
+    // jumping
+    if (global.keys[GLFW_KEY_SPACE]) {
+        transform.jump = true;
+    }
+
+    // center on player
+    global.camera->centerOn(transform.position, transform.rotation);
 }

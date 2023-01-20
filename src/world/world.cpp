@@ -37,13 +37,9 @@ World::~World()
 
 void World::render()
 {
-    glm::mat4 projection = glm::perspective(glm::radians(global.camera->zoom), (float)global.width / (float)global.height, 0.1f, (float)chunkWidth * (renderDistance - 1.2f));
-    glm::mat4 view = global.camera->getViewMatrix();
-
     shader.start();
-
-    shader.setMat4("projection", projection);
-    shader.setMat4("view", view);
+    shader.setMat4("projection", global.camera->getProjectionMatrix());
+    shader.setMat4("view", global.camera->getViewMatrix());
 
     shader.setVec3("lightDirection", glm::vec3(0.3f, -1.0f, 0.5f));
     shader.setVec3("lightColor", glm::vec3(1.0f, 0.8f, 0.8f));
