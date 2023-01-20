@@ -29,13 +29,13 @@ void InputSystem::update()
     }
 
     if (global.keys[GLFW_KEY_A]) {
-        transform.currentTurnSpeed = transform.speed;
+        transform.currentStrafeSpeed = transform.speed;
     }
     else if (global.keys[GLFW_KEY_D]) {
-        transform.currentTurnSpeed = -transform.speed;
+        transform.currentStrafeSpeed = -transform.speed;
     }
     else {
-        transform.currentTurnSpeed = 0.0f;
+        transform.currentStrafeSpeed = 0.0f;
     }
 
     // jumping

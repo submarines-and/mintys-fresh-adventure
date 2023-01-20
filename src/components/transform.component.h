@@ -11,6 +11,7 @@ struct TransformComponent {
 
     float currentSpeed = 0.0f;
     float currentTurnSpeed = 0.0f;
+    float currentStrafeSpeed = 0.0f;
     float currentUpwardSpeed = 0.0f;
 
     /** Set to true if you want to jump */

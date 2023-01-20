@@ -34,6 +34,8 @@ void TransformSystem::update(float deltaTime)
         float dy = transform.currentUpwardSpeed * deltaTime;
         transform.position += glm::vec3(dx, dy, dz);
 
+        transform.position -= global.camera->front * transform.currentStrafeSpeed * deltaTime;
+
         // clamp y to terrain height
         auto heightAtPosition = global.world->getTerrainHeight(transform.position);
         if (transform.position.y < heightAtPosition) {

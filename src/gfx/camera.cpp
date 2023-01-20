@@ -6,6 +6,7 @@
 void Camera::centerOn(glm::vec3 targetPosition, glm::vec3 rotation)
 {
     if (!thirdPerson) {
+        updateCameraAngles();
         return;
     }
 
@@ -22,9 +23,11 @@ void Camera::centerOn(glm::vec3 targetPosition, glm::vec3 rotation)
 
     yaw = 180 - (rotation.y + angleAroundPlayer);
     this->targetPosition = targetPosition;
+
+    updateCameraAngles();
 }
 
-void Camera::updateFirstPersonView()
+void Camera::updateCameraAngles()
 {
     glm::vec3 newFront;
     newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -39,11 +42,13 @@ void Camera::updateFirstPersonView()
 
 glm::mat4 Camera::getViewMatrix()
 {
-    if (!thirdPerson) {
-        return glm::lookAt(position, position + front, up);
+    // third person -> look at player
+    if (thirdPerson) {
+        return glm::lookAt(position, targetPosition, glm::vec3(0, 1, 0));
     }
 
-    return glm::lookAt(position, targetPosition, glm::vec3(0, 1, 0));
+    // look "forward"
+    return glm::lookAt(position, position + front, up);
 }
 
 glm::mat4 Camera::getProjectionMatrix()
@@ -72,7 +77,6 @@ void Camera::processMouseMovement(float xOffset, float yOffset)
     else {
         pitch += yOffset;
         yaw += xOffset;
-        updateFirstPersonView();
     }
 }
 
@@ -92,7 +96,7 @@ void Camera::processScroll(float yOffset)
 
 void Camera::processKeyboard(float deltaTime)
 {
-    // check camera mode
+    // keyboard only controls camera in first person view
     if (thirdPerson) {
         return;
     }
@@ -116,6 +120,4 @@ void Camera::processKeyboard(float deltaTime)
     if (position.y < heightAtPosition) {
         position.y = heightAtPosition;
     }
-
-    updateFirstPersonView();
 }

@@ -21,7 +21,7 @@ void init()
     auto sheep = global.ecs->createEntity();
     global.ecs->addComponent(sheep, TransformComponent{
                                         .position = glm::vec3(50, 0, 50),
-                                        .speed = 10.0f,
+                                        .speed = 20.0f,
                                     });
     global.ecs->addComponent(sheep, ModelComponent{.modelFilePath = "obj/sheep.obj"});
     global.ecs->addComponent(sheep, InputComponent());
