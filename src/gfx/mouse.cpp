@@ -12,13 +12,11 @@ glm::vec3 Mouse::getWorldPosition()
     glm::vec4 clipCoordinates(normalizedX, normalizedY, -1.0f, 1.0f);
 
     // eye coordinates
-    glm::mat4 inverseProjection = glm::inverse(global.camera->getProjectionMatrix());
-    glm::vec4 eyeCoords = inverseProjection * clipCoordinates;
+    glm::vec4 eyeCoords = glm::inverse(global.camera->getProjectionMatrix()) * clipCoordinates;
     eyeCoords = glm::vec4(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);
 
     // world coordinates
-    glm::mat4 inverseView = glm::inverse(global.camera->getViewMatrix());
-    glm::vec4 rayWorld = inverseView * eyeCoords;
+    glm::vec4 rayWorld = glm::inverse(global.camera->getViewMatrix()) * eyeCoords;
     glm::vec3 mouseRay = glm::vec3(rayWorld.x, rayWorld.y, rayWorld.z);
     mouseRay = glm::normalize(mouseRay);
 
