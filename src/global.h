@@ -1,6 +1,7 @@
 #pragma once
 #include "ecs/ecs.h"
 #include "gfx/camera.h"
+#include "gfx/mouse.h"
 #include "world/sky.h"
 #include "world/world.h"
 
@@ -14,14 +15,14 @@ struct Global {
     int ticks = 0;
 
     bool keys[GLFW_KEY_LAST];
-    float mouseOffsetX = 0.0f;
-    float mouseOffsetY = 0.0f;
+
 
     ECS* ecs;
     World* world;
     Sky* sky;
 
     Camera* camera;
+    Mouse* mouse;
 };
 
 /** Will be created by main.cpp */

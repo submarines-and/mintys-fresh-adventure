@@ -9,10 +9,11 @@ Global& global = global_instance;
 
 void init()
 {
-    global.sky = new Sky();
-    global.world = new World(4);
+    global.mouse = new Mouse();
     global.camera = new Camera();
+    global.sky = new Sky();
     global.ecs = new ECS();
+    global.world = new World(4);
 
     // register all systems
     // this also ensures components/systems are imported in the main file
@@ -44,8 +45,9 @@ void render()
 
 void destroy()
 {
-    delete global.ecs;
     delete global.camera;
+    delete global.ecs;
+    delete global.mouse;
     delete global.world;
     delete global.sky;
 }

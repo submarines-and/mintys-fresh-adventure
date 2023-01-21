@@ -72,20 +72,20 @@ void Window::handleMouseMovement(GLFWwindow* window)
     GLdouble xposIn, yposIn;
     glfwGetCursorPos(window, &xposIn, &yposIn);
 
-    float xPos = static_cast<float>(xposIn);
-    float yPos = static_cast<float>(yposIn);
+    global.mouse->position.x = static_cast<float>(xposIn);
+    global.mouse->position.y = static_cast<float>(yposIn);
 
     if (firstMouse) {
-        lastX = xPos;
-        lastY = yPos;
+        lastX = global.mouse->position.x;
+        lastY = global.mouse->position.y;
         firstMouse = false;
     }
 
-    global.mouseOffsetX = xPos - lastX;
-    global.mouseOffsetY = lastY - yPos; // reversed since y-coordinates go from bottom to top
+    global.mouse->offset.x = global.mouse->position.x - lastX;
+    global.mouse->offset.y = lastY - global.mouse->position.y; // reversed since y-coordinates go from bottom to top
 
-    lastX = xPos;
-    lastY = yPos;
+    lastX = global.mouse->position.x;
+    lastY = global.mouse->position.y;
 
     // flag mouse button
     global.keys[GLFW_MOUSE_BUTTON_LEFT] = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
@@ -98,7 +98,7 @@ void Window::handleMouseMovement(GLFWwindow* window)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
-    global.camera->processMouseMovement(global.mouseOffsetX, global.mouseOffsetY);
+    global.camera->processMouseMovement(global.mouse->offset.x, global.mouse->offset.y);
 }
 
 Window::Window(int width, int height, WindowFunction init, WindowFunction destroy, WindowFunctionWithTime update, WindowFunction render)

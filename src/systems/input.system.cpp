@@ -25,7 +25,7 @@ void InputSystem::update()
         }
 
         // rotate normally
-        transform.rotation.y -= global.mouseOffsetX * 0.5f;
+        transform.rotation.y -= global.mouse->offset.x * 0.5f;
     }
     else {
         // reset sync
