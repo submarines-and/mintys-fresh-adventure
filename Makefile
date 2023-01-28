@@ -22,7 +22,7 @@ OBJ = $(SRC:.cpp=.o)
 DEPS = $(OBJ:.o=.d)
 BIN = bin
 
-.PHONY: start build clean install
+.PHONY: start build clean libs
 
 start: build
 	$(BIN)/MintyFresh
@@ -37,7 +37,7 @@ build: $(OBJ)
 clean:
 	rm -rf $(BIN) $(OBJ) $(DEPS)
 
-install:
+libs:
 # Reload and ignore output changes
 	git submodule deinit -f . && git submodule update --init
 	git update-index --assume-unchanged lib/glfw
